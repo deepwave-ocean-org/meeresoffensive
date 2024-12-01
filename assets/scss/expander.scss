@@ -1,0 +1,54 @@
+.expander .trigger {
+    cursor: pointer;
+    border-bottom: 1px solid darkgray;
+    // transition: all 0.3s;
+}
+
+.expander.active .trigger {
+    border-bottom: 2px solid var(--background-extract-color);
+}
+
+.expander>.trigger::after {
+    content: "\e800";
+    font-family: "mo-icons";
+    color: #999;
+    font-size: 0.8em;
+    margin-left: 0.2em;
+    margin-right: 0.2em;
+}
+
+.expander:hover>.trigger {
+    border-color: var(--background-extract-color);
+}
+
+.expander:hover>.trigger::after {
+    color: var(--background-extract-color);
+}
+
+.expander.active>.trigger::after {
+    content: "\e801";
+    color: var(--background-extract-color);
+}
+
+.expander>.info {
+    display: inline-block;
+    margin: 0;
+    height: 0;
+    width: 0;
+    color: var(--articleText);
+    font-style: italic;
+    overflow-y: hidden;
+    // opacity: 0;
+    // transition:
+    //     all 0s,
+    //     opacity 0.8s ease-out 0s;
+}
+
+.expander.active>.info {
+    display: block;
+    margin: 1.5em;
+    margin-top: 1em;
+    width: auto;
+    height: auto;
+    opacity: 1;
+}
