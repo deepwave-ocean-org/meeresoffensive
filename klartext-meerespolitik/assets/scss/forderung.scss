@@ -194,32 +194,3 @@
 
 
 
-.mo-explanation h3 {
-    font-size: large;
-    padding-bottom: 1rem;
-}
-
-.link-color-4c8aa4 a {
-    color: #4c8aa4;
-}
-
-.link-color-235aa1 a {
-    color: hsl(214, 64%, 38%);
-}
-
-.mo-main-content a.active {
-    pointer-events: all;
-    color: white;
-    text-decoration: underline;
-    text-underline-offset: 0.2em;
-}
-
-.mo-explanation p,
-.mo-cta-button,
-.mo-cta-wrapper {
-    display: none;
-}
-
-.mo-explanation.active p {
-    display: block;
-}

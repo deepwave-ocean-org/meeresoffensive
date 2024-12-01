@@ -1,0 +1,21 @@
+.mo-explanation h3 {
+    font-size: large;
+    padding-bottom: 1rem;
+}
+
+.mo-main-content a.active {
+    pointer-events: all;
+    color: white;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+}
+
+.mo-explanation p,
+.mo-cta-button,
+.mo-cta-wrapper {
+    display: none;
+}
+
+.mo-explanation.active p {
+    display: block;
+}
