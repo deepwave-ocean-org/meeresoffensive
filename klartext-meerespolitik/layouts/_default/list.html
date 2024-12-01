@@ -1,0 +1,57 @@
+{{ define "mo-main" }}
+
+
+<div class="desktop-only">
+    {{ range .Pages.ByParam "order" }}
+    Hello
+    {{ range .Pages.ByParam "order" }}
+    <section class="panel" id="{{ .Title | urlize }}" data-url="#{{ .Title | urlize }}"
+        data-file="{{ .File.ContentBaseName }}" data-sprite=" {{ .Params.sprite }}">
+        <div class="mo-background" data-bg=""
+            style="background: linear-gradient(180deg, rgba(0,0,0,0), rgba(0,0,0,0.5), rgba(0,0,0,0.9)), url(' {{ .Site.Params.cloudinary_url }}/{{ .Params.background_image }} ');">
+        </div>
+        <div class="sprite-container" style="z-index: 10; position: relative;"></div>
+    </section>
+    {{ end }}
+    {{ end }}
+</div>
+<div class="mobile-only">
+    <div class="swiper">
+        <div class="swiper-wrapper">
+            {{ $menuItems := slice }}
+            {{ range .Pages.ByParam "order" }}
+            {{ range .Pages.ByParam "order" }}
+            {{ $menuItems = $menuItems | append .Title }}
+            <div class="swiper-slide" data-hash="{{ .Title | urlize }}">
+                {{ .Render "forderung" }}
+            </div>
+            {{ end }}
+            {{ end }}
+        </div>
+        <div id="custom-pagination" class="swiper-pagination">
+            <script>
+                const menu = {{ $menuItems | jsonify | safeJS }};
+                console.log(menu)
+                window.menu = menu;
+                console.log(window.menu)
+            </script>
+        </div>
+    </div>
+</div>
+
+
+<!-- <div id="content-container">
+    {{ range .Pages.ByParam "order" }}
+    <div class="content-section" id="{{ .File.Path | urlize }}" data-url="{{ .RelPermalink }}">
+        <h1>{{ .Title }}</h1>
+        <div class="mo-sections-wrapper">
+            {{ range .Pages.ByParam "order" }}
+            <div class="content-subsection" id="{{ .File.Path | urlize }}" data-url="{{ .RelPermalink }}">
+                {{ .Render "forderung" }}
+            </div>
+            {{ end }}
+        </div>
+    </div>
+    {{ end }}
+</div> -->
+{{ end }}

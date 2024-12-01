@@ -1,0 +1,11 @@
+baseURL: "https://meeresoffensive.deepwave.org"
+languageCode: "de-DE"
+title: "Kommentar zur „Meeresoffensive“"
+markup:
+  goldmark:
+    renderer:
+      unsafe: true  # default is false // https://stackoverflow.com/questions/63198652/hugo-shortcode-ignored-saying-raw-html-omitted
+pygmentsstyle: 'monokai'
+metaDataFormat: yaml
+params:
+  cloudinary_url: https://res.cloudinary.com/deepwave-org/image/upload

@@ -1,0 +1,225 @@
+// .mo-sections-wrapper {
+//     position: static;
+//     min-height: 100vh;
+// }
+
+// .mo-section {
+//     position: relative;
+//     color: white;
+// }
+
+// .mo-single {
+//     z-index: 5;
+//     overflow: hidden;
+//     position: relative;
+//     width: 100%;
+//     min-height: 100vh;
+//     display: flex;
+//     margin: 0;
+//     background-color: transparent;
+//     background-size: cover !important;
+//     background-position: center !important;
+// }
+
+
+
+.panel {
+    min-height: 100vh;
+    padding-left: 0.6rem;
+    padding-right: 0.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mo-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+
+    background-size: cover !important;
+    background-repeat: no-repeat !important;
+    z-index: 0;
+    border-bottom: 1px solid #0a0a0a;
+}
+
+.mo-single p,
+.mo-single h2,
+.mo-single h3,
+.mo-single h4 {
+    font-family: "Merriweather Sans";
+}
+
+.mo-single h2,
+.mo-single h3,
+.mo-single h4 {
+    font-weight: 700;
+}
+
+.swiper-slide {
+    min-height: 100vh;
+}
+
+// from https://codepen.io/quicksilversel/pen/yLwOPye
+#custom-pagination {
+    display: flex;
+    z-index: 999;
+    align-items: center;
+    justify-content: space-around;
+    // gap: 0 0.5rem;
+    box-sizing: border-box;
+    position: absolute;
+    top: 0;
+    left: 0;
+    // width: 100vw !important;
+    height: fit-content;
+    margin: 0;
+    // padding: 0 1rem;
+    color: white;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+    -ms-hyphens: auto;
+    word-break: break-word;
+}
+
+#custom-pagination .swiper-pagination-bullet {
+    opacity: 0;
+    min-width: 33vw;
+    height: fit-content;
+    border-radius: 0;
+    background: transparent;
+    padding: 1rem 1rem;
+    margin: 0;
+    position: relative;
+    text-align: center;
+
+    &::before {
+        content: none;
+    }
+}
+
+#custom-pagination .swiper-pagination-bullet.swiper-pagination-bullet-active.swiper-pagination-bullet-active-main {
+    opacity: 1;
+    transform: translate(-33vw, 5px);
+}
+
+#custom-pagination .swiper-pagination-bullet.swiper-pagination-bullet-active-prev,
+#custom-pagination .swiper-pagination-bullet.swiper-pagination-bullet-active-next {
+    // transform: scale(0.8);
+    opacity: 0.5;
+    transform: translateX(-33vw);
+}
+
+.mo-original {
+    position: relative;
+    color: white;
+    max-width: 80vw;
+    margin: auto;
+    padding-bottom: 20vh;
+    font-size: large;
+}
+
+.mobile-divider {
+    margin: 20% 5%;
+    margin-bottom: 80vh;
+    visibility: hidden;
+}
+
+.mo-video {
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+.mo-video video {
+    mix-blend-mode: screen;
+    width: 75vw;
+    position: relative;
+
+}
+
+.video-container {
+    position: relative;
+    height: calc(75vw + 200px);
+    margin-top: calc(50vh - 37.5vw);
+    /* Full viewport height for pinning */
+    overflow: hidden;
+}
+
+.gif-explanation {
+    opacity: 0.1;
+    margin-top: 0;
+}
+
+.sprite-container {
+    z-index: 10;
+}
+
+
+.mo-translation {
+    background-color: white;
+    width: 100vw;
+    height: 50vh;
+    overflow-y: scroll;
+    position: fixed;
+    bottom: 0;
+}
+
+.mo-translation--text {
+    max-width: 80vw;
+    margin: auto;
+    padding-top: 3rem;
+}
+
+
+
+.mo-main-content {
+    position: fixed;
+    bottom: 56vh;
+    height: 40vh;
+    overflow: scroll;
+    display: flex;
+    color: white;
+    width: 100%;
+    font-size: large;
+}
+
+.mo-main-content p {
+    max-width: 80vw;
+    margin: auto;
+}
+
+
+
+
+.mo-explanation h3 {
+    font-size: large;
+    padding-bottom: 1rem;
+}
+
+.link-color-4c8aa4 a {
+    color: #4c8aa4;
+}
+
+.link-color-235aa1 a {
+    color: hsl(214, 64%, 38%);
+}
+
+.mo-main-content a.active {
+    pointer-events: all;
+    color: white;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+}
+
+.mo-explanation p,
+.mo-cta-button,
+.mo-cta-wrapper {
+    display: none;
+}
+
+.mo-explanation.active p {
+    display: block;
+}
