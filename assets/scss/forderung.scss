@@ -125,7 +125,6 @@
     max-width: 80vw;
     margin: auto;
     padding-bottom: 92vh;
-        padding-bottom: 92bvh;
     font-size: large;
 }
 
@@ -155,16 +154,8 @@
 
 .video-container {
     position: relative;
-    height: calc(50vh + 25vw);
-        /* fallback */
-            height: calc(50bvh + 25vw);
-            /* modern browsers */
-        margin-top: calc(50vh - 37.5vw);
-        /* fallback */
-            margin-top: calc(50bvh - 37.5vw);
-            /* modern browsers */
-    /* Full viewport height for pinning */
-    overflow: hidden;
+    height: calc(50dvh + 25vw);
+        margin-top: calc(50dvh - 37.5vw);
 }
 
 .gif-explanation {
