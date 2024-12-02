@@ -61,6 +61,7 @@ document.addEventListener('DOMContentLoaded', function () {
         //A) Sidenotes beside text: entry.querySelector('cite').addEventListener('click', function(e){
         //B) Sidenotes within text:
         entry.addEventListener('click', function (e) {
+            console.log("helloooo")
             e.stopPropagation()
             let link = e.currentTarget.querySelector('a').getAttribute('href')
 
@@ -87,7 +88,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 // LINK external
             } else {
-                window.open(link, '_blank')
+                if (window.matchMedia('(max-width: 767px)').matches) {
+                    entry.classList.toggle('active');
+                } else {
+                    window.open(link, '_blank');
+                }
             }
         })
     })
