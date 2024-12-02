@@ -124,14 +124,20 @@
     color: white;
     max-width: 80vw;
     margin: auto;
-    padding-bottom: 100vh;
+    padding-bottom: 92vh;
+        padding-bottom: 92bvh;
     font-size: large;
 }
 
 .quote-icon {
-    padding-top: 20vh;
+    padding-top: 28vh;
     font-size: xx-large;
     text-align: center;
+    line-height: 0.6;
+    }
+    
+    .quote-icon span {
+        font-size: x-large;
 }
 
 .mo-video {
@@ -150,7 +156,13 @@
 .video-container {
     position: relative;
     height: calc(50vh + 25vw);
-    margin-top: calc(50vh - 37.5vw);
+        /* fallback */
+            height: calc(50bvh + 25vw);
+            /* modern browsers */
+        margin-top: calc(50vh - 37.5vw);
+        /* fallback */
+            margin-top: calc(50bvh - 37.5vw);
+            /* modern browsers */
     /* Full viewport height for pinning */
     overflow: hidden;
 }
@@ -185,7 +197,7 @@
 .mo-main-content {
     position: fixed;
     bottom: 56vh;
-    height: 40vh;
+    height: 32vh;
     overflow: scroll;
     display: flex;
     color: white;
@@ -194,6 +206,8 @@
 }
 
 .mo-main-content p {
+    border-left: 2px solid white;
+        padding-left: 15px;
     max-width: 80vw;
     margin: auto;
 }

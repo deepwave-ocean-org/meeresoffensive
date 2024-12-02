@@ -24,10 +24,10 @@
             </div>
             {{ $menuItems = $menuItems | append " " }}
             {{ range .Pages.ByParam "order" }}
-            <div class="swiper-slide" data-hash="{{ .Params.titlesmall | urlize }}">
+            <!-- <div class="swiper-slide" data-hash="{{ .Params.titlesmall | urlize }}">
                 {{ .Render "chapter" }}
             </div>
-            {{ $menuItems = $menuItems | append " " }}
+            {{ $menuItems = $menuItems | append " " }} -->
             {{ range .Pages.ByParam "order" }}
             {{ $menuItems = $menuItems | append .Title }}
             <div class="swiper-slide" data-hash="{{ .Title | urlize }}">
