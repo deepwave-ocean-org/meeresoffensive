@@ -289,8 +289,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 init: function (_) {
                     this.params.speed = 300;
                     console.log("init")
-                    // singleSlideScrollAnimation(this);
-                    // playVideo(this);
+                    singleSlideScrollAnimation(this);
+                    playVideo(this);
                 },
                 slideChange: function () {
                     window.scrollTo(0, 0);

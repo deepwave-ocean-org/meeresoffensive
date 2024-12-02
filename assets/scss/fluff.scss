@@ -11,7 +11,7 @@
 
 .mo-chapter div,
 #final-slide div,
-#intro-slide div {
+#intro-slide>div {
     max-width: 80vw;
     margin: 0 auto;
 }
@@ -29,4 +29,43 @@
     max-width: 300px;
     min-width: auto;
     flex-grow: 2;
+}
+.intro-video {
+    position: relative;
+    padding-bottom: 177.78%;
+    height: 0;
+    overflow: hidden;
+    width: 80vw;
+    max-width: 100%;
+    margin-bottom: 5rem;
+}
+
+.intro-video iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.intro-text {
+    margin: 3rem 0;
+}
+
+#intro-slide h1 {
+    max-width: 87%;
+    text-align: center;
+    font-size: 4em;
+    font-size: clamp(32px, 4vw, 4em);
+    padding: 0;
+    margin-bottom: 55px;
+    color: #fff;
+}
+
+#intro-slide {
+    color: white;
+    background-size: cover;
+    background-position: center;
+    background-image: linear-gradient(rgba(7, 28, 37, 0.72), rgba(7, 28, 37, 0.68)), url(/images/background-ocean.avif);
+    background-attachment: fixed;
 }
