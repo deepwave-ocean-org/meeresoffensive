@@ -2,13 +2,16 @@
 @import "sidenotes.scss";
 @import "colors.scss";
 @import "expander.scss";
-
+@import "fluff.scss";
 
 
 body {
     overflow-x: hidden;
 }
 
+a {
+    color: #23599f;
+}
 @media screen and (max-width: 767px) {
     .desktop-only {
         display: none !important;

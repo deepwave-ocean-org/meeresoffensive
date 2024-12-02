@@ -16,7 +16,6 @@ document.addEventListener('DOMContentLoaded', function () {
         let explanations = entry.querySelectorAll('.mo-explanation')
         // Find all Anchor-Links in each MO Original
         let explanationLinks = entry.querySelectorAll('a[href^="#"]')
-        console.log(explanationLinks)
 
         // Make Explanations clickable
         explanations.forEach(function (entry, index) {

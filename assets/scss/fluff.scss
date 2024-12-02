@@ -1,0 +1,32 @@
+.mo-chapter,
+#final-slide,
+#intro-slide {
+    background-color: whitesmoke;
+    color: #0a0a0a;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.mo-chapter div,
+#final-slide div,
+#intro-slide div {
+    max-width: 80vw;
+    margin: 0 auto;
+}
+
+.mo-logos-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3em;
+    justify-content: center;
+}
+
+.mo-logos-container .mo-signatory-logo {
+    flex-basis: 150px;
+    width: 150px;
+    max-width: 300px;
+    min-width: auto;
+    flex-grow: 2;
+}

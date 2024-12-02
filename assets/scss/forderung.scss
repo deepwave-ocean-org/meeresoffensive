@@ -66,7 +66,8 @@
 #custom-pagination {
     display: flex;
     z-index: 999;
-    align-items: center;
+    align-items: start;
+        padding-top: 1.5rem;
     justify-content: space-around;
     // gap: 0 0.5rem;
     box-sizing: border-box;
@@ -84,7 +85,9 @@
     -ms-hyphens: auto;
     word-break: break-word;
 }
-
+#custom-pagination li {
+    list-style: none;
+}
 #custom-pagination .swiper-pagination-bullet {
     opacity: 0;
     min-width: 33vw;
@@ -121,14 +124,14 @@
     color: white;
     max-width: 80vw;
     margin: auto;
-    padding-bottom: 20vh;
+    padding-bottom: 100vh;
     font-size: large;
 }
 
-.mobile-divider {
-    margin: 20% 5%;
-    margin-bottom: 80vh;
-    visibility: hidden;
+.quote-icon {
+    padding-top: 20vh;
+    font-size: xx-large;
+    text-align: center;
 }
 
 .mo-video {
@@ -146,7 +149,7 @@
 
 .video-container {
     position: relative;
-    height: calc(75vw + 200px);
+    height: calc(50vh + 25vw);
     margin-top: calc(50vh - 37.5vw);
     /* Full viewport height for pinning */
     overflow: hidden;
@@ -163,7 +166,7 @@
 
 
 .mo-translation {
-    background-color: white;
+    background-color: whitesmoke;
     width: 100vw;
     height: 50vh;
     overflow-y: scroll;

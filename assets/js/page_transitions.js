@@ -164,11 +164,18 @@ document.addEventListener('DOMContentLoaded', function () {
             killTimeline(window.videoDescriptionTimeline2);
 
             const activeSlide = swiper.slides[swiper.activeIndex];
+            const background = activeSlide.querySelector('.mo-background')
+            if (!background) {
+                console.log("not a slide")
+                return
+            }
+            console.log(activeSlide)
             const video = activeSlide.querySelector('.mo-video video');
             const videoContainer = activeSlide.querySelector('.video-container');
             const gifTranslation = activeSlide.querySelector('.gif-explanation');
-            const background = activeSlide.querySelector('.mo-background')
+
             const height = window.innerHeight
+
             window.backgroundTimeline = gsap.timeline({
                 scrollTrigger: {
                     trigger: activeSlide,
@@ -242,19 +249,23 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         function playVideo(swiper) {
+            const activeVideo = swiper.slides[swiper.activeIndex].querySelector('.mo-video video');
             document.querySelectorAll('.mo-video video').forEach(video => {
-                video.pause();
+                if (video !== activeVideo) {
+                    video.pause();
+                }
             });
-            const video = swiper.slides[swiper.activeIndex].querySelector('.mo-video video');
-            if (video) {
-                video.currentTime = 0;  // Reset to start
-                video.play();
+
+            if (activeVideo) {
+                activeVideo.currentTime = 0;
+                activeVideo.play();
             }
         }
 
         const swiper = new Swiper('.swiper', {
             direction: 'horizontal',
             slidesPerView: 1,
+            autoHeight: true,
             hashNavigation: true,
             mousewheel: {
                 forceToAxis: true,
@@ -273,13 +284,17 @@ document.addEventListener('DOMContentLoaded', function () {
                     return '<li class="' + className + '">' + menu[index] + "</li>";
                 }
             },
+            speed: 0,
             on: {
                 init: function (_) {
-                    singleSlideScrollAnimation(this);
-                    playVideo(this);
+                    this.params.speed = 300;
+                    console.log("init")
+                    // singleSlideScrollAnimation(this);
+                    // playVideo(this);
                 },
                 slideChange: function () {
                     window.scrollTo(0, 0);
+                    console.log("slide_change")
                     singleSlideScrollAnimation(this);
                     playVideo(this);
                 },

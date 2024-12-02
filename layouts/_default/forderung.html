@@ -10,14 +10,14 @@
 
           <video autoplay muted>
             <!-- <source src="videos/mo11_av1.mp4" type="video/mp4; codecs=av01.0.08M.08" /> -->
-            <source src="videos/mo11_png.mp4" type="video/mp4" /> <!-- H.264 fallback -->
+            <source src="videos/{{ lower .File.ContentBaseName }}.mp4" type="video/mp4" /> <!-- H.264 fallback -->
           </video>
         </div>
       </div>
       <p class="gif-explanation">
         <span>{{ .Params.text_translation | safeHTML }}</span>
       </p>
-      <hr class="mobile-divider">
+      <p class="quote-icon">&ldquo;</p>
 
     </div>
     <div class="mo-main-content">{{ .Content }}</div>

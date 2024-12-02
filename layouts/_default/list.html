@@ -19,7 +19,15 @@
     <div class="swiper">
         <div class="swiper-wrapper">
             {{ $menuItems := slice }}
+            <div class="swiper-slide" id="intro-slide" data-hash="intro">
+                {{ .Render "intro" }}
+            </div>
+            {{ $menuItems = $menuItems | append " " }}
             {{ range .Pages.ByParam "order" }}
+            <div class="swiper-slide" data-hash="{{ .Params.titlesmall | urlize }}">
+                {{ .Render "chapter" }}
+            </div>
+            {{ $menuItems = $menuItems | append " " }}
             {{ range .Pages.ByParam "order" }}
             {{ $menuItems = $menuItems | append .Title }}
             <div class="swiper-slide" data-hash="{{ .Title | urlize }}">
@@ -27,13 +35,15 @@
             </div>
             {{ end }}
             {{ end }}
+            <div class="swiper-slide" id="final-slide" data-hash="danke">
+                {{ .Render "final" }}
+            </div>
+            {{ $menuItems = $menuItems | append " " }}
         </div>
         <div id="custom-pagination" class="swiper-pagination">
             <script>
-                const menu = {{ $menuItems | jsonify | safeJS }};
-                console.log(menu)
-                window.menu = menu;
-                console.log(window.menu)
+                                                        const menu = {{ $menuItems | jsonify | safeJS }};
+                                                        window.menu = menu;
             </script>
         </div>
     </div>
