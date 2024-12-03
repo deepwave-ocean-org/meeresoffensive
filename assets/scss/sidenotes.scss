@@ -43,7 +43,7 @@ display: block;
 display: none;
 }
 
-@media (min-width: 768px) {
+@media screen and (min-width: 768px) {
 .sidenote>cite>a {
     position: absolute;
     left: 5%;
@@ -53,6 +53,7 @@ display: none;
     display: block;
         opacity: 0;
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.25);
+    text-decoration: none !important;
 }
 
 .sidenote:hover>cite>a {
@@ -92,13 +93,14 @@ display: none;
     }
 }
 
+
 .sidenote>cite>a {
     background-color: whitesmoke;
     z-index: 10;
     display: none;
     color: darkgray;
     text-decoration: underline;
-    }
+}
     
 .sidenote>cite+span {
     cursor: pointer;

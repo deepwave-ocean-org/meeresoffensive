@@ -12,6 +12,14 @@ body {
 a {
     color: #b9d2da;
 }
+/* Show relevant container based on device class */
+.is-desktop .desktop-only {
+    display: block;
+}
+
+.is-mobile .mobile-only {
+    display: block;
+}
 @media screen and (max-width: 767px) {
     .desktop-only {
         display: none !important;

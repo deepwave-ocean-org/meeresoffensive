@@ -1,5 +1,5 @@
 <head>
-
+    
     <!-- GSAP (for ScrollTriggers) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
@@ -9,6 +9,13 @@
         window.workerURL = "{{ $worker.RelPermalink }}";
     </script>
 
+    <script>
+        (function () {
+            document.documentElement.classList.add(
+                window.innerWidth < 768 ? 'is-mobile' : 'is-desktop'
+            );
+        })();
+    </script>
     <!-- SwiperJS for Mobile navigation-->
     {{ $style := resources.Get "scss/swiper.css" }}
     <link rel="stylesheet" href="{{ $style.RelPermalink }}" />
@@ -21,8 +28,10 @@
 
     <script type="module" src="https://cdn.jsdelivr.net/npm/stacked-alpha-video/+esm"></script>
 
-    {{ $js := resources.Get "js/page_transitions.js" | resources.Minify }}
-    <script src="{{ $js.RelPermalink }}"></script>
+    {{ $isMobile := resources.Get "js/page_transitions.js" | resources.Minify }}
+    {{ $isDesktop := resources.Get "js/page_transitions_desktop.js" | resources.Minify }}
+    <script src="{{ $isMobile.RelPermalink }}"></script>
+    <script src="{{ $isDesktop.RelPermalink }}"></script>
     {{ $js := resources.Get "js/sidenote-navigation.js" | resources.Minify }}
     <script src="{{ $js.RelPermalink }}"></script>
 

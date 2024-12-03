@@ -1,156 +1,9 @@
-document.addEventListener('DOMContentLoaded', function () {
-    gsap.registerPlugin(ScrollTrigger);
+if (document.documentElement.classList.contains('is-mobile')) {
+    document.addEventListener('DOMContentLoaded', function () {
+        console.log("mooobille!")
 
+        gsap.registerPlugin(ScrollTrigger);
 
-    let nm = gsap.matchMedia();
-
-    // nm.add("(min-width: 768px)", () => {
-    //     const sections = document.querySelectorAll('.panel');
-    //     let worker, sharedCanvas;
-    //     let currentSection = null;
-
-    //     // Create single worker and canvas
-    //     const initializeWorker = async () => {
-    //         try {
-    //             // Create shared canvas
-    //             sharedCanvas = document.createElement('canvas');
-    //             sharedCanvas.width = 1000;
-    //             sharedCanvas.height = 1000;
-    //             sharedCanvas.style.width = '40vw';
-    //             sharedCanvas.style.height = '40vw';
-
-    //             // Create worker
-    //             worker = new Worker(window.workerURL);
-
-    //             // Initialize worker with offscreen canvas
-    //             const offscreen = sharedCanvas.transferControlToOffscreen();
-    //             worker.postMessage({
-    //                 type: 'init',
-    //                 payload: { canvas: offscreen }
-    //             }, [offscreen]);
-
-    //             // Wait for worker to be ready
-    //             await new Promise(resolve => {
-    //                 worker.onmessage = (e) => {
-    //                     if (e.data.type === 'ready') resolve();
-    //                 };
-    //             });
-
-    //         } catch (error) {
-    //             console.error('Failed to initialize worker:', error);
-    //             return false;
-    //         }
-    //         return true;
-    //     };
-
-    //     // Function to switch sprites
-    //     const switchSprite = async (section) => {
-    //         if (currentSection === section) return true;
-
-    //         try {
-    //             const filename = section.dataset.file.toLowerCase();
-
-    //             worker.postMessage({
-    //                 type: 'switchSprite',
-    //                 payload: { filename }
-    //             });
-
-    //             await new Promise((resolve, reject) => {
-    //                 worker.onmessage = (e) => {
-    //                     if (e.data.type === 'spriteReady') resolve();
-    //                     if (e.data.type === 'error') reject(e.data.error);
-    //                 };
-    //             });
-
-    //             currentSection = section;
-    //             return true;
-    //         } catch (error) {
-    //             console.error('Failed to switch sprite:', error);
-    //             return false;
-    //         }
-    //     };
-
-    //     // Initialize everything
-    //     (async () => {
-    //         if (!await initializeWorker()) return;
-
-    //         sections.forEach((section) => {
-    //             const sprite_cont = section.querySelector(".sprite-container");
-
-    //             // Setup ScrollTrigger for pinning
-    //             gsap.from(section, {
-    //                 scrollTrigger: {
-    //                     trigger: section,
-    //                     scrub: true,
-    //                     pin: true,
-    //                     start: "top top",
-    //                     end: "+=100%",
-    //                     onEnter: async () => {
-    //                         // When entering a section, switch sprite and add canvas
-    //                         if (await switchSprite(section)) {
-    //                             sprite_cont.appendChild(sharedCanvas);
-    //                         }
-    //                     },
-    //                     onEnterBack: async () => {
-    //                         // Same for entering backwards
-    //                         if (await switchSprite(section)) {
-    //                             sprite_cont.appendChild(sharedCanvas);
-    //                         }
-    //                     },
-    //                     onLeave: () => {
-    //                         // Remove canvas when leaving
-    //                         if (sprite_cont.contains(sharedCanvas)) {
-    //                             sprite_cont.removeChild(sharedCanvas);
-    //                         }
-    //                     },
-    //                     onLeaveBack: () => {
-    //                         // Same for leaving backwards
-    //                         if (sprite_cont.contains(sharedCanvas)) {
-    //                             sprite_cont.removeChild(sharedCanvas);
-    //                         }
-    //                     },
-    //                     onToggle: self => {
-    //                         if (self.isActive && section.dataset.url) {
-    //                             history.replaceState({ path: section.dataset.url }, '', section.dataset.url);
-    //                         }
-    //                     }
-    //                 }
-    //             });
-
-    //             // Setup ScrollTrigger for animation
-    //             ScrollTrigger.create({
-    //                 trigger: section,
-    //                 start: "top top",
-    //                 end: "+=100%",
-    //                 scrub: true,
-    //                 onUpdate: (self) => {
-    //                     if (currentSection !== section) return;
-
-    //                     const totalFrames = parseInt(section.dataset.sprite);
-    //                     const frame = Math.min(totalFrames - 1, Math.floor(self.progress * totalFrames));
-
-    //                     worker.postMessage({
-    //                         type: 'render',
-    //                         payload: {
-    //                             frame,
-    //                             columns: 16
-    //                         }
-    //                     });
-    //                 }
-    //             });
-    //         });
-    //     })();
-
-    //     // Cleanup function
-    //     return () => {
-    //         if (worker) {
-    //             worker.terminate();
-    //             worker = null;
-    //         }
-    //     };
-    // });
-
-    nm.add("(max-width: 767px)", () => {
         function killTimeline(timeline) {
             if (timeline) {
                 timeline.kill()
@@ -263,6 +116,134 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
+        function loadRessources(swiper) {
+            const loadCriticalSlides = () => {
+                const relevantSlides = [
+                    swiper.slides[swiper.activeIndex - 2],
+                    swiper.slides[swiper.activeIndex - 1],
+                    swiper.slides[swiper.activeIndex],
+                    swiper.slides[swiper.activeIndex + 1],
+                    swiper.slides[swiper.activeIndex + 2]
+                ].filter(Boolean);
+
+                const loadPromises = [];
+
+                relevantSlides.forEach(slide => {
+                    const videoContainer = slide.querySelector('.video-container');
+                    if (videoContainer) {
+                        videoContainer.innerHTML += '<div class="video-spinner"></div>';
+                    }
+
+                    const background = slide.querySelector('.mo-background');
+                    if (background && !background.style.background) {
+                        const gradient = "linear-gradient(180deg, rgba(0,0,0,0.35) 1%, rgba(0,0,0,0) 14%, rgba(10,10,10,0.5) 60%, rgba(10,10,10,1) 98%, #0a0a0a 100%)";
+                        const bgUrl = background.dataset.bg;
+
+                        if (gradient && bgUrl) {
+                            const imagePromise = new Promise((resolve) => {
+                                const img = new Image();
+                                img.onload = () => {
+                                    background.style.background = `${gradient}, url('${bgUrl}')`;
+                                    resolve();
+                                };
+                                img.onerror = () => {
+                                    console.log('Image failed to load:', bgUrl);
+                                    background.style.background = gradient;
+                                    resolve();
+                                };
+                                img.src = bgUrl;
+                            });
+                            loadPromises.push(imagePromise);
+                        }
+                    }
+
+                    const video = slide.querySelector('video');
+                    if (video) {
+                        const videoPromise = new Promise((resolve) => {
+                            const sources = video.querySelectorAll('source[data-src]');
+                            let currentSourceIndex = 0;
+
+                            function tryLoadSource() {
+                                if (currentSourceIndex >= sources.length) {
+                                    console.error('All video sources failed to load');
+                                    resolve(); // Resolve anyway to not block other loading
+                                    return;
+                                }
+
+                                const source = sources[currentSourceIndex];
+                                if (!source.src) {
+                                    source.src = source.dataset.src;
+                                    video.style.display = 'none';
+                                    video.load();
+
+                                    video.addEventListener('canplaythrough', () => {
+                                        video.play();
+                                        const spinner = slide.querySelector('.video-spinner');
+                                        if (spinner) spinner.remove();
+                                        video.style.display = 'block';
+                                        resolve();
+                                    }, { once: true });
+
+                                    // Handle error and try next source
+                                    source.addEventListener('error', () => {
+                                        console.log(`Source ${currentSourceIndex} failed, trying next`);
+                                        currentSourceIndex++;
+                                        tryLoadSource();
+                                    }, { once: true });
+                                }
+                            }
+
+                            tryLoadSource(); // Start loading first source
+                        });
+                        loadPromises.push(videoPromise);
+                    }
+                });
+
+                // Once critical slides are loaded, load the rest
+                Promise.all(loadPromises).then(() => {
+                    loadRemainingSlides();
+                });
+            };
+
+            // Load all other slides in the background
+            const loadRemainingSlides = () => {
+                const allSlides = Array.from(swiper.slides);
+                console.log(allSlides)
+                const nonCriticalSlides = allSlides.filter((slide, index) => {
+                    return Math.abs(index - swiper.activeIndex) > 2;
+                });
+                console.log(nonCriticalSlides)
+
+
+                nonCriticalSlides.forEach(slide => {
+                    // Load background images
+
+                    const background = slide.querySelector('.mo-background');
+                    if (background && !background.style.background) {
+                        const gradient = "linear-gradient(180deg, rgba(0,0,0,0.35) 1%, rgba(0,0,0,0) 14%, rgba(10,10,10,0.5) 60%, rgba(10,10,10,1) 98%, #0a0a0a 100%)";
+                        const bgUrl = background.dataset.bg;
+                        if (gradient && bgUrl) {
+                            background.style.background = `${gradient}, url('${bgUrl}')`;
+                        }
+                    }
+
+                    const video = slide.querySelector('video');
+                    if (video) {
+                        const sources = video.querySelectorAll('source[data-src]');
+                        sources.forEach(source => {
+                            if (!source.src) {
+                                source.src = source.dataset.src;
+                            }
+                        });
+                        video.load();
+                        video.preload = 'auto';
+                    }
+                });
+            };
+
+            loadCriticalSlides();
+        }
+
         const swiper = new Swiper('.swiper', {
             direction: 'horizontal',
             slidesPerView: 1,
@@ -285,13 +266,15 @@ document.addEventListener('DOMContentLoaded', function () {
                     return '<li class="' + className + '">' + menu[index] + "</li>";
                 }
             },
-            speed: 0,
             on: {
-                init: function (_) {
-                    this.params.speed = 300;
+                init: function () {
                     console.log("init")
                     singleSlideScrollAnimation(this);
                     playVideo(this);
+                    loadRessources(this);
+                },
+                afterInit: () => {
+                    document.querySelector(".swiper").classList.remove("swiper-hidden");
                 },
                 slideChange: function () {
                     window.scrollTo(0, 0);
@@ -308,12 +291,26 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
 
+        // if (window.location.hash) {
+        //     // Let browser's native scroll-to-hash happen first
+        //     console.log("hello?")
+        //     requestAnimationFrame(() => {
+        //         swiper.init();
+        //         // Remove the initial hiding styles
+        //         swiper.classList.toggle("swiper-hidden");
+        //     });
+        // } else {
+        //     swiper.init();
+            
+        // }
+
         return () => {
             if (swiper) {
                 swiper.destroy();
                 swiper = null;
             }
         };
-    });
+    }
 
-})
+    )
+}

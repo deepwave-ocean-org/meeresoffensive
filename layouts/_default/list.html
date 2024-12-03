@@ -2,21 +2,21 @@
 
 
 <div class="desktop-only">
+    <div id="intro-slide">
+        {{ .Render "intro" }}
+    </div>
     {{ range .Pages.ByParam "order" }}
-    Hello
+    {{ .Render "chapter" }}
     {{ range .Pages.ByParam "order" }}
-    <section class="panel" id="{{ .Title | urlize }}" data-url="#{{ .Title | urlize }}"
-        data-file="{{ .File.ContentBaseName }}" data-sprite=" {{ .Params.sprite }}">
-        <div class="mo-background" data-bg=""
-            style="background: linear-gradient(180deg, rgba(0,0,0,0), rgba(0,0,0,0.5), rgba(0,0,0,0.9)), url(' {{ .Site.Params.cloudinary_url }}/{{ .Params.background_image }} ');">
-        </div>
-        <div class="sprite-container" style="z-index: 10; position: relative;"></div>
-    </section>
+    {{ .Render "forderung-desktop" }}
     {{ end }}
     {{ end }}
+    <div id="final-slide">
+        {{ .Render "final" }}
+    </div>
 </div>
 <div class="mobile-only">
-    <div class="swiper">
+    <div class="swiper swiper-hidden">
         <div class="swiper-wrapper">
             {{ $menuItems := slice }}
             <div class="swiper-slide" id="intro-slide" data-hash="intro">

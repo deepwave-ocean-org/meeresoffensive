@@ -1,0 +1,51 @@
+<section class="panel" id="{{ .Title | urlize }}" data-file="{{ .File.ContentBaseName }}"
+  data-sprite=" {{ .Params.sprite }}" class="mo-section link-color-{{ .Params.color }}">
+  <article data-url="#{{ .Title | urlize }}" class="mo-single" id="article-no-{{ .Params.order }}">
+    <div class="mo-background" data-bg=""
+      style="background: linear-gradient(180deg, rgba(0,0,0,0.35) 1%, rgba(0,0,0,0) 14%, rgba(10,10,10,0.5) 60%, rgba(10,10,10,1) 98%, #0a0a0a 100%), url(' {{ .Site.Params.cloudinary_url }}/{{ .Params.background_image }} ');">
+    </div>
+    <div class="video-container">
+      <video muted playsinline>
+        <source src="videos/{{ lower .File.ContentBaseName }}_av1.mp4" type="video/mp4; codecs=av01.0.08M.08" />
+        <source src="videos/{{ lower .File.ContentBaseName }}.mp4" type="video/mp4" />
+      </video>
+    </div>
+    <div class="view-1">
+      <div class="gif-explanation">
+        <span>{{ .Params.text_translation | safeHTML }}</span>
+      </div>
+    </div>
+    <div class="view-2">
+      <div class="mo-main-content">
+        <p class="quote-icon">&ldquo;<br><span style="font-size: x-large">Daher fordern wir</span></p>
+        <div class="mo-main-content-text">{{ .Content }}</div>
+      </div>
+
+      <div class="mo-translation">
+        <div class="mo-translation--text">
+          {{ range .Params.explanations }}
+          <div class="mo-explanation">
+            <h3>{{ .title }}</h3>
+            <p>{{ .text | safeHTML }}</p>
+          </div>
+          {{ end }}
+          {{ with .Params.ctas }}
+          <div class="mo-cta-button"><button>Was kann ich tun?</button></div>
+          {{ end }}
+        </div>
+        {{ with .Params.ctas }}
+        <div class="mo-cta-wrapper">
+          <h3>Was kann ich tun?</h3>
+          {{ range . }}
+          <div
+            class="{{ if eq .short true}}mo-cta-short icon-time_short{{ end }}{{ if eq .part true}}mo-cta-part icon-time_part{{ end }}{{ if eq .full true}}mo-cta-full icon-time_full{{ end }}">
+            <p>{{ .text | safeHTML }}</p>
+          </div>
+          {{ end }}
+          <div class="mo-close-handle"></div>
+        </div>
+        {{ end }}
+      </div>
+    </div>
+  </article>
+</section>

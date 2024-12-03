@@ -1,16 +1,15 @@
 <section id="{{ .File.ContentBaseName }}" class="mo-section link-color-{{ .Params.color }}">
   <span class="line line-2"></span>
   <article class="mo-single" id="article-no-{{ .Params.order }}">
-    <div class="mo-background" data-bg=""
-      style="background: linear-gradient(180deg, rgba(0,0,0,0.35) 1%, rgba(0,0,0,0) 14%, rgba(10,10,10,0.5) 60%, rgba(10,10,10,1) 98%, #0a0a0a 100%), url(' {{ .Site.Params.cloudinary_url }}/{{ .Params.background_image }} ');">
+    <div class="mo-background" data-bg="backgrounds/{{ .Params.background_image }}">
     </div>
     <div class="mo-original">
       <div class="video-container">
         <div id="mo-video-{{ .File.ContentBaseName }}" class="mo-video">
 
-          <video muted playsinline>
-            <!-- <source src="videos/mo11_av1.mp4" type="video/mp4; codecs=av01.0.08M.08" /> -->
-            <source src="videos/{{ lower .File.ContentBaseName }}.mp4" type="video/mp4" /> <!-- H.264 fallback -->
+          <video muted playsinline preload="none">
+            <source data-src="videos/{{ lower .File.ContentBaseName }}_av1.mp4" type="video/mp4; codecs=av01.0.08M.08" />
+            <source data-src="videos/{{ lower .File.ContentBaseName }}.mp4" type="video/mp4" />
           </video>
         </div>
       </div>

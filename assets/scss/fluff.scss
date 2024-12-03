@@ -32,14 +32,38 @@
 #final-slide p {
     padding-bottom: 1rem;
 }
-.mo-logos-container {
+.mobile-only .mo-logos-container {
     display: grid;
         grid-template-columns: repeat(3, 1fr);
         gap: 20px 20px;
         align-items: center;
 }
+.desktop-only .mo-logos-container {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 20px 20px;
+    align-items: center;
+}
 
+.desktop-only #logoteppich,
+.desktop-only #deepwave-says-thank-you,
+.desktop-only #danksagung {
+    width: 800px;
+}
 
+.desktop-only #mobile-placeholder {
+    display: none;
+}
+
+#footer {
+    text-align: center;
+    color: grey !important;
+    padding: 4rem;
+}
+
+#footer a {
+    color: grey !important;
+}
 .mo-logos-container .mo-signatory-logo {
     width: 100%;
     max-width: 300px;
@@ -69,9 +93,10 @@
 #intro-slide h1 {
     text-align: center;
     font-size: 4em;
-    font-size: clamp(32px, 4vw, 4em);
+    font-size: clamp(32px, 3vw, 3em);
     padding: 0;
     margin-top: 4rem;
+    padding-bottom: 2rem;
     color: #fff;
 }
 
@@ -125,4 +150,45 @@
 
 .swiper-pagination-bullet:nth-child(2).swiper-pagination-bullet-active-next {
     opacity: 0 !important;
+}
+.desktop-only .mo-chapter {
+    min-height: 0;
+    padding: 10rem;
+}
+
+.mo-chapter h2 {
+    font-weight: 500;
+    font-size: x-large;
+    padding-bottom: 1rem;
+}
+
+.desktop-only .mo-chapter div {
+    max-width: 800px;
+    font-size: large;
+}
+
+.desktop-only .mo-chapter div p {
+    padding-left: 15px;
+    border-left: 2px solid #0a0a0a;
+}
+
+.desktop-only .swipe-info,
+.desktop-only .shimmer {
+    display: none !important;
+}
+
+.desktop-only #intro-slide .content {
+    display: flex;
+}
+
+.desktop-only #intro-slide .content .intro-text {
+    margin: 0 6rem 0 0;
+    max-width: 40vw;
+}
+
+.desktop-only #intro-slide .content .intro-video {
+    position: relative;
+    width: calc(70vh / 1.7778);
+    height: 70vh;
+    padding: 0;
 }
