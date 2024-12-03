@@ -1,4 +1,6 @@
-if (document.documentElement.classList.contains('is-mobile')) {
+if (
+    window.innerWidth < 768
+) {
     document.addEventListener('DOMContentLoaded', function () {
         console.log("mooobille!")
 
@@ -29,7 +31,6 @@ if (document.documentElement.classList.contains('is-mobile')) {
             const height = window.innerHeight
 
             gsap.set(background, { clearProps: "transform" })
-
             window.backgroundTimeline = gsap.timeline({
                 scrollTrigger: {
                     trigger: document.querySelector(".swiper"),

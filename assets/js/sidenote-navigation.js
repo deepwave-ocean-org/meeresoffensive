@@ -26,6 +26,7 @@ document.addEventListener('DOMContentLoaded', function () {
         let original = section.querySelector(".mo-main-content")
         let explanationContainer = section.querySelector(".mo-translation")
 
+        const wrapper = section.querySelector(".mo-cta-wrapper")
         // Make Explanations clickable
         explanations.forEach(function (entry, index) {
 
@@ -33,6 +34,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (entry.classList.contains('active')) {
                     removeAllActive()
                     return
+                }
+                console.log("hellooooo", entry)
+                if (entry.classList.contains("mo-cta-button")) {
+                    wrapper.classList.add("active")
+                    scrollInParentView(wrapper, explanationContainer, -2)
                 }
                 removeAllActive()
                 explanationLinks[index].classList.toggle('active')
@@ -56,6 +62,19 @@ document.addEventListener('DOMContentLoaded', function () {
                 scrollInParentView(explanations[index], explanationContainer)
             })
         })
+        const closeHandle = section.querySelector(".mo-close-handle")
+        if (closeHandle) {
+            closeHandle.addEventListener("click",
+                () => {
+                    explanationContainer.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                    wrapper.classList.remove("active")
+                }
+            )
+        }
+
     })
 
     // expanders

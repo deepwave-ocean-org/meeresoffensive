@@ -1,10 +1,11 @@
-if (document.documentElement.classList.contains('is-desktop')) {
+if (
+    window.innerWidth > 767
+) {
 
     function setupAllScrollTriggers() {
         gsap.registerPlugin(ScrollTrigger);
 
         const sections = document.querySelectorAll(".desktop-only .mo-single")
-        console.log(sections)
         sections.forEach((section) => {
             const video = section.querySelector(".video-container")
             const view1 = section.querySelector(".view-1")
@@ -85,6 +86,7 @@ if (document.documentElement.classList.contains('is-desktop')) {
         })
     }
     document.addEventListener('DOMContentLoaded', function () {
+        console.log("desktooop")
         setupAllScrollTriggers();
 
         ScrollTrigger.refresh();

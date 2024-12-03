@@ -19,7 +19,10 @@
       <p class="quote-icon">&ldquo;<br><span style="font-size: x-large">Daher fordern wir</span></p>
 
     </div>
-    <div class="mo-main-content">{{ .Content }}</div>
+    <div class="mo-main-content">
+      <p>&#8811; {{ .Content | replaceRE "^<p>" "" | replaceRE "</p>\n$" "" | safeHTML }} &#8810;
+      </p>
+    </div>
     <div class="mo-translation">
       <div class="mo-translation--text">
 
@@ -31,21 +34,22 @@
         {{ end }}
 
         {{ with .Params.ctas }}
-        <div class="mo-cta-button"><button>Was kann ich tun?</button></div>
+        <div class="mo-cta-button mo-explanation">
+          <h3>Was kann ich tun?</h3>
+        </div>
         {{ end }}
       </div>
       {{ with .Params.ctas }}
-      <div class="mo-cta-wrapper">
-        <h3>Was kann ich tun?</h3>
-        {{ range . }}
-        <div
-          class="{{ if eq .short true}}mo-cta-short icon-time_short{{ end }}{{ if eq .part true}}mo-cta-part icon-time_part{{ end }}{{ if eq .full true}}mo-cta-full icon-time_full{{ end }}">
-          <p>{{ .text | safeHTML }}</p>
+        <div class="mo-cta-wrapper">
+          <h3 class="mo-close-handle">Was kann ich tun?</h3>
+          {{ range . }}
+          <div
+            class="{{ if eq .short true}}mo-cta-short icon-time_short{{ end }}{{ if eq .part true}}mo-cta-part icon-time_part{{ end }}{{ if eq .full true}}mo-cta-full icon-time_full{{ end }}">
+            <p>{{ .text | safeHTML }}</p>
+          </div>
+          {{ end }}
         </div>
         {{ end }}
-        <div class="mo-close-handle"></div>
-      </div>
-      {{ end }}
     </div>
   </article>
 </section>
