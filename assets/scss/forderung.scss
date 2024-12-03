@@ -62,7 +62,7 @@
         color: black;
         padding: 4rem;
         width: 100vw;
-        height: 50dvh;
+        height: 50vh;
         overflow-y: scroll;
         bottom: 0;
         position: relative;
@@ -243,7 +243,7 @@
     color: white;
     max-width: 80vw;
     margin: auto;
-    padding-bottom: 92dvh;
+    padding-bottom: 92vh;
     font-size: large;
 }
 
@@ -299,8 +299,8 @@
     margin: auto;
     padding: 3rem 0;
     display: flex;
-        flex-direction: column;
-        min-height: calc(100% - 6rem);
+    flex-direction: column;
+        min-height: calc(100% - 6rem - (100vh - 100dvh));
 }
 
 .mo-main-content {
