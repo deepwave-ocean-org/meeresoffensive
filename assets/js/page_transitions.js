@@ -176,7 +176,7 @@ if (
                                     source.src = source.dataset.src;
                                     video.style.display = 'none';
                                     video.load();
-
+                                    video.playbackRate = 0.6;    
                                     video.addEventListener('canplaythrough', () => {
                                         video.play();
                                         const spinner = slide.querySelector('.video-spinner');
