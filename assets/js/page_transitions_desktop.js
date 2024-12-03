@@ -7,12 +7,13 @@ if (
 
         const sections = document.querySelectorAll(".desktop-only .mo-single")
         sections.forEach((section) => {
-            const videoCont = section.querySelector(".video-container")
+            const videoCont = section.querySelector(".video-container");
             const video = videoCont.querySelector("video");
-            const view1 = section.querySelector(".view-1")
-            const view2 = section.querySelector(".view-2")
-            const background = section.querySelector(".mo-background")
+            const view1 = section.querySelector(".view-1");
+            const view2 = section.querySelector(".view-2");
+            const background = section.querySelector(".mo-background");
 
+            console.log(video)
             video.playbackRate = 0.6
             gsap.to(videoCont, {
                 left: -window.innerWidth,
@@ -73,15 +74,15 @@ if (
                     }
                 },
                 onEnter: () => {
-                    video.querySelector("video").currentTime = 0;
-                    video.querySelector("video").play();
+                    video.currentTime = 0;
+                    video.play();
                 },
                 onEnterBack: () => {
-                    video.querySelector("video").currentTime = 0;
-                    video.querySelector("video").play();
+                    video.currentTime = 0;
+                    video.play();
                 },
                 onLeave: () => {
-                    video.querySelector("video").pause();
+                    video.pause();
                 }
 
             });
