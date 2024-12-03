@@ -10,12 +10,21 @@ document.addEventListener('DOMContentLoaded', function () {
         if (activeLink) { activeLink.classList.remove('active') }
     }
 
-    mos.forEach(function (entry, index) {
+    function scrollInParentView(child, parent, offset = 15) {
+        parent.scrollTo({
+            top: child.offsetTop - offset,
+            behavior: 'smooth'
+        });
+    }
+
+    mos.forEach(function (section, index) {
 
         // Find all Explanations in each MO Translation
-        let explanations = entry.querySelectorAll('.mo-explanation')
+        let explanations = section.querySelectorAll('.mo-explanation')
         // Find all Anchor-Links in each MO Original
-        let explanationLinks = entry.querySelectorAll('a[href^="#"]')
+        let explanationLinks = section.querySelectorAll('a[href^="#"]')
+        let original = section.querySelector(".mo-main-content")
+        let explanationContainer = section.querySelector(".mo-translation")
 
         // Make Explanations clickable
         explanations.forEach(function (entry, index) {
@@ -27,7 +36,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
                 removeAllActive()
                 explanationLinks[index].classList.toggle('active')
+                scrollInParentView(explanationLinks[index], original)
                 entry.classList.toggle('active')
+                scrollInParentView(entry, explanationContainer)
             })
         })
 
@@ -42,6 +53,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 removeAllActive()
                 explanations[index].classList.toggle('active')
                 e.currentTarget.classList.toggle('active')
+                scrollInParentView(explanations[index], explanationContainer)
             })
         })
     })

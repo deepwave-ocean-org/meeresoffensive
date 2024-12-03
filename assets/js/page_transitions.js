@@ -169,16 +169,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.log("not a slide")
                 return
             }
-            console.log(activeSlide)
             const video = activeSlide.querySelector('.mo-video video');
             const videoContainer = activeSlide.querySelector('.video-container');
             const gifTranslation = activeSlide.querySelector('.gif-explanation');
 
             const height = window.innerHeight
 
+            gsap.set(background, { clearProps: "transform" })
+
             window.backgroundTimeline = gsap.timeline({
                 scrollTrigger: {
-                    trigger: activeSlide,
+                    trigger: document.querySelector(".swiper"),
                     start: 'top top',
                     end: `+=${height * 2.1}`,
                     scrub: true,

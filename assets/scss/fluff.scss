@@ -10,25 +10,39 @@
 }
 
 .mo-chapter div,
-#final-slide div,
-#intro-slide>div {
+#final-slide>div,
+#intro-slide .content {
     max-width: 80vw;
     margin: 0 auto;
 }
 
-.mo-logos-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 3em;
-    justify-content: center;
+#intro-slide p {
+    margin-bottom: 1rem;
+    hyphens: auto;
 }
 
+#final-slide {
+    padding: 4rem 0;
+}
+
+#final-slide div {
+    padding-bottom: 2rem;
+}
+
+#final-slide p {
+    padding-bottom: 1rem;
+}
+.mo-logos-container {
+    display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px 20px;
+        align-items: center;
+}
+
+
 .mo-logos-container .mo-signatory-logo {
-    flex-basis: 150px;
-    width: 150px;
+    width: 100%;
     max-width: 300px;
-    min-width: auto;
-    flex-grow: 2;
 }
 .intro-video {
     position: relative;
@@ -53,12 +67,11 @@
 }
 
 #intro-slide h1 {
-    max-width: 87%;
     text-align: center;
     font-size: 4em;
     font-size: clamp(32px, 4vw, 4em);
     padding: 0;
-    margin-bottom: 55px;
+    margin-top: 4rem;
     color: #fff;
 }
 
@@ -66,6 +79,50 @@
     color: white;
     background-size: cover;
     background-position: center;
-    background-image: linear-gradient(rgba(7, 28, 37, 0.72), rgba(7, 28, 37, 0.68)), url(/images/background-ocean.avif);
+    background-image: linear-gradient(rgba(7, 28, 37, 0.82), rgba(7, 28, 37, 0.78)), url(/images/background-ocean.avif);
     background-attachment: fixed;
+}
+.shimmer {
+    // position: absolute;
+    // inset: 0;
+    // opacity: 0.2;
+    background: linear-gradient(90deg,
+            transparent 0%,
+            rgba(255, 255, 255, 0.3) 45%,
+            rgba(255, 255, 255, 0.7) 50%,
+            rgba(255, 255, 255, 0.3) 55%,
+            transparent 100%);
+    background-size: 200% 100%;
+    animation: shimmer 3s infinite;
+    height: 20vh;
+    width: 100%;
+    position: absolute;
+    opacity: 0.3;
+    bottom: 0;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 100% 0;
+    }
+
+    45% {
+        background-position: -100% 0;
+    }
+
+    100% {
+        background-position: -100% 0;
+    }
+}
+
+.swipe-info {
+    height: 20vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: x-large;
+}
+
+.swiper-pagination-bullet:nth-child(2).swiper-pagination-bullet-active-next {
+    opacity: 0 !important;
 }

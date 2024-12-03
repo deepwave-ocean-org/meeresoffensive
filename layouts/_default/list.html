@@ -24,10 +24,6 @@
             </div>
             {{ $menuItems = $menuItems | append " " }}
             {{ range .Pages.ByParam "order" }}
-            <!-- <div class="swiper-slide" data-hash="{{ .Params.titlesmall | urlize }}">
-                {{ .Render "chapter" }}
-            </div>
-            {{ $menuItems = $menuItems | append " " }} -->
             {{ range .Pages.ByParam "order" }}
             {{ $menuItems = $menuItems | append .Title }}
             <div class="swiper-slide" data-hash="{{ .Title | urlize }}">
@@ -44,6 +40,7 @@
             <script>
                     const menu = {{ $menuItems | jsonify | safeJS }};
                     window.menu = menu;
+                                    console.log(menu);
             </script>
         </div>
     </div>
