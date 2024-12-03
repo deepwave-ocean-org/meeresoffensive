@@ -1,5 +1,6 @@
 if (document.documentElement.classList.contains('is-desktop')) {
-    document.addEventListener('DOMContentLoaded', function () {
+
+    function setupAllScrollTriggers() {
         gsap.registerPlugin(ScrollTrigger);
 
         const sections = document.querySelectorAll(".desktop-only .mo-single")
@@ -80,18 +81,17 @@ if (document.documentElement.classList.contains('is-desktop')) {
                     video.querySelector("video").pause();
                 }
 
-                // markers: true,
             });
-
-            // Second pin for final viewport
-            // ScrollTrigger.create({
-            //     trigger: section,
-            //     pin: true,
-            //     start: "+=200% top", // Start after animation section
-            //     end: "+=100%",
-            //     markers: true,
-            // });
         })
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+        setupAllScrollTriggers();
+
+        ScrollTrigger.refresh();
+
+        requestAnimationFrame(() => {
+            document.querySelector('.desktop-only').classList.remove('swiper-hidden');
+        });
     })
 }
 
