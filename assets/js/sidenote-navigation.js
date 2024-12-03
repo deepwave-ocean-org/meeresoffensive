@@ -99,8 +99,8 @@ document.addEventListener('DOMContentLoaded', function () {
             // LINK internal
             if (link.includes('#')) {
                 // do something
-                alert('jump to internal link — TO BE IMPLEMENTED')
-
+                // alert('jump to internal link — TO BE IMPLEMENTED')
+                window.open(link, '_blank');
                 // IMAGE lightBox
             } else if (link.includes('cloudinary.com')) {
                 // Open image in lightbox
