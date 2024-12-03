@@ -7,24 +7,23 @@ if (
 
         const sections = document.querySelectorAll(".desktop-only .mo-single")
         sections.forEach((section) => {
-            const videoCont = section.querySelector(".video-container")
-            const video = videoCont.querySelector("video");
+            const video = section.querySelector(".video-container")
             const view1 = section.querySelector(".view-1")
             const view2 = section.querySelector(".view-2")
             const background = section.querySelector(".mo-background")
-            video.playbackRate = 0.6;
-            gsap.to(videoCont, {
+
+            gsap.to(video, {
                 left: -window.innerWidth,
                 duration: 0.5,
                 scrollTrigger: {
                     trigger: section,
                     // markers: true,
                     onEnter: () => {
-                        video.currentTime = 0;
-                        video.play();
+                        video.querySelector("video").currentTime = 0;
+                        video.querySelector("video").play();
                     },
                     onLeave: () => {
-                        video.pause();
+                        video.querySelector("video").pause();
                     },
                     start: "50% top",
                     toggleActions: "play none none reverse"
@@ -72,15 +71,15 @@ if (
                     }
                 },
                 onEnter: () => {
-                    videoCont.querySelector("video").currentTime = 0;
-                    videoCont.querySelector("video").play();
+                    video.querySelector("video").currentTime = 0;
+                    video.querySelector("video").play();
                 },
                 onEnterBack: () => {
-                    videoCont.querySelector("video").currentTime = 0;
-                    videoCont.querySelector("video").play();
+                    video.querySelector("video").currentTime = 0;
+                    video.querySelector("video").play();
                 },
                 onLeave: () => {
-                    videoCont.querySelector("video").pause();
+                    video.querySelector("video").pause();
                 }
 
             });
