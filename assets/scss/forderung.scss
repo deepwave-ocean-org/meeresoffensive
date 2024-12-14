@@ -19,16 +19,18 @@
 }
 
 .mo-explanation h3::before {
-    content: "\22CE";
+    content: "\003E";
     display: inline-block;
-    font-size: 135%;
+    font-size: 105%;
     position: absolute;
-    margin-top: -0.25em;
-    margin-left: -2.5rem;
+    margin-top: -0.04em;
+        margin-left: -2.2rem;
 }
 
 .mo-explanation.active h3::before {
-    content: "\224D";
+    content: "v";
+        transform: scale(1.2, 0.9);
+        margin-top: -0.1em;
 }
 
 .mo-cta-button.mo-explanation h3::before {

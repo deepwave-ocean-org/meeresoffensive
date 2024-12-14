@@ -2,7 +2,7 @@
   data-sprite=" {{ .Params.sprite }}" class="mo-section link-color-{{ .Params.color }}">
   <article data-url="#{{ .Title | urlize }}" class="mo-single" id="article-no-{{ .Params.order }}">
     <div class="mo-background" data-bg=""
-      style="background: linear-gradient(180deg, rgba(0,0,0,0.35) 1%, rgba(0,0,0,0) 14%, rgba(10,10,10,0.5) 60%, rgba(10,10,10,1) 98%, #0a0a0a 100%), url(' {{ .Site.Params.cloudinary_url }}/{{ .Params.background_image }} ');">
+      style="background: linear-gradient(180deg, rgba(0,0,0,0.35) 1%, rgba(0,0,0,0) 14%, rgba(10,10,10,0.5) 60%, rgba(10,10,10,1) 98%, #0a0a0a 100%), url(' backgrounds/{{ .Params.background_image }} ');">
     </div>
     <div class="video-container">
       <video muted playsinline>
