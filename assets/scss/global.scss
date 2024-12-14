@@ -3,7 +3,7 @@
 @import "colors.scss";
 @import "expander.scss";
 @import "fluff.scss";
-
+@import "navigation.scss";
 
 body {
     overflow-x: hidden;
@@ -11,25 +11,6 @@ body {
 
 a {
     color: #b9d2da;
-}
-/* Show relevant container based on device class */
-.is-desktop .desktop-only {
-    display: block;
-}
-
-.is-mobile .mobile-only {
-    display: block;
-}
-@media screen and (max-width: 767px) {
-    .desktop-only {
-        display: none !important;
-    }
-}
-
-@media screen and (min-width: 768px) {
-    .mobile-only {
-        display: none !important;
-    }
 }
 
 /**

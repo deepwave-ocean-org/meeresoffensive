@@ -1,11 +1,13 @@
-<section class="panel" id="{{ .Title | urlize }}" data-file="{{ .File.ContentBaseName }}"
-  data-sprite=" {{ .Params.sprite }}" class="mo-section link-color-{{ .Params.color }}">
+<section id="{{ .Title | urlize }}" data-file="{{ .File.ContentBaseName }}"
+  class="panel mo-section link-color-{{ .Params.color }} order-{{ .Params.order }}">
   <article data-url="#{{ .Title | urlize }}" class="mo-single" id="article-no-{{ .Params.order }}">
+    <span class="navigation-opener" data-order="{{ .Params.order }}">{{ .Params.title }}</span>
     <div class="mo-background" data-bg=""
       style="background: linear-gradient(180deg, rgba(0,0,0,0.35) 1%, rgba(0,0,0,0) 14%, rgba(10,10,10,0.5) 60%, rgba(10,10,10,1) 98%, #0a0a0a 100%), url(' backgrounds/{{ .Params.background_image }} ');">
     </div>
     <div class="video-container">
-      <video muted playsinline>
+      <!-- <div class="scroll-video" data-src="videos/{{ lower .File.ContentBaseName }}.mp4"></div> -->
+      <video muted playsinline preload="auto">
         <source src="videos/{{ lower .File.ContentBaseName }}_av1.mp4" type="video/mp4; codecs=av01.0.08M.08" />
         <source src="videos/{{ lower .File.ContentBaseName }}.mp4" type="video/mp4" />
       </video>

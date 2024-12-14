@@ -1,0 +1,58 @@
+.navigation-opener {
+    position: absolute;
+    top: 2rem;
+    left: 2rem;
+    padding-left: 2.5rem;
+    z-index: 100000;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: pointer;
+}
+
+.navigation-opener::before {
+    content: "\2630";
+    font-size: 90%;
+    bottom: 0.25rem;
+    position: absolute;
+    left: 0;
+}
+
+.navigation-opener.active::before {
+    content: "\2715";
+}
+
+
+
+#map-container-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: calc(100% - 7rem);
+    margin-top: 7rem;
+    width: 100%;
+    z-index: 9000;
+    // background-image: linear-gradient(rgba(7, 28, 37, 0.72),
+    //         rgba(7, 28, 37, 0.68)),
+    //     url(/images/background-ocean.avif);
+    // background-attachment: fixed;
+    // background-position: center;
+    // background-size: cover;
+    visibility: visible;
+}
+
+#map-container-container.map-hidden {
+    visibility: hidden;
+}
+
+#map-container {
+    position: relative;
+    overflow-x: hidden;
+    background-color: transparent;
+}
+
+#map {
+    display: block;
+    width: 100%;
+    height: 100%;
+}

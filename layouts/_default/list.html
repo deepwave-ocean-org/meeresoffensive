@@ -2,6 +2,7 @@
 
 
 <div class="desktop-only swiper-hidden">
+    
     <div id="intro-slide">
         {{ .Render "intro" }}
     </div>
@@ -13,6 +14,26 @@
     {{ end }}
     <div id="final-slide">
         {{ .Render "final" }}
+    </div>
+    <div class="map-hidden" id="map-container-container">
+        <div id="map-container">
+            <canvas id="map"></canvas>
+            <span id="close-map">X</span>
+        </div>
+        <script type="text/javascript">
+            window.smalltitles = [
+                {{ range .Data.Pages.ByParam "order" }}
+                [
+                    {{ range .Data.Pages.ByParam "order" }}
+                    {
+                        title: "{{ .Params.title | safeHTML }}",
+                        order: "{{ .Params.order }}"
+                    },
+                    {{ end }}
+                ],
+                {{ end }}
+            ]
+        </script>
     </div>
 </div>
 <div class="mobile-only">

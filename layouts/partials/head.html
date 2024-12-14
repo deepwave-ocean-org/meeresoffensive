@@ -4,19 +4,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
-    {{ $worker := resources.Get "js/sprite-worker.js" | resources.Minify }}
-    <script>
-        window.workerURL = "{{ $worker.RelPermalink }}";
-    </script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@latest/bundled/lenis.js"></script>
 
-    <script>
-        (function () {
-            document.documentElement.classList.add(
-                window.innerWidth < 768 ? 'is-mobile' : 'is-desktop'
-            );
-        })();
-    </script>
-    <!-- SwiperJS for Mobile navigation-->
     {{ $style := resources.Get "scss/swiper.css" }}
     <link rel="stylesheet" href="{{ $style.RelPermalink }}" />
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
@@ -28,10 +17,14 @@
 
     <script type="module" src="https://cdn.jsdelivr.net/npm/stacked-alpha-video/+esm"></script>
 
-    {{ $isMobile := resources.Get "js/page_transitions.js" | resources.Minify }}
-    {{ $isDesktop := resources.Get "js/page_transitions_desktop.js" | resources.Minify }}
-    <script src="{{ $isMobile.RelPermalink }}"></script>
-    <script src="{{ $isDesktop.RelPermalink }}"></script>
+    {{ $mobileJS := resources.Get "js/page_transitions.js" | resources.Minify }}
+    {{ $desktopJS := resources.Get "js/page_transitions_desktop.js" | resources.Minify }}
+    <script src="{{ $mobileJS.RelPermalink }}"></script>
+    <script src="{{ $desktopJS.RelPermalink }}"></script>
+    
+    {{ $map := resources.Get "js/map.js" | resources.Minify }}
+    <script src="{{ $map.RelPermalink }}"></script>
+
     {{ $js := resources.Get "js/sidenote-navigation.js" | resources.Minify }}
     <script src="{{ $js.RelPermalink }}"></script>
 
