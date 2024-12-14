@@ -12,6 +12,35 @@ if (
             const view1 = section.querySelector(".view-1");
             const view2 = section.querySelector(".view-2");
             const background = section.querySelector(".mo-background");
+            // const videoScroll = videoCont.querySelector(".scroll-video")
+            // const videoSrc = videoScroll.dataset.src
+            // new ScrollyVideo({
+            //     scrollyVideoContainer: videoScroll,
+            //     src: videoSrc,
+            //     useWebCodecs: false
+            // });
+
+
+            const navigation = section.querySelector(".navigation-opener ")
+            navigation.addEventListener("click", () => {
+                if (!navigation.classList.contains("active")) {
+                    console.log("helloo")
+                    navigation.classList.add("active")
+                    gsap.to([videoCont, view1, view2], {
+                        visibility: "hidden",
+                        duration: 0,
+                    })
+                    window.openNavigationMap()
+                    window.setActiveMapPlace(navigation.dataset.order)
+                    return
+                }
+                navigation.classList.remove("active")
+                gsap.to([videoCont, view1, view2], {
+                    visibility: "visible",
+                    duration: 0,
+                })
+                window.closeNavigationMap()
+            })
 
             console.log(video)
             video.playbackRate = 0.6
