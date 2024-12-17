@@ -40,6 +40,17 @@ if (
 
         requestAnimationFrame(raf);
 
+        function closeMap() {
+            map.classList.add("hidden");
+            document.querySelectorAll(".video-container.hidden, .view-1.hidden, .view-2.hidden").forEach(el => el.classList.remove("hidden"));
+            document.querySelector(".mo-background.background-dark").classList.remove("background-dark");
+            document.querySelector(".navigation-opener.active").classList.remove("active")
+            lenis.start();
+            document.body.style.overflow = '';
+        }
+
+        window.closeMap = closeMap
+
         const sections = document.querySelectorAll(".desktop-only .mo-single")
         const map = document.getElementById("map")
 
@@ -66,12 +77,11 @@ if (
                     map.classList.remove("hidden");
                     // window.setActiveMapPlace(navigation.dataset.order)
                     background.classList.add("background-dark");
+                    lenis.stop();
+                    document.body.style.overflow = 'hidden';
                     return
                 }
-                navigation.classList.remove("active");
-                [videoCont, view1, view2].forEach(el => el.classList.remove("hidden"));
-                background.classList.remove("background-dark");
-                map.classList.add("hidden");
+                closeMap()
             })
 
             console.log(video)
