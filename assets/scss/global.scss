@@ -32,6 +32,17 @@ from Hugo Novella Theme
 .hidden {
     visibility: hidden !important;
 }
+@media screen and (max-width: 767px) {
+    .desktop-only {
+        display: none !important;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .mobile-only {
+        display: none !important;
+    }
+}
 @font-face {
     font-family: "-apple-system", "BlinkMacSystemFont", "San Francisco",
         "Helvetica Neue", "Helvetica", "Ubuntu", "Roboto", "Noto", "Segoe UI",
