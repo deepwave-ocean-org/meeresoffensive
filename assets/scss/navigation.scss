@@ -24,7 +24,7 @@
 
 
 
-#map-container-container {
+#map {
     position: fixed;
     top: 0;
     left: 0;
@@ -32,27 +32,19 @@
     margin-top: 7rem;
     width: 100%;
     z-index: 9000;
-    // background-image: linear-gradient(rgba(7, 28, 37, 0.72),
-    //         rgba(7, 28, 37, 0.68)),
-    //     url(/images/background-ocean.avif);
-    // background-attachment: fixed;
-    // background-position: center;
-    // background-size: cover;
     visibility: visible;
 }
 
-#map-container-container.map-hidden {
-    visibility: hidden;
-}
-
-#map-container {
-    position: relative;
-    overflow-x: hidden;
-    background-color: transparent;
-}
-
-#map {
-    display: block;
+.hover-text {
+    font-size: x-large;
+    word-break: break-word;
+    hyphens: auto;
+    text-align: center;
     width: 100%;
-    height: 100%;
+    color: white;
+}
+
+.node-inactive,
+.background-dark {
+    opacity: 0.2 !important;
 }

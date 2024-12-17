@@ -5,7 +5,44 @@ if (
     function setupAllScrollTriggers() {
         gsap.registerPlugin(ScrollTrigger);
 
+        const lenis = new Lenis({
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+        });
+
+        lenis.on("scroll", () => {
+            ScrollTrigger.update();
+        });
+
+
+        // ScrollTrigger.scrollerProxy(document.documentElement, {
+        //     scrollTop(value) {
+        //         // Important: handle both getting and setting scroll position
+        //         if (arguments.length) {
+        //             lenis.scrollTo(value);  // Set scroll position
+        //         }
+        //         return lenis.scroll;        // Get scroll position
+        //     },
+        //     getBoundingClientRect() {
+        //         return {
+        //             top: 0,
+        //             left: 0,
+        //             width: window.innerWidth,
+        //             height: window.innerHeight
+        //         };
+        //     }
+        // });
+
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+
+        requestAnimationFrame(raf);
+
         const sections = document.querySelectorAll(".desktop-only .mo-single")
+        const map = document.getElementById("map")
+
         sections.forEach((section) => {
             const videoCont = section.querySelector(".video-container");
             const video = videoCont.querySelector("video");
@@ -24,22 +61,17 @@ if (
             const navigation = section.querySelector(".navigation-opener ")
             navigation.addEventListener("click", () => {
                 if (!navigation.classList.contains("active")) {
-                    console.log("helloo")
-                    navigation.classList.add("active")
-                    gsap.to([videoCont, view1, view2], {
-                        visibility: "hidden",
-                        duration: 0,
-                    })
-                    window.openNavigationMap()
-                    window.setActiveMapPlace(navigation.dataset.order)
+                    navigation.classList.add("active");
+                    [videoCont, view1, view2].forEach(el => el.classList.add("hidden"));
+                    map.classList.remove("hidden");
+                    // window.setActiveMapPlace(navigation.dataset.order)
+                    background.classList.add("background-dark");
                     return
                 }
-                navigation.classList.remove("active")
-                gsap.to([videoCont, view1, view2], {
-                    visibility: "visible",
-                    duration: 0,
-                })
-                window.closeNavigationMap()
+                navigation.classList.remove("active");
+                [videoCont, view1, view2].forEach(el => el.classList.remove("hidden"));
+                background.classList.remove("background-dark");
+                map.classList.add("hidden");
             })
 
             console.log(video)

@@ -23,7 +23,7 @@
     <script src="{{ $desktopJS.RelPermalink }}"></script>
     
     {{ $map := resources.Get "js/map.js" | resources.Minify }}
-    <script src="{{ $map.RelPermalink }}"></script>
+    <script src="{{ $map.RelPermalink }}" type="module"></script>
 
     {{ $js := resources.Get "js/sidenote-navigation.js" | resources.Minify }}
     <script src="{{ $js.RelPermalink }}"></script>

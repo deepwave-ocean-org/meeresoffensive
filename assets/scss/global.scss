@@ -29,6 +29,9 @@ from Hugo Novella Theme
     --ease-in-out-quart: cubic-bezier(0.77, 0, 0.175, 1);
 }
 
+.hidden {
+    visibility: hidden !important;
+}
 @font-face {
     font-family: "-apple-system", "BlinkMacSystemFont", "San Francisco",
         "Helvetica Neue", "Helvetica", "Ubuntu", "Roboto", "Noto", "Segoe UI",

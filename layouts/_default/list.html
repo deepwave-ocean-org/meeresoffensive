@@ -7,32 +7,36 @@
         {{ .Render "intro" }}
     </div>
     {{ range .Pages.ByParam "order" }}
-    {{ .Render "chapter" }}
-    {{ range .Pages.ByParam "order" }}
-    {{ .Render "forderung-desktop" }}
-    {{ end }}
+        {{ .Render "chapter" }}
+        {{ range .Pages.ByParam "order" }}
+            {{ .Render "forderung-desktop" }}
+        {{ end }}
     {{ end }}
     <div id="final-slide">
         {{ .Render "final" }}
     </div>
-    <div class="map-hidden" id="map-container-container">
-        <div id="map-container">
-            <canvas id="map"></canvas>
-            <span id="close-map">X</span>
-        </div>
+    <div class="hidden" id="map">
         <script type="text/javascript">
-            window.smalltitles = [
-                {{ range .Data.Pages.ByParam "order" }}
-                [
+            window.mapdata = {
+                name: "KLARTEXT Meerespolitik",
+                children: [
                     {{ range .Data.Pages.ByParam "order" }}
                     {
-                        title: "{{ .Params.title | safeHTML }}",
-                        order: "{{ .Params.order }}"
+                        name: "{{ .Title }}",
+                        anchor: "{{ .Title | urlize }}",
+                        children: [
+                            {{ range .Data.Pages.ByParam "order" }}
+                                {
+                                    name: "{{ .Title  }}",
+                                    anchor: "{{ .Title | urlize }}",
+                                    thumbnail: "/thumbnails/{{ .Params.order}}.webp"
+                                },
+                            {{ end }}
+                        ]
                     },
                     {{ end }}
-                ],
-                {{ end }}
-            ]
+                ]
+            }
         </script>
     </div>
 </div>
@@ -45,12 +49,12 @@
             </div>
             {{ $menuItems = $menuItems | append " " }}
             {{ range .Pages.ByParam "order" }}
-            {{ range .Pages.ByParam "order" }}
-            {{ $menuItems = $menuItems | append .Title }}
-            <div class="swiper-slide" data-hash="{{ .Title | urlize }}">
-                {{ .Render "forderung" }}
-            </div>
-            {{ end }}
+                {{ range .Pages.ByParam "order" }}
+                    {{ $menuItems = $menuItems | append .Title }}
+                    <div class="swiper-slide" data-hash="{{ .Title | urlize }}">
+                        {{ .Render "forderung" }}
+                    </div>
+                {{ end }}
             {{ end }}
             <div class="swiper-slide" id="final-slide" data-hash="danke">
                 {{ .Render "final" }}
