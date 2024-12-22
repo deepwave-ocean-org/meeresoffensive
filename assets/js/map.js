@@ -1,4 +1,5 @@
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
+import Fuse from 'https://cdn.jsdelivr.net/npm/fuse.js@6.6.2/dist/fuse.esm.js';
 
 if (
   window.innerWidth > 767
@@ -14,8 +15,100 @@ if (
     const links = root.links();
     const nodes = root.descendants();
 
-    const map = document.getElementById('map');
+    // Create the container SVG.
+    const svg = d3.create("svg")
+      .attr("width", width)
+      .attr("height", height)
+      .attr("viewBox", [-width / 2, -height / 2, width, height])
+      .attr("style", "max-width: 100%; height: auto;");
 
+    const map = document.getElementById('map');
+    const search = document.getElementById('search-bar')
+    const searchResults = document.getElementById("search-results")
+    function debounce(func, wait) {
+      let timeout;
+      return function (...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, args), wait);
+      };
+    }
+    const searchableNodes = nodes.filter(n => n.depth > 1).map(n => ({
+      name: n.data.name,
+      node: n,
+      anchor: n.data.anchor,
+      content: typeof n.data.content === 'string' ? JSON.parse(n.data.content) : n.data.content,
+      thumbnail: n.data.thumbnail
+    }));
+
+    const fuse = new Fuse(searchableNodes, {
+      keys: ['name',
+        'content.text_translation',
+        'content.title',
+        'content.explanations.text',
+      ],
+      threshold: 0.2,
+      includeMatches: true,
+      minMatchCharLength: 3,
+      includeScore: true,
+      ignoreLocation: true,
+    });
+
+    function renderSearchResults(e) {
+      let searchTerm = ""
+      if (e) {
+        searchTerm = e.target.value.trim();
+      }
+
+      searchResults.innerHTML = '';
+
+      if (searchTerm === '') {
+        svg.classed("hidden", false);
+        return;
+      }
+
+      const results = fuse.search(searchTerm);
+      if (results.length > 0) {
+        console.log(results)
+        svg.classed("hidden", true);
+        const ul = document.createElement('ul');
+        ul.className = 'search-results-list';
+
+        results.forEach(result => {
+          const li = document.createElement('li');
+          li.className = 'search-result-item';
+          const link = document.createElement('a');
+          link.href = "#" + result.item.anchor;
+          link.addEventListener("click", (e) => {
+            if (result.matches[0].key == "content.explanations.text") {
+              e.preventDefault();
+              const target = document.getElementById(result.item.anchor)
+              window.scrollTo(0, target.getBoundingClientRect().top + window.scrollY + window.innerHeight)
+            }
+            window.closeMap();
+          })
+          const thumb = document.createElement('img');
+          thumb.src = result.item.thumbnail;
+          link.append(thumb)
+          const nameText = document.createTextNode(result.item.name);
+          link.appendChild(nameText);
+          if (result.matches[0].key == "content.explanations.text") {
+            const explanation = document.createElement('span');
+            explanation.textContent = ": " + result.item.content.explanations[result.matches[0].refIndex].title;
+            link.appendChild(explanation)
+          }
+          li.appendChild(link);
+          ul.appendChild(li);
+        })
+        searchResults.append(ul)
+      }
+
+    }
+
+    search.addEventListener('input', debounce(e => {
+      renderSearchResults(e)
+    }, 300));
+
+    window.renderSearchResults = renderSearchResults
     const drag = (simulation) => {
       let dragStart = null
       function dragstarted(event, d) {
@@ -85,12 +178,7 @@ if (
         .strength(0.7))
       .force("bounds", boundingForce);
 
-    // Create the container SVG.
-    const svg = d3.create("svg")
-      .attr("width", width)
-      .attr("height", height)
-      .attr("viewBox", [-width / 2, -height / 2, width, height])
-      .attr("style", "max-width: 100%; height: auto;");
+
 
     const defs = svg.append("defs");
 
@@ -132,6 +220,7 @@ if (
       .selectAll("line")
       .data(links)
       .join("line")
+      .attr("opacity", 0.7)
       .attr("stroke", d => {
         if (d.source.depth < 1) { return "#999" } else {
           return d.target.x < d.source.x ? "url(#lineGradientRight)" : "url(#lineGradientLeft)"
@@ -194,10 +283,6 @@ if (
         .style("display", d => d.depth === 1 ? "none" : null)
         .text(d.data.name);
     })
-      .on("mousemove", (event, d) => {
-        console.log("hellodjeiwo")
-        this.attr("transform", `translate(${d.x},${d.y})`);
-      })
       .on("mouseout", () => {
         textContainer.selectAll("foreignObject").remove();
         node.selectAll("circle").attr("class", "")

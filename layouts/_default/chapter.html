@@ -1,4 +1,4 @@
-<div class="mo-chapter">
+<div id="{{ .Title | urlize }}" class="mo-chapter order-{{ .Params.order }}">
     <div>
         <h2>{{.Title}}</h2>
         {{ .Content }}

@@ -47,12 +47,70 @@ if (
             document.querySelector(".navigation-opener.active").classList.remove("active")
             lenis.start();
             document.body.style.overflow = '';
+            search.blur();
+            search.value = "";
+            window.renderSearchResults()
+        }
+        function openMap(section) {
+            const videoCont = section.querySelector(".video-container");
+            const view1 = section.querySelector(".view-1");
+            const view2 = section.querySelector(".view-2");
+            const background = section.querySelector(".mo-background");
+            const navigation = section.querySelector(".navigation-opener ")
+
+            window.scrollTo(0, section.getBoundingClientRect().top + window.scrollY);
+            navigation.classList.add("active");
+            [videoCont, view1, view2].forEach(el => el.classList.add("hidden"));
+            map.classList.remove("hidden");
+            background.classList.add("background-dark");
+            lenis.stop();
+            document.body.style.overflow = 'hidden';
+            search.focus();
+            window.renderSearchResults()
         }
 
+
         window.closeMap = closeMap
+        window.openMap = openMap
+
+
 
         const sections = document.querySelectorAll(".desktop-only .mo-single")
         const map = document.getElementById("map")
+        const search = document.getElementById("search-bar")
+
+        document.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+
+                // Find most visible section at the moment Ctrl+K is pressed
+                const sections = document.querySelectorAll('section');
+                let currentSection = null;
+                let maxVisibleArea = 0;
+
+                sections.forEach(section => {
+                    const rect = section.getBoundingClientRect();
+                    const viewHeight = window.innerHeight;
+                    const visibleHeight = Math.min(rect.bottom, viewHeight) - Math.max(rect.top, 0);
+                    const visibleArea = Math.max(0, visibleHeight);
+
+                    if (visibleArea > maxVisibleArea) {
+                        maxVisibleArea = visibleArea;
+                        currentSection = section;
+                    }
+                });
+
+                if (currentSection) {
+                    openMap(currentSection);
+                    search.focus();
+                }
+            }
+
+            if (e.key === 'Escape') {
+                e.preventDefault();
+                closeMap();
+            }
+        });
 
         sections.forEach((section) => {
             const videoCont = section.querySelector(".video-container");
@@ -60,25 +118,11 @@ if (
             const view1 = section.querySelector(".view-1");
             const view2 = section.querySelector(".view-2");
             const background = section.querySelector(".mo-background");
-            // const videoScroll = videoCont.querySelector(".scroll-video")
-            // const videoSrc = videoScroll.dataset.src
-            // new ScrollyVideo({
-            //     scrollyVideoContainer: videoScroll,
-            //     src: videoSrc,
-            //     useWebCodecs: false
-            // });
-
-
             const navigation = section.querySelector(".navigation-opener ")
+
             navigation.addEventListener("click", () => {
                 if (!navigation.classList.contains("active")) {
-                    navigation.classList.add("active");
-                    [videoCont, view1, view2].forEach(el => el.classList.add("hidden"));
-                    map.classList.remove("hidden");
-                    // window.setActiveMapPlace(navigation.dataset.order)
-                    background.classList.add("background-dark");
-                    lenis.stop();
-                    document.body.style.overflow = 'hidden';
+                    openMap(section)
                     return
                 }
                 closeMap()
