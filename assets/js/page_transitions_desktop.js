@@ -20,7 +20,7 @@ if (
             return;
         }
         if (video.readyState != 4) {
-            console.log(video.readyState)
+            // console.log(video.readyState)
             return;
         }
         isChanging = false
@@ -126,7 +126,7 @@ if (
 
             video.addEventListener('ended', () => {
                 const triggerPosition = ScrollTrigger.getById("show-explanation-" + section.id).start;
-                // console.log("video ended", window.scrollY, triggerPosition, sectionParent.getBoundingClientRect().y)
+                console.log("video ended", window.scrollY, triggerPosition, sectionParent.getBoundingClientRect().y)
                 if (window.scrollY > triggerPosition) {
                     return
                 }
@@ -154,6 +154,7 @@ if (
             });
 
             videoReversed.addEventListener('ended', () => {
+                console.log("reverse ended")
                 if (sectionParent.getBoundingClientRect().y > 0 && sectionParent.getBoundingClientRect().y < window.innerHeight * 10) {
                     return
                 }

@@ -4,182 +4,8 @@ import Fuse from 'https://cdn.jsdelivr.net/npm/fuse.js@6.6.2/dist/fuse.esm.js';
 if (
   window.innerWidth > 767
 ) {
-  document.addEventListener('DOMContentLoaded', function () {
-    const width = window.innerWidth;
-    const height = window.innerHeight - 50;
 
-    const svg = d3.create("svg")
-      .attr("width", width)
-      .attr("height", height)
-      .attr("viewBox", [-width / 2, -height / 2, width, height])
-      .attr("style", "max-width: 100%; height: auto;");
-
-    const root = d3.hierarchy(window.mapdata);
-    const links = root.links();
-    const nodes = root.descendants();
-
-    // ---- toggling the Map ------ //
-    const map = document.getElementById('map');
-    const search = document.getElementById('search-bar')
-    const searchResults = document.getElementById("search-results")
-
-    function closeMap() {
-      map.classList.add("hidden");
-      document.querySelectorAll(".video-container.hidden, .view-1.hidden, .view-2.hidden").forEach(el => el.classList.remove("hidden"));
-      document.querySelector(".mo-background.background-dark").classList.remove("background-dark");
-      document.querySelector(".navigation-opener.active").classList.remove("active")
-      window.lenis.start();
-      document.body.style.overflow = '';
-      search.blur();
-      search.value = "";
-      renderSearchResults()
-    }
-    function openMap(section) {
-      const videoCont = section.querySelector(".video-container");
-      const view1 = section.querySelector(".view-1");
-      const view2 = section.querySelector(".view-2");
-      const background = section.querySelector(".mo-background");
-      const navigation = section.querySelector(".navigation-opener ")
-
-      window.scrollTo(0, section.getBoundingClientRect().top + window.scrollY);
-      navigation.classList.add("active");
-      [videoCont, view1, view2].forEach(el => el.classList.add("hidden"));
-      map.classList.remove("hidden");
-      background.classList.add("background-dark");
-      window.lenis.stop();
-      document.body.style.overflow = 'hidden';
-      search.focus();
-      renderSearchResults()
-    }
-
-
-    window.closeMap = closeMap
-    window.openMap = openMap
-
-
-    document.addEventListener('keydown', (e) => {
-      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-        e.preventDefault();
-
-        // Find most visible section at the moment Ctrl+K is pressed
-        const sections = document.querySelectorAll('section');
-        let currentSection = null;
-        let maxVisibleArea = 0;
-
-        sections.forEach(section => {
-          const rect = section.getBoundingClientRect();
-          const viewHeight = window.innerHeight;
-          const visibleHeight = Math.min(rect.bottom, viewHeight) - Math.max(rect.top, 0);
-          const visibleArea = Math.max(0, visibleHeight);
-
-          if (visibleArea > maxVisibleArea) {
-            maxVisibleArea = visibleArea;
-            currentSection = section;
-          }
-        });
-
-        if (currentSection) {
-          openMap(currentSection);
-          search.focus();
-        }
-      }
-
-      if (e.key === 'Escape') {
-        e.preventDefault();
-        closeMap();
-      }
-    });
-
-
-    // -------- Search --------------//
-    const searchableNodes = nodes.filter(n => n.depth > 1).map(n => ({
-      name: n.data.name,
-      node: n,
-      anchor: n.data.anchor,
-      content: typeof n.data.content === 'string' ? JSON.parse(n.data.content) : n.data.content,
-      thumbnail: n.data.thumbnail
-    }));
-
-    const fuse = new Fuse(searchableNodes, {
-      keys: ['name',
-        'content.text_translation',
-        'content.title',
-        'content.explanations.text',
-      ],
-      threshold: 0.2,
-      includeMatches: true,
-      minMatchCharLength: 3,
-      includeScore: true,
-      ignoreLocation: true,
-    });
-
-
-    function renderSearchResults(e) {
-      let searchTerm = ""
-      if (e) {
-        searchTerm = e.target.value.trim();
-      }
-
-      searchResults.innerHTML = '';
-
-      if (searchTerm === '') {
-        svg.classed("hidden", false);
-        return;
-      }
-
-      const results = fuse.search(searchTerm);
-      if (results.length > 0) {
-        console.log(results)
-        svg.classed("hidden", true);
-        const ul = document.createElement('ul');
-        ul.className = 'search-results-list';
-
-        results.forEach(result => {
-          const li = document.createElement('li');
-          li.className = 'search-result-item';
-          const link = document.createElement('a');
-          link.href = "#" + result.item.anchor;
-          link.addEventListener("click", (e) => {
-            if (result.matches[0].key == "content.explanations.text") {
-              e.preventDefault();
-              const section = document.getElementById(result.item.anchor)
-              window.scrollTo(0, section.getBoundingClientRect().top + window.scrollY + window.innerHeight)
-              explanationLink = section.querySelectorAll('a[href^="#"]').filter()
-              section.quer
-              entry.classList.toggle('active')
-              explanationLinks[index].classList.toggle('active')
-            }
-            window.closeMap();
-          })
-          const thumb = document.createElement('img');
-          thumb.src = result.item.thumbnail;
-          link.append(thumb)
-          const nameText = document.createTextNode(result.item.name);
-          link.appendChild(nameText);
-          if (result.matches[0].key == "content.explanations.text") {
-            const explanation = document.createElement('span');
-            explanation.textContent = ": " + result.item.content.explanations[result.matches[0].refIndex].title;
-            link.appendChild(explanation)
-          }
-          li.appendChild(link);
-          ul.appendChild(li);
-        })
-        searchResults.append(ul)
-      }
-
-    }
-
-    function debounce(func, wait) {
-      let timeout;
-      return function (...args) {
-        clearTimeout(timeout);
-        timeout = setTimeout(() => func.apply(this, args), wait);
-      };
-    }
-
-    search.addEventListener('input', debounce(e => {
-      renderSearchResults(e)
-    }, 300));
+  function initializeMapVisualization(svg, links, nodes, width, height) {
 
     // -------- Rendering the Map --------------//
     const drag = (simulation) => {
@@ -381,7 +207,199 @@ if (
       }
     });
 
-    map.append(svg.node())
+    return svg.node();
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const width = window.innerWidth;
+    const height = window.innerHeight - 50;
+
+    const menuSvg = d3.create("svg")
+      .attr("width", width)
+      .attr("height", height)
+      .attr("viewBox", [-width / 2, -height / 2, width, height])
+      .attr("style", "max-width: 100%; height: auto;");
+    const slideSvg = d3.create("svg")
+      .attr("width", width)
+      .attr("height", height)
+      .attr("viewBox", [-width / 2, -height / 2, width, height])
+      .attr("style", "max-width: 100%; height: auto; margin-top: 75px");
+
+    const root = d3.hierarchy(window.mapdata);
+    const nodes = root.descendants();
+
+    // ---- toggling the Map ------ //
+    const map = document.getElementById('map');
+    const search = document.getElementById('search-bar')
+    const searchResults = document.getElementById("search-results")
+
+    const mapSlide = document.getElementById("map-slide-child")
+
+    function closeMap() {
+      if (map.classList.contains("hidden")) {
+        return
+      }
+      map.classList.add("hidden");
+      document.querySelectorAll(".video-container.hidden, .view-1.hidden, .view-2.hidden").forEach(el => el.classList.remove("hidden"));
+      document.querySelector(".mo-background.background-dark").classList.remove("background-dark");
+      document.querySelector(".navigation-opener.active").classList.remove("active")
+      window.lenis.start();
+      document.body.style.overflow = '';
+      search.blur();
+      search.value = "";
+      renderSearchResults()
+    }
+    function openMap(section) {
+      const videoCont = section.querySelector(".video-container");
+      const view1 = section.querySelector(".view-1");
+      const view2 = section.querySelector(".view-2");
+      const background = section.querySelector(".mo-background");
+      const navigation = section.querySelector(".navigation-opener ")
+
+      window.scrollTo(0, section.getBoundingClientRect().top + window.scrollY);
+      navigation.classList.add("active");
+      [videoCont, view1, view2].forEach(el => el.classList.add("hidden"));
+      map.classList.remove("hidden");
+      background.classList.add("background-dark");
+      window.lenis.stop();
+      document.body.style.overflow = 'hidden';
+      search.focus();
+      renderSearchResults()
+    }
+
+
+    window.closeMap = closeMap
+    window.openMap = openMap
+
+
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+
+        // Find most visible section at the moment Ctrl+K is pressed
+        const sections = document.querySelectorAll('section');
+        let currentSection = null;
+        let maxVisibleArea = 0;
+
+        sections.forEach(section => {
+          const rect = section.getBoundingClientRect();
+          const viewHeight = window.innerHeight;
+          const visibleHeight = Math.min(rect.bottom, viewHeight) - Math.max(rect.top, 0);
+          const visibleArea = Math.max(0, visibleHeight);
+
+          if (visibleArea > maxVisibleArea) {
+            maxVisibleArea = visibleArea;
+            currentSection = section;
+          }
+        });
+
+        if (currentSection) {
+          openMap(currentSection);
+          search.focus();
+        }
+      }
+
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        closeMap();
+      }
+    });
+
+
+    // -------- Search --------------//
+    const searchableNodes = nodes.filter(n => n.depth > 1).map(n => ({
+      name: n.data.name,
+      node: n,
+      anchor: n.data.anchor,
+      content: typeof n.data.content === 'string' ? JSON.parse(n.data.content) : n.data.content,
+      thumbnail: n.data.thumbnail
+    }));
+
+    const fuse = new Fuse(searchableNodes, {
+      keys: ['name',
+        'content.text_translation',
+        'content.title',
+        'content.explanations.text',
+      ],
+      threshold: 0.2,
+      includeMatches: true,
+      minMatchCharLength: 3,
+      includeScore: true,
+      ignoreLocation: true,
+    });
+
+
+    function renderSearchResults(e) {
+      let searchTerm = ""
+      if (e) {
+        searchTerm = e.target.value.trim();
+      }
+
+      searchResults.innerHTML = '';
+
+      if (searchTerm === '') {
+        menuSvg.classed("hidden", false);
+        return;
+      }
+
+      const results = fuse.search(searchTerm);
+      if (results.length > 0) {
+        console.log(results)
+        menuSvg.classed("hidden", true);
+        const ul = document.createElement('ul');
+        ul.className = 'search-results-list';
+
+        results.forEach(result => {
+          const li = document.createElement('li');
+          li.className = 'search-result-item';
+          const link = document.createElement('a');
+          link.href = "#" + result.item.anchor;
+          link.addEventListener("click", (e) => {
+            if (result.matches[0].key == "content.explanations.text") {
+              e.preventDefault();
+              const section = document.getElementById(result.item.anchor)
+              window.scrollTo(0, section.getBoundingClientRect().top + window.scrollY + window.innerHeight)
+              explanationLink = section.querySelectorAll('a[href^="#"]').filter()
+              section.quer
+              entry.classList.toggle('active')
+              explanationLinks[index].classList.toggle('active')
+            }
+            window.closeMap();
+          })
+          const thumb = document.createElement('img');
+          thumb.src = result.item.thumbnail;
+          link.append(thumb)
+          const nameText = document.createTextNode(result.item.name);
+          link.appendChild(nameText);
+          if (result.matches[0].key == "content.explanations.text") {
+            const explanation = document.createElement('span');
+            explanation.textContent = ": " + result.item.content.explanations[result.matches[0].refIndex].title;
+            link.appendChild(explanation)
+          }
+          li.appendChild(link);
+          ul.appendChild(li);
+        })
+        searchResults.append(ul)
+      }
+
+    }
+
+    function debounce(func, wait) {
+      let timeout;
+      return function (...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, args), wait);
+      };
+    }
+
+    search.addEventListener('input', debounce(e => {
+      renderSearchResults(e)
+    }, 300));
+
+
+
+    map.append(initializeMapVisualization(menuSvg, root.links(), root.descendants(), width, height));
+    mapSlide.append(initializeMapVisualization(slideSvg, root.links(), root.descendants(), width, height));
 
   })
 }

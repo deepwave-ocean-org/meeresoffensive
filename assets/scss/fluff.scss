@@ -22,6 +22,7 @@
     font-size: large;
 }
 
+
 #final-slide {
     padding: 4rem 0;
 }
@@ -112,7 +113,22 @@
     color: white;
     background-size: cover;
     background-position: center;
-    background-image: linear-gradient(rgba(7, 28, 37, 0.82), rgba(7, 28, 37, 0.78)), url(/images/background-ocean.avif);
+    background-image: linear-gradient(rgba(4, 18, 24, 0.82), rgba(5, 25, 34, 0.78)), url(/backgrounds/background-ocean.avif);
+        background-attachment: fixed;
+    }
+    
+    #map-slide {
+        height: 200vh;
+    }
+    
+    #map-slide-child {
+        height: 100vh;
+        position: sticky;
+        top: 0;
+        color: white;
+        background-size: cover;
+        background-position: center;
+        background-image: linear-gradient(rgba(4, 18, 24, 0.82), rgba(5, 25, 34, 0.78)), url(/backgrounds/background-ocean.avif);
     background-attachment: fixed;
 }
 .shimmer {
