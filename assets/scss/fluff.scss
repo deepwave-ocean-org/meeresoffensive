@@ -91,13 +91,20 @@
     margin: 3rem 0;
 }
 
-#intro-slide h1 {
-    text-align: center;
-    font-size: 4em;
-    font-size: clamp(32px, 3vw, 3em);
-    padding: 0;
+.logo_title {
+    display: flex;
+    flex-direction: row;
     margin-top: 4rem;
     padding-bottom: 2rem;
+}
+
+.logo_title img {
+    width: 26rem;
+}
+#intro-slide h1 {
+    font-size: 4em;
+    font-size: clamp(32px, 3vw, 3em);
+    padding: 0 0 0 2rem;
     color: #fff;
 }
 

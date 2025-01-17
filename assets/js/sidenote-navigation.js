@@ -35,7 +35,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     removeAllActive()
                     return
                 }
-                console.log("hellooooo", entry)
                 if (entry.classList.contains("mo-cta-button")) {
                     wrapper.classList.add("active")
                     scrollInParentView(wrapper, explanationContainer, -2)

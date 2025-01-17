@@ -33,6 +33,9 @@
         margin-top: -0.1em;
 }
 
+.mo-explanation p {
+    font-size: 103%;
+}
 .mo-cta-button.mo-explanation h3::before {
     content: "";
 }
@@ -44,6 +47,42 @@
     position: absolute;
     margin-top: -0.29em;
     margin-left: 0.5rem;
+}
+.mo-cta-wrapper [class*="icon-"]:before {
+    font-family: "mo-icons";
+    font-size: 3rem;
+    text-align: center;
+
+    font-variant: normal;
+    text-transform: none;
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.cta-text {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.mo-cta-wrapper .cta-text div {
+    padding: 0 0 0 2rem;
+}
+
+
+.icon-time_full:before {
+    content: "\e80a";
+}
+
+/* '' */
+.icon-time_part:before {
+    content: "\e80b";
+}
+
+/* '' */
+.icon-time_short:before {
+    content: "\e80c";
 }
 @media screen and (min-width: 768px) {
     .background-container {
@@ -62,7 +101,7 @@
     .mo-translation {
         background-color: whitesmoke;
         color: black;
-        padding: 4rem;
+        padding: 5rem 4rem 8rem 4rem;
         width: 100vw;
         height: 50dvh;
         overflow-y: scroll;
@@ -75,7 +114,6 @@
     .mo-translation--text {
         max-width: 80vw;
         margin: auto;
-        padding: 3rem 0;
         font-size: medium;
         display: flex;
             flex-direction: column;
@@ -152,6 +190,7 @@
     .mo-single video {
         width: 80%;
         mix-blend-mode: screen;
+        position: absolute;
     }
     
     .video-container {
@@ -188,7 +227,7 @@
     display: flex;
     z-index: 999;
     align-items: start;
-        padding-top: 1.5rem;
+    padding-top: 1.5rem;
     justify-content: space-around;
     // gap: 0 0.5rem;
     box-sizing: border-box;
@@ -299,7 +338,6 @@
 .mo-translation--text {
     max-width: 80vw;
     margin: auto;
-    padding: 3rem 0;
     display: flex;
         flex-direction: column;
         min-height: calc(100% - 6rem - (100vh - 100dvh));

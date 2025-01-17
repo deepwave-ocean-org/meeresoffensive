@@ -7,9 +7,13 @@
     </div>
     <div class="video-container">
       <!-- <div class="scroll-video" data-src="videos/{{ lower .File.ContentBaseName }}.mp4"></div> -->
-      <video muted playsinline preload="auto">
+      <video class="forward" muted playsinline preload="auto" data-duration="{{ .Params.duration }}">
         <source src="videos/{{ lower .File.ContentBaseName }}_av1.mp4" type="video/mp4; codecs=av01.0.08M.08" />
         <source src="videos/{{ lower .File.ContentBaseName }}.mp4" type="video/mp4" />
+      </video>
+      <video class="reversed hidden" muted playsinline preload="auto" data-duration="{{ .Params.duration }}">
+        <source src="videos/{{ lower .File.ContentBaseName }}_av1_reversed.mp4" type="video/mp4; codecs=av01.0.08M.08" />
+        <source src="videos/{{ lower .File.ContentBaseName }}_reversed.mp4" type="video/mp4" />
       </video>
     </div>
     <div class="view-1">
@@ -47,8 +51,8 @@
           <h3 class="mo-close-handle">Was kann ich tun?</h3>
           {{ range . }}
           <div
-            class="{{ if eq .short true}}mo-cta-short icon-time_short{{ end }}{{ if eq .part true}}mo-cta-part icon-time_part{{ end }}{{ if eq .full true}}mo-cta-full icon-time_full{{ end }}">
-            <p>{{ .text | safeHTML }}</p>
+            class="{{ if eq .short true}}mo-cta-short icon-time_short{{ end }}{{ if eq .part true}}mo-cta-part icon-time_part{{ end }}{{ if eq .full true}}mo-cta-full icon-time_full{{ end }} cta-text">
+            <div>{{ .text | safeHTML }}</div>
           </div>
           {{ end }}
         </div>

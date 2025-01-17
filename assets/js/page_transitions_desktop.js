@@ -1,6 +1,51 @@
 if (
     window.innerWidth > 767
 ) {
+    let isChanging = false
+    function switchVideoVisibility(oldVideo, newVideo) {
+        isChanging = true;
+        const onSeeked = () => {
+            newVideo.classList.remove("hidden");
+            oldVideo.classList.add("hidden");
+            isChanging = false
+        };
+
+        newVideo.addEventListener('seeked', onSeeked, { once: true });
+    }
+
+    function playVideo(video, otherVideo, scaledVelocity) {
+        const isVisible = !video.classList.contains("hidden");
+        if (!isVisible && !isChanging) {
+            switchVideoVisibility(otherVideo, video);
+            return;
+        }
+        if (video.readyState != 4) {
+            console.log(video.readyState)
+            return;
+        }
+        isChanging = false
+
+        try {
+            const rate = Math.max(0.0625, Math.min(16, scaledVelocity));
+            if (video.playbackRate !== rate) {
+                video.playbackRate = rate;
+            }
+
+            if (video.paused && video.currentTime !== video.duration) {
+                video.play().catch(e => console.warn('Video play failed:', e));
+            }
+        } catch (e) {
+            if (e instanceof DOMException && e.name === "NotSupportedError") {
+                const fallbackRate = Math.max(0.5, Math.min(4, scaledVelocity));
+                video.playbackRate = fallbackRate;
+                if (video.paused && video.currentTime !== video.duration) {
+                    video.play().catch(e => console.warn('Video play failed:', e));
+                }
+            } else {
+                console.error('Video playback error:', e);
+            }
+        }
+    }
 
     function setupAllScrollTriggers() {
         gsap.registerPlugin(ScrollTrigger);
@@ -14,24 +59,7 @@ if (
             ScrollTrigger.update();
         });
 
-
-        // ScrollTrigger.scrollerProxy(document.documentElement, {
-        //     scrollTop(value) {
-        //         // Important: handle both getting and setting scroll position
-        //         if (arguments.length) {
-        //             lenis.scrollTo(value);  // Set scroll position
-        //         }
-        //         return lenis.scroll;        // Get scroll position
-        //     },
-        //     getBoundingClientRect() {
-        //         return {
-        //             top: 0,
-        //             left: 0,
-        //             width: window.innerWidth,
-        //             height: window.innerHeight
-        //         };
-        //     }
-        // });
+        window.lenis = lenis
 
         function raf(time) {
             lenis.raf(time);
@@ -40,171 +68,168 @@ if (
 
         requestAnimationFrame(raf);
 
-        function closeMap() {
-            map.classList.add("hidden");
-            document.querySelectorAll(".video-container.hidden, .view-1.hidden, .view-2.hidden").forEach(el => el.classList.remove("hidden"));
-            document.querySelector(".mo-background.background-dark").classList.remove("background-dark");
-            document.querySelector(".navigation-opener.active").classList.remove("active")
-            lenis.start();
-            document.body.style.overflow = '';
-            search.blur();
-            search.value = "";
-            window.renderSearchResults()
-        }
-        function openMap(section) {
-            const videoCont = section.querySelector(".video-container");
-            const view1 = section.querySelector(".view-1");
-            const view2 = section.querySelector(".view-2");
-            const background = section.querySelector(".mo-background");
-            const navigation = section.querySelector(".navigation-opener ")
-
-            window.scrollTo(0, section.getBoundingClientRect().top + window.scrollY);
-            navigation.classList.add("active");
-            [videoCont, view1, view2].forEach(el => el.classList.add("hidden"));
-            map.classList.remove("hidden");
-            background.classList.add("background-dark");
-            lenis.stop();
-            document.body.style.overflow = 'hidden';
-            search.focus();
-            window.renderSearchResults()
-        }
-
-
-        window.closeMap = closeMap
-        window.openMap = openMap
-
-
 
         const sections = document.querySelectorAll(".desktop-only .mo-single")
-        const map = document.getElementById("map")
-        const search = document.getElementById("search-bar")
 
-        document.addEventListener('keydown', (e) => {
-            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-                e.preventDefault();
+        let currentAnimation = null;
 
-                // Find most visible section at the moment Ctrl+K is pressed
-                const sections = document.querySelectorAll('section');
-                let currentSection = null;
-                let maxVisibleArea = 0;
-
-                sections.forEach(section => {
-                    const rect = section.getBoundingClientRect();
-                    const viewHeight = window.innerHeight;
-                    const visibleHeight = Math.min(rect.bottom, viewHeight) - Math.max(rect.top, 0);
-                    const visibleArea = Math.max(0, visibleHeight);
-
-                    if (visibleArea > maxVisibleArea) {
-                        maxVisibleArea = visibleArea;
-                        currentSection = section;
-                    }
-                });
-
-                if (currentSection) {
-                    openMap(currentSection);
-                    search.focus();
-                }
-            }
-
-            if (e.key === 'Escape') {
-                e.preventDefault();
-                closeMap();
-            }
-        });
-
-        sections.forEach((section) => {
+        sections.forEach((section, index) => {
             const videoCont = section.querySelector(".video-container");
             const video = videoCont.querySelector("video");
+            const videoReversed = videoCont.querySelector("video.reversed");
             const view1 = section.querySelector(".view-1");
             const view2 = section.querySelector(".view-2");
             const background = section.querySelector(".mo-background");
             const navigation = section.querySelector(".navigation-opener ")
+            const sectionParent = document.getElementsByClassName("mo-section")[index]
 
             navigation.addEventListener("click", () => {
                 if (!navigation.classList.contains("active")) {
-                    openMap(section)
+                    window.openMap(section)
                     return
                 }
-                closeMap()
+                window.closeMap()
             })
 
-            console.log(video)
-            video.playbackRate = 0.6
+            let isPlayingForward = true;
+
+            const animationTrigger = {
+                id: "show-explanation-" + section.id,
+                trigger: section,
+                start: "900% top",
+                end: "920% top",
+                // markers: true,
+                scrub: true,
+                onLeaveBack: () => {
+                    if (isPlayingForward) {
+                        videoReversed.currentTime = 0.1;
+                    }
+                },
+            };
+
             gsap.to(videoCont, {
                 left: -window.innerWidth,
-                duration: 0.5,
-                scrollTrigger: {
-                    trigger: section,
-                    // markers: true,
-                    onEnter: () => {
-                        video.currentTime = 0;
-                        video.play();
-                    },
-                    onLeave: () => {
-                        video.pause();
-                    },
-                    start: "50% top",
-                    toggleActions: "play none none reverse"
-                }
+                scrollTrigger: animationTrigger
             });
             gsap.to(view1, {
                 left: -window.innerWidth,
-                duration: 0.5,
-                scrollTrigger: {
-                    trigger: section,
-                    // markers: true,
-                    start: "50% top",
-                    toggleActions: "play none none reverse"
-                }
+                scrollTrigger: animationTrigger
             });
             gsap.to(view2, {
                 left: 0,
-                duration: 0.5,
-                scrollTrigger: {
-                    trigger: section,
-                    // markers: true,
-                    start: "50% top",
-                    toggleActions: "play none none reverse",
-                }
+                scrollTrigger: animationTrigger
             });
             gsap.to(background, {
                 opacity: 0.2,
-                duration: 0.5,
-                scrollTrigger: {
-                    trigger: section,
-                    // markers: true,
-                    start: "50% top",
-                    toggleActions: "play none none reverse",
-                }
+                scrollTrigger: animationTrigger
             });
+
+            video.addEventListener('ended', () => {
+                const triggerPosition = ScrollTrigger.getById("show-explanation-" + section.id).start;
+                // console.log("video ended", window.scrollY, triggerPosition, sectionParent.getBoundingClientRect().y)
+                if (window.scrollY > triggerPosition) {
+                    return
+                }
+                if (sectionParent.getBoundingClientRect().y > 0) {
+                    return
+                }
+                if (currentAnimation) {
+                    currentAnimation.abort();
+                }
+                const controller = new AbortController();
+                currentAnimation = controller;
+                lenis.scrollTo(triggerPosition, {
+                    offset: -150,
+                    immediate: true,
+                    signal: controller.signal,
+                    onComplete: () => {
+                        if (currentAnimation === controller) {
+                            currentAnimation = null;
+                        }
+                    },
+                    onAbort: () => {
+                        console.log('Scroll animation aborted');
+                    }
+                })
+            });
+
+            videoReversed.addEventListener('ended', () => {
+                if (sectionParent.getBoundingClientRect().y > 0 && sectionParent.getBoundingClientRect().y < window.innerHeight * 10) {
+                    return
+                }
+                if (currentAnimation) {
+                    currentAnimation.abort();
+                }
+
+                const controller = new AbortController();
+                currentAnimation = controller;
+                lenis.scrollTo(sectionParent.getBoundingClientRect().y + window.scrollY, {
+                    offset: 0,
+                    immediate: true,
+                    signal: controller.signal,
+                    onComplete: () => {
+                        if (currentAnimation === controller) {
+                            currentAnimation = null;
+                        }
+                    },
+                    onAbort: () => {
+                        console.log('Scroll animation aborted');
+                    }
+                })
+            });
+
+            const velocityToPlaybackFactor = 1000
 
             ScrollTrigger.create({
                 trigger: section,
+                id: "pin-section-" + section.id,
                 pin: true,
                 start: "top top",
-                end: "+=100%",
-                onToggle: () => {
+                // markers: true,
+                end: "+=1000%",
+                onToggle: (e) => {
+                    if (!e.isActive) {
+                        return
+                    }
                     if (section.dataset.url) {
                         history.replaceState({ path: section.dataset.url }, '', section.dataset.url);
-                    }
+                    };
                 },
                 onEnter: () => {
-                    video.currentTime = 0;
-                    video.play();
+                    video.currentTime = 0.1;
                 },
                 onEnterBack: () => {
-                    video.currentTime = 0;
-                    video.play();
+                    videoReversed.currentTime = 0.1;
                 },
-                onLeave: () => {
-                    video.pause();
-                }
+                onUpdate: (e) => {
+                    const scaledVelocity = e.getVelocity() / velocityToPlaybackFactor
 
+                    if (Math.abs(scaledVelocity) > 16) {
+                        return
+                    }
+                    if (scaledVelocity > 0.2) {
+                        if (!isPlayingForward) {
+                            video.currentTime = video.duration - videoReversed.currentTime;
+                            isPlayingForward = true;
+                        }
+                        playVideo(video, videoReversed, scaledVelocity);
+                    }
+                    else if (scaledVelocity < -0.2 && videoReversed.readyState > 0) {
+                        if (isPlayingForward) {
+                            videoReversed.currentTime = videoReversed.duration - video.currentTime;
+                            isPlayingForward = false;
+                        }
+                        playVideo(videoReversed, video, -1 * scaledVelocity);
+                    }
+                    else {
+                        video.pause();
+                        videoReversed.pause();
+                    }
+                },
             });
         })
     }
     document.addEventListener('DOMContentLoaded', function () {
-        console.log("desktooop")
         setupAllScrollTriggers();
 
         ScrollTrigger.refresh();

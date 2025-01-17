@@ -18,6 +18,9 @@ font-family: "mo-icons";
 font-size: large;
     padding-bottom: 1rem;
 }
+.mo-explanation h3:last-child {
+    padding-bottom: 0;
+}
 
 .mo-main-content a.active {
 pointer-events: all;
@@ -52,6 +55,7 @@ display: none;
     top: 100vh;
     left: 0;
     padding: 5rem;
+    padding-right: 8rem;
     color: white;
     display: none;
 }

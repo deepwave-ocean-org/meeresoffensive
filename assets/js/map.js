@@ -5,33 +5,93 @@ if (
   window.innerWidth > 767
 ) {
   document.addEventListener('DOMContentLoaded', function () {
-
-    console.log(window.mapdata)
-
     const width = window.innerWidth;
     const height = window.innerHeight - 50;
 
-    const root = d3.hierarchy(window.mapdata);
-    const links = root.links();
-    const nodes = root.descendants();
-
-    // Create the container SVG.
     const svg = d3.create("svg")
       .attr("width", width)
       .attr("height", height)
       .attr("viewBox", [-width / 2, -height / 2, width, height])
       .attr("style", "max-width: 100%; height: auto;");
 
+    const root = d3.hierarchy(window.mapdata);
+    const links = root.links();
+    const nodes = root.descendants();
+
+    // ---- toggling the Map ------ //
     const map = document.getElementById('map');
     const search = document.getElementById('search-bar')
     const searchResults = document.getElementById("search-results")
-    function debounce(func, wait) {
-      let timeout;
-      return function (...args) {
-        clearTimeout(timeout);
-        timeout = setTimeout(() => func.apply(this, args), wait);
-      };
+
+    function closeMap() {
+      map.classList.add("hidden");
+      document.querySelectorAll(".video-container.hidden, .view-1.hidden, .view-2.hidden").forEach(el => el.classList.remove("hidden"));
+      document.querySelector(".mo-background.background-dark").classList.remove("background-dark");
+      document.querySelector(".navigation-opener.active").classList.remove("active")
+      window.lenis.start();
+      document.body.style.overflow = '';
+      search.blur();
+      search.value = "";
+      renderSearchResults()
     }
+    function openMap(section) {
+      const videoCont = section.querySelector(".video-container");
+      const view1 = section.querySelector(".view-1");
+      const view2 = section.querySelector(".view-2");
+      const background = section.querySelector(".mo-background");
+      const navigation = section.querySelector(".navigation-opener ")
+
+      window.scrollTo(0, section.getBoundingClientRect().top + window.scrollY);
+      navigation.classList.add("active");
+      [videoCont, view1, view2].forEach(el => el.classList.add("hidden"));
+      map.classList.remove("hidden");
+      background.classList.add("background-dark");
+      window.lenis.stop();
+      document.body.style.overflow = 'hidden';
+      search.focus();
+      renderSearchResults()
+    }
+
+
+    window.closeMap = closeMap
+    window.openMap = openMap
+
+
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+
+        // Find most visible section at the moment Ctrl+K is pressed
+        const sections = document.querySelectorAll('section');
+        let currentSection = null;
+        let maxVisibleArea = 0;
+
+        sections.forEach(section => {
+          const rect = section.getBoundingClientRect();
+          const viewHeight = window.innerHeight;
+          const visibleHeight = Math.min(rect.bottom, viewHeight) - Math.max(rect.top, 0);
+          const visibleArea = Math.max(0, visibleHeight);
+
+          if (visibleArea > maxVisibleArea) {
+            maxVisibleArea = visibleArea;
+            currentSection = section;
+          }
+        });
+
+        if (currentSection) {
+          openMap(currentSection);
+          search.focus();
+        }
+      }
+
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        closeMap();
+      }
+    });
+
+
+    // -------- Search --------------//
     const searchableNodes = nodes.filter(n => n.depth > 1).map(n => ({
       name: n.data.name,
       node: n,
@@ -52,6 +112,7 @@ if (
       includeScore: true,
       ignoreLocation: true,
     });
+
 
     function renderSearchResults(e) {
       let searchTerm = ""
@@ -81,8 +142,12 @@ if (
           link.addEventListener("click", (e) => {
             if (result.matches[0].key == "content.explanations.text") {
               e.preventDefault();
-              const target = document.getElementById(result.item.anchor)
-              window.scrollTo(0, target.getBoundingClientRect().top + window.scrollY + window.innerHeight)
+              const section = document.getElementById(result.item.anchor)
+              window.scrollTo(0, section.getBoundingClientRect().top + window.scrollY + window.innerHeight)
+              explanationLink = section.querySelectorAll('a[href^="#"]').filter()
+              section.quer
+              entry.classList.toggle('active')
+              explanationLinks[index].classList.toggle('active')
             }
             window.closeMap();
           })
@@ -104,11 +169,19 @@ if (
 
     }
 
+    function debounce(func, wait) {
+      let timeout;
+      return function (...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, args), wait);
+      };
+    }
+
     search.addEventListener('input', debounce(e => {
       renderSearchResults(e)
     }, 300));
 
-    window.renderSearchResults = renderSearchResults
+    // -------- Rendering the Map --------------//
     const drag = (simulation) => {
       let dragStart = null
       function dragstarted(event, d) {
@@ -177,8 +250,6 @@ if (
         .radius(d => d.depth === 2 ? 50 : 20)
         .strength(0.7))
       .force("bounds", boundingForce);
-
-
 
     const defs = svg.append("defs");
 
