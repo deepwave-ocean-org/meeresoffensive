@@ -1,6 +1,6 @@
-baseURL: "https://meeresoffensive.deepwave.org"
+baseURL: "https://klartext.deepwave.org"
 languageCode: "de-DE"
-title: "Kommentar zur „Meeresoffensive“"
+title: "Klartext Meerespolitik"
 markup:
   goldmark:
     renderer:

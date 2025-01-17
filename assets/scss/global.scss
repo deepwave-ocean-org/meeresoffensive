@@ -43,14 +43,13 @@ from Hugo Novella Theme
         display: none !important;
     }
 }
+
 @font-face {
-    font-family: "-apple-system", "BlinkMacSystemFont", "San Francisco",
-        "Helvetica Neue", "Helvetica", "Ubuntu", "Roboto", "Noto", "Segoe UI",
-        "Arial", sans-serif;
-    font-weight: 400;
+    font-family: "mo-icons";
+        src: url("/fonts/mo-icons.woff") format("woff");
+        font-weight: normal;
     font-style: normal;
 }
-
 
 /* merriweather-sans-regular - latin-ext */
 @font-face {
