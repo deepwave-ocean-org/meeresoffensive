@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 explanationLinks[index].classList.toggle('active')
                 scrollInParentView(explanationLinks[index], original)
                 entry.classList.toggle('active')
-                scrollInParentView(entry, explanationContainer)
+                scrollInParentView(entry, explanationContainer, 13)
             })
         })
 

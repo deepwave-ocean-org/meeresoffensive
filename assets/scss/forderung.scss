@@ -85,9 +85,6 @@
     content: "\e80c";
 }
 @media screen and (min-width: 768px) {
-.mobile-only {
-        max-height: 100dvh;
-    }
     .background-container {
         position: absolute;
         top: 0;
@@ -220,7 +217,9 @@
     border-bottom: 1px solid #0a0a0a;
 }
     
-
+.mobile-only {
+    max-height: 100dvh;
+}
 .swiper-slide {
     min-height: 100vh;
 }
@@ -320,7 +319,7 @@
     color: white;
     max-width: 80vw;
     margin: auto;
-    padding-bottom: 150dvh;
+    padding-bottom: 130dvh;
     font-size: large;
 }
 
