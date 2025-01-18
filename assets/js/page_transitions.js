@@ -65,7 +65,7 @@ if (
             })
                 .to(video, {
                     width: "33vh",
-                    y: 200,
+                    y: 0,
                     ease: "none",
                     duration: 0.4
                 });
