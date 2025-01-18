@@ -325,8 +325,8 @@
     font-size: 2.3rem;
     text-align: center;
     line-height: 0.8;
-    height: 8vh;
-    bottom: calc(100dvh - 6rem);
+    height: 6rem;
+        bottom: calc(env(safe-area-inset-bottom, 0px) + 100dvh - 6rem);
     position: fixed;
     color: white;
     width: 100%;
@@ -342,7 +342,8 @@
     height: 55vh;
     overflow-y: scroll;
     position: fixed;
-    bottom: 0;
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 0px);
+        ;
 }
 .mo-translation--text {
     max-width: 80vw;
@@ -356,7 +357,7 @@
 .mo-main-content {
     position: fixed;
     bottom: 55vh;
-        margin: 2rem 0 3rem 0;
+    margin: 2rem 0 3rem 0;
         height: calc(100dvh - 55vh - 5rem - 6rem);
     overflow: scroll;
     display: flex;
