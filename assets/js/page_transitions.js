@@ -73,13 +73,13 @@ if (
                 y: 0
             }, {
                 width: "33vh",
-                y: 100,
+                y: 0,
                 ease: "none",
                 duration: 0.6
             })
                 .to(video, {
                     width: "33vh",
-                    y: 200,
+                    y: 0,
                     ease: "none",
                     duration: 0.4
                 });
@@ -112,7 +112,7 @@ if (
                     y: -20
                 },
                 {
-                    y: 50
+                    y: 0
                 }
             );
         }
