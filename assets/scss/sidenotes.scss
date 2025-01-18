@@ -94,6 +94,9 @@ display: none;
 }
 
 @media (max-width: 767px) {
+    .mo-cta-wrapper h3::after {
+            top: 3.45rem;
+        }
     .sidenote.active {
         display: inline-flex;
         flex-direction: column;
