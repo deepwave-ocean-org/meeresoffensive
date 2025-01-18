@@ -37,7 +37,7 @@ if (
                     start: 'top top',
                     end: `+=${height * 2.1}`,
                     scrub: true,
-                    markers: true,
+                    // markers: true,
                     ease: "power1.inOut"
                 }
             }).to(background, {
@@ -52,7 +52,7 @@ if (
                     start: "top 33%",
                     end: "bottom-=200 25%",
                     scrub: true,
-                    markers: true,
+                    // markers: true,
                 }
             }).fromTo(video, {
                 width: "75vw",
@@ -76,7 +76,7 @@ if (
                     start: 'top bottom',
                     end: 'top center',
                     scrub: true,
-                    markers: true,
+                    // markers: true,
                 },
             }).to(gifTranslation, {
                 y: -20,
@@ -91,8 +91,7 @@ if (
                     start: 'top 40%',
                     end: 'bottom 45%',
                     scrub: true,
-                    onLeave: () => { console.log("helloo") },
-                    markers: true,
+                    // markers: true,
                 }
             }).fromTo(gifTranslation,
                 {
