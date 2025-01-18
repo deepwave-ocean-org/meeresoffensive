@@ -16,9 +16,8 @@
       <p class="gif-explanation">
         <span>{{ .Params.text_translation | safeHTML }}</span>
       </p>
-      <p class="quote-icon">&ldquo;<br><span style="font-size: x-large">Daher fordern wir</span></p>
-
     </div>
+    <div class="quote-icon">&ldquo;<br>Daher fordern wir</span></div>
     <div class="mo-main-content">
       <p>&#8811; {{ .Content | replaceRE "^<p>" "" | replaceRE "</p>\n$" "" | safeHTML }} &#8810;
       </p>

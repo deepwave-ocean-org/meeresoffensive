@@ -103,7 +103,7 @@
         color: black;
         padding: 5rem 4rem 8rem 4rem;
         width: 100vw;
-        height: 50dvh;
+        height: 50vh;
         overflow-y: scroll;
         bottom: 0;
         position: relative;
@@ -279,21 +279,7 @@
         text-overflow: ellipsis;
 }
 
-.mo-original {
-    position: relative;
-    color: white;
-    max-width: 80vw;
-    margin: auto;
-    padding-bottom: 92dvh;
-    font-size: large;
-}
 
-.quote-icon {
-    padding-top: 28vh;
-    font-size: xx-large;
-    text-align: center;
-    line-height: 0.6;
-}
 
 .quote-icon span {
     font-size: x-large;
@@ -326,11 +312,34 @@
     z-index: 10;
 }
 
+.mo-original {
+    position: relative;
+    color: white;
+    max-width: 80vw;
+    margin: auto;
+    padding-bottom: 130dvh;
+    font-size: large;
+}
+
+.quote-icon {
+    font-size: 2.3rem;
+    text-align: center;
+    line-height: 0.8;
+    height: 8vh;
+    bottom: calc(100dvh - 6rem);
+    position: fixed;
+    color: white;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: flex-end;
+}
 
 .mo-translation {
     background-color: whitesmoke;
     width: 100vw;
-    height: 50vh;
+    height: 55vh;
     overflow-y: scroll;
     position: fixed;
     bottom: 0;
@@ -339,14 +348,16 @@
     max-width: 80vw;
     margin: auto;
     display: flex;
-        flex-direction: column;
-        min-height: calc(100% - 6rem - (100vh - 100dvh));
+    flex-direction: column;
+    min-height: calc(100% - 6rem);
+        padding: 3rem 0;
 }
 
 .mo-main-content {
     position: fixed;
-    bottom: 56vh;
-    height: 32vh;
+    bottom: 55vh;
+        margin: 2rem 0 3rem 0;
+        height: calc(100dvh - 55vh - 5rem - 6rem);
     overflow: scroll;
     display: flex;
     color: white;
