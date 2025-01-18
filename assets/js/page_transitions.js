@@ -6,6 +6,10 @@ if (
 
         gsap.registerPlugin(ScrollTrigger);
 
+        ScrollTrigger.config({
+            autoRefreshEvents: "visibilitychange,DOMContentLoaded,load", // Exclude 'resize'
+        });
+
         function killTimeline(timeline) {
             if (timeline) {
                 timeline.kill()
@@ -65,7 +69,7 @@ if (
             })
                 .to(video, {
                     width: "33vh",
-                    y: 0,
+                    y: 200,
                     ease: "none",
                     duration: 0.4
                 });
