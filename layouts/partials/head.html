@@ -13,7 +13,7 @@
     {{ $style := resources.Get "scss/global.scss" | resources.ToCSS | fingerprint }}
     <link rel="stylesheet" href="{{ $style.RelPermalink }}">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
     <script type="module" src="https://cdn.jsdelivr.net/npm/stacked-alpha-video/+esm"></script>
 
