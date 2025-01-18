@@ -348,11 +348,11 @@
 }
 .mo-translation--text {
     max-width: 80vw;
-    margin: auto;
+    margin: 1rem auto;
     display: flex;
     flex-direction: column;
     min-height: calc(100% - 6rem);
-        padding: 3rem 0;
+    padding: 2rem 0;
 }
 
 .mo-main-content {

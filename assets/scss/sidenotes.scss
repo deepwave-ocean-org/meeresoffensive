@@ -1,6 +1,6 @@
 
 .mo-explanation h3 {
-font-size: large;
+    font-size: large;
     padding-bottom: 1rem;
 }
 .mo-explanation h3:last-child {
@@ -35,7 +35,6 @@ display: none;
 
 .mo-cta-wrapper {
     position: absolute;
-    height: 100vh;
     background-color: rgb(0, 29, 69);
     top: 100vh;
     left: 0;
@@ -52,6 +51,7 @@ display: none;
 .mo-cta-wrapper div,
 .mo-cta-wrapper h3 {
     width: 100%;
+    font-size: large;
     padding-bottom: 3rem;
 }
 
@@ -68,6 +68,9 @@ display: none;
     z-index: 1;
 }
 @media screen and (min-width: 768px) {
+.mo-cta-wrapper {
+        height: 100vh;
+    }
 .sidenote>cite>a {
     position: absolute;
     left: 5%;
