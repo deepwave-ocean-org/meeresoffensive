@@ -66,20 +66,20 @@ if (
                     start: "top 33%",
                     end: "bottom-=200 25%",
                     scrub: true,
-                    markers: true,
+                    // markers: true,
                 }
             }).fromTo(video, {
                 width: "75vw",
                 y: 0
             }, {
                 width: "33vh",
-                y: 0,
+                y: 100,
                 ease: "none",
                 duration: 0.6
             })
                 .to(video, {
                     width: "33vh",
-                    y: 0,
+                    y: 200,
                     ease: "none",
                     duration: 0.4
                 });
@@ -112,7 +112,7 @@ if (
                     y: -20
                 },
                 {
-                    y: 0
+                    y: 50
                 }
             );
         }
