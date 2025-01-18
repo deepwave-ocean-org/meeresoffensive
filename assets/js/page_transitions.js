@@ -10,6 +10,16 @@ if (
             autoRefreshEvents: "visibilitychange,DOMContentLoaded,load", // Exclude 'resize'
         });
 
+        // const handleResize = () => {
+        //     if (window.innerWidth !== previousWidth) {
+        //         previousWidth = window.innerWidth;
+        //         ScrollTrigger.refresh(); // Refresh only when width changes
+        //     }
+        // };
+
+        // let previousWidth = window.innerWidth;
+        // window.addEventListener("resize", handleResize);
+
         function killTimeline(timeline) {
             if (timeline) {
                 timeline.kill()
@@ -56,7 +66,7 @@ if (
                     start: "top 33%",
                     end: "bottom-=200 25%",
                     scrub: true,
-                    // markers: true,
+                    markers: true,
                 }
             }).fromTo(video, {
                 width: "75vw",
