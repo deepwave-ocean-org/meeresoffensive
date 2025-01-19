@@ -9,6 +9,7 @@
     justify-content: center;
 }
 
+
 .mo-chapter div,
 #final-slide>div,
 #intro-slide .content {
@@ -101,6 +102,11 @@
 
 .logo_title img {
     width: 26rem;
+}
+@media (max-width: 767px) {
+    .logo_title img {
+        width: 29vw;
+    }
 }
 #intro-slide h1 {
     font-size: 4em;
