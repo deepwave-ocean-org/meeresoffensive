@@ -1,6 +1,59 @@
 if (
     window.innerWidth > 767
 ) {
+
+    function mouseScroll() {
+        let startY = 0
+        let lastY = 0
+        let notClick = false
+        let panning = false
+        let velocity = 0
+        let delta = 0
+
+        document.addEventListener('selectstart', function (e) {
+            e.preventDefault();
+        }, { passive: false });
+        document.addEventListener('contextmenu', function (e) {
+            e.preventDefault();
+        }, { passive: false });
+        const style = document.createElement('style');
+        style.textContent = `
+            body {
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="4" height="4" viewBox="0 0 4 4"><circle cx="2" cy="2" r="2" fill="whitesmoke"/></svg>') 2 2, auto !important;
+        }`;
+        document.head.appendChild(style);
+
+
+        window.addEventListener("mousedown", (e) => {
+            notClick = true
+            startY = e.clientY
+        })
+        window.addEventListener("mousemove", (e) => {
+            if (notClick & Math.abs(e.clientY - startY) > 10 || panning) {
+                if (!panning) {
+                    panning = true
+                    lastY = e.clientY
+                    return
+                }
+                velocity = (e.clientY - lastY + delta) / 2
+                delta = e.clientY - lastY
+                window.lenis.scrollTo(window.scrollY - delta * 2, { immediate: true })
+                lastY = e.clientY
+            }
+        })
+        window.addEventListener("mouseup", (e) => {
+            window.lenis.scrollTo(window.scrollY + velocity, {
+                immediate: true,
+                onComplete: () => {
+                    window.lenis.scrollTo(window.scrollY)
+                },
+            })
+            notClick = false
+            panning = false
+        })
+    }
+    // mouseScroll() // use in dev console
+
     let isChanging = false
     function switchVideoVisibility(oldVideo, newVideo) {
         isChanging = true;
