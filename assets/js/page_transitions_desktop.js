@@ -129,6 +129,7 @@ if (
         sections.forEach((section, index) => {
             const videoCont = section.querySelector(".video-container");
             const video = videoCont.querySelector("video");
+            video.preload = "auto";
             const videoReversed = videoCont.querySelector("video.reversed");
             const view1 = section.querySelector(".view-1");
             const view2 = section.querySelector(".view-2");

@@ -7,11 +7,11 @@
     </div>
     <div class="video-container">
       <!-- <div class="scroll-video" data-src="videos/{{ lower .File.ContentBaseName }}.mp4"></div> -->
-      <video class="forward" muted playsinline preload="auto" data-duration="{{ .Params.duration }}">
+      <video class="forward" muted playsinline preload="none" data-duration="{{ .Params.duration }}">
         <source src="videos/{{ lower .File.ContentBaseName }}_av1.mp4" type="video/mp4; codecs=av01.0.08M.08" />
         <source src="videos/{{ lower .File.ContentBaseName }}.mp4" type="video/mp4" />
       </video>
-      <video class="reversed hidden" muted playsinline preload="auto" data-duration="{{ .Params.duration }}">
+      <video class="reversed hidden" muted playsinline preload="none" data-duration="{{ .Params.duration }}">
         <source src="videos/{{ lower .File.ContentBaseName }}_av1_reversed.mp4" type="video/mp4; codecs=av01.0.08M.08" />
         <source src="videos/{{ lower .File.ContentBaseName }}_reversed.mp4" type="video/mp4" />
       </video>
