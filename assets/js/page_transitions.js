@@ -222,6 +222,7 @@ if (
 
             // Load all other slides in the background
             const loadRemainingSlides = () => {
+                console.log("loading remaining")
                 const allSlides = Array.from(swiper.slides);
                 console.log(allSlides)
                 const nonCriticalSlides = allSlides.filter((slide, index) => {
@@ -346,4 +347,7 @@ if (
     }
 
     )
+    window.addEventListener('pageshow', (event) => {
+        console.log("loading done")
+    });
 }
