@@ -131,6 +131,7 @@ if (
             const video = videoCont.querySelector("video");
             video.preload = "auto";
             const videoReversed = videoCont.querySelector("video.reversed");
+            videoReversed.preload = "auto";
             const view1 = section.querySelector(".view-1");
             const view2 = section.querySelector(".view-2");
             const background = section.querySelector(".mo-background");
