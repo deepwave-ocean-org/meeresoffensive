@@ -214,9 +214,12 @@ if (
                     }
                 });
 
-                // Once critical slides are loaded, load the rest
-                Promise.all(loadPromises).then(() => {
-                    loadRemainingSlides();
+                Promise.all([
+                    new Promise(resolve => window.addEventListener('load', resolve, { once: true })),
+                    loadPromises
+                ]).then(() => {
+                    console.log("loading done")
+                    loadRemainingSlides, 100;
                 });
             };
 
@@ -347,7 +350,5 @@ if (
     }
 
     )
-    window.addEventListener('pageshow', (event) => {
-        console.log("loading done")
-    });
+
 }
