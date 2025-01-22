@@ -289,7 +289,7 @@ if (
                     loadRessources(this);
                 },
                 afterInit: () => {
-                    this.updateAutoHeight(1)
+                    swiper.updateAutoHeight(1)
                     document.querySelector(".swiper").classList.remove("swiper-hidden");
                 },
                 slideChange: function () {
