@@ -190,7 +190,22 @@ if (
                                     source.src = source.dataset.src;
                                     video.style.display = 'none';
                                     video.load();
-                                    video.playbackRate = 0.6;    
+                                    video.playbackRate = 0.6;  
+
+                                    // Add error handling and decode check
+                                    const loadTimeout = setTimeout(() => {
+                                        console.warn('Video load timeout');
+                                        currentSourceIndex++;
+                                        tryLoadSource();
+                                    }, 5000);
+
+                                    video.decode().catch(err => {
+                                        console.warn('Video decode failed:', err);
+                                        clearTimeout(loadTimeout);
+                                        currentSourceIndex++;
+                                        tryLoadSource();
+                                    });
+
                                     video.addEventListener('canplaythrough', () => {
                                         video.play();
                                         const spinner = slide.querySelector('.video-spinner');
@@ -219,7 +234,7 @@ if (
                     loadPromises
                 ]).then(() => {
                     console.log("loading done")
-                    loadRemainingSlides, 100;
+                    loadRemainingSlides()
                 });
             };
 
