@@ -288,7 +288,7 @@ if (
                     playVideo(this);
                     loadRessources(this);
                 },
-                afterInit: () => {
+                afterInit: (swiper) => {
                     swiper.updateAutoHeight(1)
                     document.querySelector(".swiper").classList.remove("swiper-hidden");
                 },
