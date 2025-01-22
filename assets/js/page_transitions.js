@@ -234,31 +234,31 @@ if (
                 console.log(nonCriticalSlides)
 
 
-                nonCriticalSlides.forEach(slide => {
+                    nonCriticalSlides.forEach(slide => {
                     // Load background images
 
-                    const background = slide.querySelector('.mo-background');
-                    if (background && !background.style.background) {
-                        const gradient = "linear-gradient(180deg, rgba(0,0,0,0.35) 1%, rgba(0,0,0,0) 14%, rgba(10,10,10,0.5) 60%, rgba(10,10,10,1) 98%, #0a0a0a 100%)";
-                        const bgUrl = background.dataset.bg;
-                        if (gradient && bgUrl) {
-                            background.style.background = `${gradient}, url('${bgUrl}')`;
-                        }
-                    }
-
-                    const video = slide.querySelector('video');
-                    if (video) {
-                        const sources = video.querySelectorAll('source[data-src]');
-                        sources.forEach(source => {
-                            if (!source.src) {
-                                source.src = source.dataset.src;
+                        const background = slide.querySelector('.mo-background');
+                        if (background && !background.style.background) {
+                            const gradient = "linear-gradient(180deg, rgba(0,0,0,0.35) 1%, rgba(0,0,0,0) 14%, rgba(10,10,10,0.5) 60%, rgba(10,10,10,1) 98%, #0a0a0a 100%)";
+                            const bgUrl = background.dataset.bg;
+                            if (gradient && bgUrl) {
+                                background.style.background = `${gradient}, url('${bgUrl}')`;
                             }
-                        });
-                        video.load();
-                        video.preload = 'auto';
-                    }
-                });
-            };
+                        }
+
+                        const video = slide.querySelector('video');
+                        if (video) {
+                            const sources = video.querySelectorAll('source[data-src]');
+                            sources.forEach(source => {
+                                if (!source.src) {
+                                    source.src = source.dataset.src;
+                                }
+                            });
+                            // video.load();
+                            video.preload = 'auto';
+                        }
+                    });
+                };
 
             loadCriticalSlides();
         }
