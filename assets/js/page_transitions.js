@@ -289,6 +289,7 @@ if (
                     loadRessources(this);
                 },
                 afterInit: () => {
+                    this.updateAutoHeight(1)
                     document.querySelector(".swiper").classList.remove("swiper-hidden");
                 },
                 slideChange: function () {
@@ -307,8 +308,9 @@ if (
         });
 
         function watchMobileUI() {
-            let oldHeight = window.innerHeight()
+            let oldHeight = window.innerHeight
             const resizeObserver = new ResizeObserver(() => {
+                console.log(window.innerHeight, oldHeight)
                 if (window.innerHeight != oldHeight) {
                     console.log("mobile UI is changing")
                     swiper.updateAutoHeight(1);
