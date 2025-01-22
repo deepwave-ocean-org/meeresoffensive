@@ -306,6 +306,21 @@ if (
             }
         });
 
+        function watchMobileUI() {
+            let oldHeight = window.innerHeight()
+            const resizeObserver = new ResizeObserver(() => {
+                if (window.innerHeight != oldHeight) {
+                    console.log("mobile UI is changing")
+                    swiper.updateAutoHeight(1);
+                }
+            });
+
+            resizeObserver.observe(document.documentElement);
+            return resizeObserver;
+        }
+
+        const resizeObserver = watchMobileUI();
+
         // if (window.location.hash) {
         //     // Let browser's native scroll-to-hash happen first
         //     console.log("hello?")
@@ -324,6 +339,7 @@ if (
                 swiper.destroy();
                 swiper = null;
             }
+            resizeObserver.disconnect();
         };
     }
 
