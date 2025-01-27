@@ -269,7 +269,7 @@ if (
                                     source.src = source.dataset.src;
                                 }
                             });
-                            // video.load();
+                            video.load();
                             video.preload = 'auto';
                         }
                     });
