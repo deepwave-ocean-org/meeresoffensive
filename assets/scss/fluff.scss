@@ -108,11 +108,11 @@
         width: 29vw;
     }
         #intro-slide h1 {
-            font-size: 3em;
+        font-size: 26px !important;
         }
 }
 #intro-slide h1 {
-    font-size: 4em;
+    font-size: 3em;
     font-size: clamp(32px, 3vw, 3em);
     padding: 0 0 0 2rem;
     color: #fff;
