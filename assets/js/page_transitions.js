@@ -199,12 +199,12 @@ if (
                                         tryLoadSource();
                                     }, 5000);
 
-                                    video.decode().catch(err => {
-                                        console.warn('Video decode failed:', err);
-                                        clearTimeout(loadTimeout);
-                                        currentSourceIndex++;
-                                        tryLoadSource();
-                                    });
+                                    // video.decode().catch(err => {
+                                    //     console.warn('Video decode failed:', err);
+                                    //     clearTimeout(loadTimeout);
+                                    //     currentSourceIndex++;
+                                    //     tryLoadSource();
+                                    // });
 
                                     video.addEventListener('canplaythrough', () => {
                                         video.play();
