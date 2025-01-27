@@ -127,9 +127,8 @@ if (
 
     const textContainer = svg.append("g")
       .attr("class", "text-labels")
-      .attr("pointer-events", "none"); // Prevent text from interfering with hover
+      .attr("pointer-events", "none");
 
-    // Modify your node selection
     const node = svg.append("g")
       .attr("fill", "#fff")
       .attr("stroke", "#fff")
@@ -138,11 +137,11 @@ if (
       .data(nodes)
       .join("g")
       .attr("fill", d => {
-        if (d.depth === 2) return "transparent";
+        if (d.depth != 1) return "transparent";
       })
-      .attr("r", d => 10 - d.depth * 2)
+      .attr("r", 6)
       .style("cursor", "pointer")
-      .style("display", d => d.depth === 0 ? "none" : null)
+      // .style("display", d => d.depth === 0 ? "none" : null)
       .call(drag(simulation));
 
     const imageSize = 100
@@ -156,10 +155,10 @@ if (
           .attr("height", imageSize)
           .attr("x", -imageSize / 2)
           .attr("y", -imageSize + 10)
-      } else if (d.depth !== 0) {
+      } else {
         element.append("circle")
-          .attr("fill", d.depth === 2 ? "transparent" : "#fff")
-          .attr("r", 10 - d.depth * 2);
+          .attr("fill", d.depth === 1 ? "#fff" : "transparent")
+          .attr("r", 6);
       }
     });
 
@@ -225,6 +224,7 @@ if (
       .attr("viewBox", [-width / 2, -height / 2, width, height])
       .attr("style", "max-width: 100%; height: auto; margin-top: 75px");
 
+    console.log(window.mapdata);
     const root = d3.hierarchy(window.mapdata);
     const nodes = root.descendants();
 

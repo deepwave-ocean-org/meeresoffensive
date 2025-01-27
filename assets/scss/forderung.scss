@@ -33,8 +33,14 @@
         margin-top: -0.1em;
 }
 
+
 .mo-explanation p {
     font-size: 103%;
+}
+@media (min-width: 768px) {
+    .mo-explanation p {
+        font-size: 20px;
+    }
 }
 .mo-cta-button.mo-explanation h3::before {
     content: "";

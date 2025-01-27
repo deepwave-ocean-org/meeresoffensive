@@ -3,6 +3,11 @@
     font-size: large;
     padding-bottom: 1rem;
 }
+@media (min-width: 768px) {
+    .mo-explanation h3 {
+        font-size: 22px;
+    }
+}
 .mo-explanation h3:last-child {
     padding-bottom: 0;
 }
