@@ -137,7 +137,7 @@ if (
       .data(nodes)
       .join("g")
       .attr("fill", d => {
-        if (d.depth != 1) return "transparent";
+        if (d.depth > 1) return "transparent";
       })
       .attr("r", 6)
       .style("cursor", "pointer")
@@ -157,8 +157,8 @@ if (
           .attr("y", -imageSize + 10)
       } else {
         element.append("circle")
-          .attr("fill", d.depth === 1 ? "#fff" : "transparent")
-          .attr("r", 6);
+          .attr("fill", d.depth <= 1 ? "#fff" : "transparent")
+          .attr("r", d.depth === 0 ? 7 : 6);
       }
     });
 
