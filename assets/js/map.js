@@ -53,7 +53,7 @@ if (
     const boundingForce = () => {
       const padding = 100;
       for (let node of nodes) {
-        node.x = Math.max(-width / 2 + padding, Math.min(width / 2 - padding, node.x));
+        node.x = Math.max(-width / 2 - padding, Math.min(width / 2 + padding, node.x));
         node.y = Math.max(-height / 2 + padding, Math.min(height / 2 - padding, node.y));
       }
     }
@@ -70,11 +70,11 @@ if (
         }))
       .force("charge", d3.forceManyBody()
         .strength(d => {
-          return d.depth === 2 ? -window.innerWidth / 1.8 : -window.innerWidth / 3.6;
+          return d.depth === 2 ? -window.innerWidth / 1.4 : -window.innerWidth / 4.5;
         }))
       .force("collide", d3.forceCollide()
-        .radius(d => d.depth === 2 ? 50 : 20)
-        .strength(0.7))
+        .radius(d => d.depth === 2 ? 55 : 20)
+        .strength(0.6))
       .force("bounds", boundingForce);
 
     const defs = svg.append("defs");
@@ -155,6 +155,18 @@ if (
           .attr("height", imageSize)
           .attr("x", -imageSize / 2)
           .attr("y", -imageSize + 10)
+          .attr("visibility", "hidden")
+        element.append("foreignObject")
+          .datum(d)
+          .attr("x", d.x - 150)
+          .attr("y", d.y - 30)
+          // .attr("y", d.y + 10)
+          .attr("width", 250)
+          .attr("height", 30)
+          .append("xhtml:div")
+          .attr("class", "hover-text")
+          .style("display", d => d.depth === 1 ? "none" : null)
+          .text(d.data.name);
       } else {
         element.append("circle")
           .attr("fill", d.depth <= 1 ? "#fff" : "transparent")
@@ -162,28 +174,28 @@ if (
       }
     });
 
-    let activeText = null;
+    // let activeText = null;
 
-    node.on("mouseover", (event, d) => {
-      textContainer.selectAll("text").remove();
-      node.selectAll("g").attr("class", "node-inactive")
-      activeText = textContainer
-        .append("foreignObject")
-        .datum(d)
-        .attr("x", d.x - 100)
-        .attr("y", d.y + 10)
-        .attr("width", 200)
-        .attr("height", 300)
-        .append("xhtml:div")
-        .attr("class", "hover-text")
-        .style("display", d => d.depth === 1 ? "none" : null)
-        .text(d.data.name);
-    })
-      .on("mouseout", () => {
-        textContainer.selectAll("foreignObject").remove();
-        node.selectAll("circle").attr("class", "")
-        activeText = null;
-      })
+    // node.on("mouseover", (event, d) => {
+    //   textContainer.selectAll("text").remove();
+    //   node.selectAll("g").attr("class", "node-inactive")
+    //   activeText = textContainer
+    //     .append("foreignObject")
+    //     .datum(d)
+    //     .attr("x", d.x - 100)
+    //     .attr("y", d.y + 10)
+    //     .attr("width", 200)
+    //     .attr("height", 300)
+    //     .append("xhtml:div")
+    //     .attr("class", "hover-text")
+    //     .style("display", d => d.depth === 1 ? "none" : null)
+    //     .text(d.data.name);
+    // })
+    //   .on("mouseout", () => {
+    //     textContainer.selectAll("foreignObject").remove();
+    //     node.selectAll("circle").attr("class", "")
+    //     activeText = null;
+    //   })
 
 
     simulation.on("tick", () => {
@@ -200,10 +212,10 @@ if (
 
       node.attr("transform", d => `translate(${d.x},${d.y})`);
 
-      if (activeText) {
-        const d = activeText.datum();
-        activeText.attr("transform", d => `translate(${d.x},${d.y})`);
-      }
+      // if (activeText) {
+      //   const d = activeText.datum();
+      //   activeText.attr("transform", d => `translate(${d.x},${d.y})`);
+      // }
     });
 
     return svg.node();
@@ -212,6 +224,7 @@ if (
   document.addEventListener('DOMContentLoaded', function () {
     const width = window.innerWidth;
     const height = window.innerHeight - 50;
+    const firstMenuHeight = window.innerHeight - 100;
 
     const menuSvg = d3.create("svg")
       .attr("width", width)
@@ -220,9 +233,9 @@ if (
       .attr("style", "max-width: 100%; height: auto;");
     const slideSvg = d3.create("svg")
       .attr("width", width)
-      .attr("height", height)
-      .attr("viewBox", [-width / 2, -height / 2, width, height])
-      .attr("style", "max-width: 100%; height: auto; margin-top: 75px");
+      .attr("height", firstMenuHeight)
+      .attr("viewBox", [-width / 2, -height / 2, width, firstMenuHeight])
+      .attr("style", "max-width: 100%; height: auto; margin-top: 40px");
 
     console.log(window.mapdata);
     const root = d3.hierarchy(window.mapdata);
