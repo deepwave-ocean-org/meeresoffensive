@@ -11,15 +11,17 @@
 }
 
 .navigation-opener::before {
-    content: "\2630";
+    content: "\2723";
     font-size: 90%;
     bottom: 0.25rem;
     position: absolute;
     left: 0;
+    transform: rotate(15deg)scaleX(1.1);
 }
 
 .navigation-opener.active::before {
     content: "\2715";
+    transform: none;
 }
 
 
