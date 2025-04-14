@@ -8,9 +8,6 @@
         font-size: 22px;
     }
 }
-.mo-explanation h3:last-child {
-    padding-bottom: 0;
-}
 
 .mo-main-content a.active {
 pointer-events: all;
@@ -36,6 +33,21 @@ display: none;
 
 .mo-cta-button {
     margin-top: auto;
+    color: #001d45;
+        width: fit-content;
+        border: 1px solid;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    
+    .mo-cta-button:hover {
+        color: white;
+        background-color: #001d45;
+        border-color: #001d45;
+    }
+    
+    .mo-cta-button h3 {
+        padding: 10px 50px 10px 20px;
 }
 
 .mo-cta-wrapper {

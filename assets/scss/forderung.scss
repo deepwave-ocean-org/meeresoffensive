@@ -42,9 +42,7 @@
         font-size: 20px;
     }
 }
-.mo-cta-button {
-    color: #001d45;
-}
+
 .mo-cta-button.mo-explanation h3::before {
     content: "";
 }
@@ -54,7 +52,7 @@
     display: inline-block;
     font-size: 135%;
     position: absolute;
-    margin-top: -0.29em;
+    margin-top: -0.31em;
     margin-left: 0.5rem;
 }
 .mo-cta-wrapper [class*="icon-"]:before {
