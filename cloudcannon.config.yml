@@ -1,0 +1,48 @@
+collections_config:
+  content_1_ms:
+    path: content/1_ms
+    name: Content 1 Ms
+    icon: content_copy
+  content_2_mk:
+    path: content/2_mk
+    name: Content 2 Mk
+    icon: content_copy
+  content_3_mt:
+    path: content/3_mt
+    name: Content 3 Mt
+    icon: content_cut
+  content_4_me:
+    path: content/4_me
+    name: Content 4 Me
+    icon: content_copy
+  content_5_mp:
+    path: content/5_mp
+    name: Content 5 Mp
+    icon: content_copy
+  hidden_pages:
+    path: hidden-pages
+    name: Hidden Pages
+    icon: hide_image
+paths:
+  static: static
+  uploads: static/uploads
+timezone: Europe/London
+markdown:
+  engine: commonmark
+  options:
+    gfm: true
+    linkify: false
+    table: false
+    strikethrough: false
+    subscript: false
+    superscript: false
+    heading_ids: false
+    breaks: false
+    xhtml: false
+    attributes: false
+    typographer: false
+    treat_indentation_as_code: true
+_snippets_imports:
+  hugo:
+    exclude:
+      - hugo_instagram
