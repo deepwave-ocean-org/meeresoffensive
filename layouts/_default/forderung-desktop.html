@@ -1,7 +1,8 @@
 <section id="{{ .Title | urlize }}" data-file="{{ .File.ContentBaseName }}"
   class="panel mo-section link-color-{{ .Params.color }} order-{{ .Params.order }}">
   <article data-url="#{{ .Title | urlize }}" class="mo-single" id="article-no-{{ .Params.order }}">
-    <span class="navigation-opener" data-order="{{ .Params.order }}">{{ .Params.title }}</span>
+    <span class="navigation-opener" data-order="{{ .Params.order }}">{{ .Params.title }} <span
+        class="info-button">i</span></span>
     <div class="mo-background" data-bg=""
       style="background: linear-gradient(180deg, rgba(0,0,0,0.35) 1%, rgba(0,0,0,0) 14%, rgba(10,10,10,0.5) 60%, rgba(10,10,10,1) 98%, #0a0a0a 100%), url(' backgrounds/{{ .Params.background_image }} ');">
     </div>

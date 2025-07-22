@@ -24,7 +24,36 @@
     transform: none;
 }
 
+.info-button {
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 100%;
+    border: 2px solid white;
+    text-align: center;
+    line-height: 2rem;
+    font-size: 1.3rem;
+    margin-left: 0.7rem;
+    position: absolute;
+    top: 0.6rem;
+}
 
+#info-video {
+    position: fixed;
+    top: 70px;
+    left: 0;
+    width: 100%;
+    height: calc(100% - 140px);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#info-video iframe {
+    width: 60%;
+    height: 80%;
+}
 
 #map {
     position: fixed;

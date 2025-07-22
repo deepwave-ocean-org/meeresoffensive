@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="{{ $style.RelPermalink }}" />
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
-    {{ $style := resources.Get "scss/global.scss" | resources.ToCSS | fingerprint }}
+    {{ $style := resources.Get "scss/global.scss" | css.Sass | fingerprint }}
     <link rel="stylesheet" href="{{ $style.RelPermalink }}">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">

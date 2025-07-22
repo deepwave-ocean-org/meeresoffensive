@@ -243,16 +243,19 @@ if (
 
     // ---- toggling the Map ------ //
     const map = document.getElementById('map');
+    const infoVideo = document.getElementById('info-video');
     const search = document.getElementById('search-bar')
     const searchResults = document.getElementById("search-results")
 
     const mapSlide = document.getElementById("map-slide-child")
 
     function closeMap() {
-      if (map.classList.contains("hidden")) {
+      console.log("closeMap")
+      if (map.classList.contains("hidden") && infoVideo.classList.contains("hidden")) {
         return
       }
       map.classList.add("hidden");
+      infoVideo.classList.add("hidden");
       document.querySelectorAll(".video-container.hidden, .view-1.hidden, .view-2.hidden").forEach(el => el.classList.remove("hidden"));
       document.querySelector(".mo-background.background-dark").classList.remove("background-dark");
       document.querySelector(".navigation-opener.active").classList.remove("active")
@@ -263,6 +266,7 @@ if (
       renderSearchResults()
     }
     function openMap(section) {
+      console.log("openMap", section)
       const videoCont = section.querySelector(".video-container");
       const view1 = section.querySelector(".view-1");
       const view2 = section.querySelector(".view-2");
@@ -279,10 +283,29 @@ if (
       search.focus();
       renderSearchResults()
     }
+    function openInfoVideo(section) {
+      console.log("openInfoVideo", section)
+      const videoCont = section.querySelector(".video-container");
+      const view1 = section.querySelector(".view-1");
+      const view2 = section.querySelector(".view-2");
+      const background = section.querySelector(".mo-background");
+
+      const navigation = section.querySelector(".navigation-opener")
+      window.scrollTo(0, section.getBoundingClientRect().top + window.scrollY);
+      navigation.classList.add("active");
+      [videoCont, view1, view2].forEach(el => el.classList.add("hidden"));
+      infoVideo.classList.remove("hidden");
+      background.classList.add("background-dark");
+      window.lenis.stop();
+      document.body.style.overflow = 'hidden';
+      // search.focus();
+      // renderSearchResults()
+    }
 
 
     window.closeMap = closeMap
     window.openMap = openMap
+    window.openInfoVideo = openInfoVideo
 
 
     document.addEventListener('keydown', (e) => {

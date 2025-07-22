@@ -136,6 +136,7 @@ if (
             const view2 = section.querySelector(".view-2");
             const background = section.querySelector(".mo-background");
             const navigation = section.querySelector(".navigation-opener ")
+            const infoButton = navigation.querySelector(".info-button");
             const sectionParent = document.getElementsByClassName("mo-section")[index]
 
             navigation.addEventListener("click", () => {
@@ -145,7 +146,14 @@ if (
                 }
                 window.closeMap()
             })
-
+            infoButton.addEventListener("click", (e) => {
+                if (!navigation.classList.contains("active")) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    window.openInfoVideo(section)
+                    return
+                }
+            })
             let isPlayingForward = true;
 
             const animationTrigger = {
