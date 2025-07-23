@@ -190,7 +190,7 @@ if (
                                     source.src = source.dataset.src;
                                     video.style.display = 'none';
                                     video.load();
-                                    video.playbackRate = 0.6;  
+                                    video.playbackRate = 0.4;  
 
                                     // Add error handling and decode check
                                     const loadTimeout = setTimeout(() => {
