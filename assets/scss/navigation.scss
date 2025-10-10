@@ -11,12 +11,9 @@
 }
 
 .navigation-opener::before {
-    content: "\2723";
-    font-size: 90%;
-    bottom: 0.25rem;
+    content: "\2630";
     position: absolute;
     left: 0;
-    transform: rotate(15deg)scaleX(1.1);
 }
 
 /*.navigation-opener::before {
@@ -33,7 +30,6 @@
 
 .navigation-opener.active::before {
     content: "\2715";
-    transform: none;
 }
 
 .info-button {
@@ -43,7 +39,7 @@
     border-radius: 100%;
     border: 2px solid white;
     text-align: center;
-    line-height: 2rem;
+    line-height: 1.7rem;
     font-size: 1.3rem;
     margin-left: 0.7rem;
     position: absolute;

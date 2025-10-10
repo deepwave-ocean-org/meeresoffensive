@@ -49,12 +49,13 @@ if (
         .on("drag", dragged)
         .on("end", dragended);
     }
-
+	console.log(width, height, "hello")
     const boundingForce = () => {
-      const padding = 100;
+      const padding = 200;
+      const y_padding = 100;
       for (let node of nodes) {
-        node.x = Math.max(-width / 2 - padding, Math.min(width / 2 + padding, node.x));
-        node.y = Math.max(-height / 2 + padding, Math.min(height / 2 - padding, node.y));
+        node.x = Math.max(-width / 2 + padding, Math.min(width / 2 - padding, node.x));
+        node.y = Math.max(-height / 2 + y_padding, Math.min(height / 2 - y_padding, node.y));
       }
     }
 
