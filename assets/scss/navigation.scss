@@ -1,4 +1,4 @@
-.navigation-opener {
+/*.navigation-opener {
     position: absolute;
     top: 2rem;
     left: 2rem;
@@ -17,6 +17,18 @@
     position: absolute;
     left: 0;
     transform: rotate(15deg)scaleX(1.1);
+}*/
+
+.navigation-opener::before {
+    content: "\2630";
+    font-size: 90%;
+    bottom: 0.25rem;
+    position: absolute;
+    left: 0;
+}
+
+.navigation-opener.active::before {
+    content: "\2715";
 }
 
 .navigation-opener.active::before {
