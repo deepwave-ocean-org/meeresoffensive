@@ -6,9 +6,6 @@
     <div id="intro-slide">
         {{ .Render "intro" }}
     </div>
-    <section id="map-slide">
-        <div id="map-slide-child"></div>
-    </section>
     {{ range .Pages.ByParam "order" }}
         {{ .Render "chapter" }}
         {{ range .Pages.ByParam "order" }}

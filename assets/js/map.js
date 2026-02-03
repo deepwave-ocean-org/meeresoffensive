@@ -443,10 +443,11 @@ if (
       renderSearchResults(e)
     }, 300));
 
-
-
     map.append(initializeMapVisualization(menuSvg, root.links(), root.descendants(), width, height));
-    mapSlide.append(initializeMapVisualization(slideSvg, root.links(), root.descendants(), width, height));
+    if (mapSlide) {
+      mapSlide.append(initializeMapVisualization(slideSvg, root.links(), root.descendants(), width, height));
+    }
+
 
   })
 }
