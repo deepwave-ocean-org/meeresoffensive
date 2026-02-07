@@ -4,6 +4,7 @@ import Fuse from 'https://cdn.jsdelivr.net/npm/fuse.js@6.6.2/dist/fuse.esm.js';
 if (
   window.innerWidth > 767
 ) {
+  const SIDEBAR_HIGHLIGHT_LIMIT = 3;
 
   function initializeMapVisualization(svg, links, nodes, width, height) {
 
@@ -244,30 +245,75 @@ if (
 
     // ---- toggling the Map ------ //
     const map = document.getElementById('map');
+    const sidebar = document.getElementById('desktop-sidebar-nav');
     const infoVideo = document.getElementById('info-video');
     const search = document.getElementById('search-bar')
     const searchResults = document.getElementById("search-results")
+    const searchContainer = document.getElementById("search-container");
 
     const mapSlide = document.getElementById("map-slide-child")
+    let overlayCloseTimer = null;
+
+    function showOverlay(mode = "search") {
+      if (overlayCloseTimer) {
+        clearTimeout(overlayCloseTimer);
+        overlayCloseTimer = null;
+      }
+      map.classList.remove("hidden");
+      if (mode === "sidebar") {
+        map.classList.add("sidebar-mode");
+      } else {
+        map.classList.remove("sidebar-mode");
+      }
+      requestAnimationFrame(() => {
+        map.classList.add("is-overlay-open");
+      });
+    }
+
+    function hideOverlay() {
+      map.classList.remove("is-overlay-open");
+      overlayCloseTimer = setTimeout(() => {
+        map.classList.add("hidden");
+        map.classList.remove("sidebar-mode");
+      }, 220);
+    }
 
     function closeMap() {
       console.log("closeMap")
-      if (map.classList.contains("hidden") && infoVideo.classList.contains("hidden")) {
-        return
+      if (sidebar) {
+        sidebar.classList.remove("is-open");
+        sidebar.querySelectorAll(".desktop-sidebar-toggle[aria-expanded='true']").forEach(toggle => {
+          toggle.setAttribute("aria-expanded", "false");
+        });
+        sidebar.querySelectorAll(".desktop-sidebar-level-2").forEach(list => {
+          list.classList.add("is-collapsed");
+        });
       }
-      map.classList.add("hidden");
+
+      hideOverlay();
       infoVideo.classList.add("hidden");
       document.querySelectorAll(".video-container.hidden, .view-1.hidden, .view-2.hidden").forEach(el => el.classList.remove("hidden"));
-      document.querySelector(".mo-background.background-dark").classList.remove("background-dark");
-      document.querySelector(".navigation-opener.active").classList.remove("active")
+      const darkBackground = document.querySelector(".mo-background.background-dark");
+      if (darkBackground) {
+        darkBackground.classList.remove("background-dark");
+      }
+      const activeNavigation = document.querySelector(".navigation-opener.active");
+      if (activeNavigation) {
+        activeNavigation.classList.remove("active");
+        activeNavigation.setAttribute("aria-expanded", "false");
+      }
       window.lenis.start();
       document.body.style.overflow = '';
       search.blur();
       search.value = "";
       renderSearchResults()
     }
-    function openMap(section) {
-      console.log("openMap", section)
+
+    function openSidebar(section) {
+      console.log("openSidebar", section)
+      if (!sidebar) {
+        return;
+      }
       const videoCont = section.querySelector(".video-container");
       const view1 = section.querySelector(".view-1");
       const view2 = section.querySelector(".view-2");
@@ -276,8 +322,33 @@ if (
 
       window.scrollTo(0, section.getBoundingClientRect().top + window.scrollY);
       navigation.classList.add("active");
+      navigation.setAttribute("aria-expanded", "true");
       [videoCont, view1, view2].forEach(el => el.classList.add("hidden"));
-      map.classList.remove("hidden");
+      sidebar.classList.add("is-open");
+      showOverlay("sidebar");
+      background.classList.add("background-dark");
+      window.lenis.stop();
+      document.body.style.overflow = 'hidden';
+      search.focus();
+      renderSearchResults()
+    }
+
+    function openSearchOverlay(section) {
+      console.log("openSearchOverlay", section)
+      const videoCont = section.querySelector(".video-container");
+      const view1 = section.querySelector(".view-1");
+      const view2 = section.querySelector(".view-2");
+      const background = section.querySelector(".mo-background");
+      const navigation = section.querySelector(".navigation-opener ")
+
+      window.scrollTo(0, section.getBoundingClientRect().top + window.scrollY);
+      navigation.classList.add("active");
+      navigation.setAttribute("aria-expanded", "true");
+      [videoCont, view1, view2].forEach(el => el.classList.add("hidden"));
+      showOverlay("search");
+      if (sidebar) {
+        sidebar.classList.remove("is-open");
+      }
       background.classList.add("background-dark");
       window.lenis.stop();
       document.body.style.overflow = 'hidden';
@@ -294,6 +365,7 @@ if (
       const navigation = section.querySelector(".navigation-opener")
       window.scrollTo(0, section.getBoundingClientRect().top + window.scrollY);
       navigation.classList.add("active");
+      navigation.setAttribute("aria-expanded", "true");
       [videoCont, view1, view2].forEach(el => el.classList.add("hidden"));
       infoVideo.classList.remove("hidden");
       background.classList.add("background-dark");
@@ -305,8 +377,152 @@ if (
 
 
     window.closeMap = closeMap
-    window.openMap = openMap
+    window.openMap = openSidebar
     window.openInfoVideo = openInfoVideo
+
+    if (sidebar) {
+      sidebar.addEventListener("wheel", (event) => {
+        event.stopPropagation();
+      }, { passive: true });
+      sidebar.addEventListener("touchmove", (event) => {
+        event.stopPropagation();
+      }, { passive: true });
+
+      sidebar.querySelectorAll(".desktop-sidebar-toggle").forEach(toggle => {
+        toggle.addEventListener("click", () => {
+          const sectionId = toggle.dataset.sidebarSection;
+          const childList = sidebar.querySelector(`[data-sidebar-children="${sectionId}"]`);
+          const isExpanded = toggle.getAttribute("aria-expanded") === "true";
+          toggle.setAttribute("aria-expanded", isExpanded ? "false" : "true");
+          if (childList) {
+            childList.classList.toggle("is-collapsed", isExpanded);
+          }
+        });
+      });
+
+      sidebar.querySelectorAll(".desktop-sidebar-link").forEach(link => {
+        link.addEventListener("click", () => {
+          closeMap();
+        });
+      });
+    }
+
+    map.addEventListener("click", (event) => {
+      if (map.classList.contains("hidden")) {
+        return;
+      }
+      const clickedInsideSearch = searchContainer?.contains(event.target);
+      const clickedInsideSidebar = sidebar?.contains(event.target);
+      if (!clickedInsideSearch && !clickedInsideSidebar) {
+        closeMap();
+      }
+    });
+
+    infoVideo.addEventListener("click", (event) => {
+      const clickedInsideFrame = event.target.closest("iframe");
+      if (!clickedInsideFrame) {
+        closeMap();
+      }
+    });
+
+    function normalizeAnchor(value) {
+      if (!value) {
+        return "";
+      }
+      let normalized = String(value).replace(/^#/, "");
+      let previous = "";
+      while (normalized !== previous) {
+        previous = normalized;
+        try {
+          normalized = decodeURIComponent(normalized);
+        } catch {
+          break;
+        }
+      }
+      return normalized.toLowerCase();
+    }
+
+    function getSidebarLinkByAnchor(anchor) {
+      if (!sidebar) {
+        return null;
+      }
+      const targetAnchor = normalizeAnchor(anchor);
+      const sidebarLinks = sidebar.querySelectorAll(".desktop-sidebar-link");
+      for (const link of sidebarLinks) {
+        const href = link.getAttribute("href") || "";
+        if (normalizeAnchor(href) === targetAnchor) {
+          return link;
+        }
+      }
+      return null;
+    }
+
+    function clearSidebarSearchHighlights(collapseLists = false) {
+      if (!sidebar) {
+        return;
+      }
+      sidebar.querySelectorAll(".desktop-sidebar-link.is-search-hit").forEach(link => {
+        link.classList.remove("is-search-hit");
+        delete link.dataset.searchRank;
+      });
+      if (collapseLists) {
+        sidebar.querySelectorAll(".desktop-sidebar-toggle").forEach(toggle => {
+          toggle.setAttribute("aria-expanded", "false");
+        });
+        sidebar.querySelectorAll(".desktop-sidebar-level-2").forEach(list => {
+          list.classList.add("is-collapsed");
+        });
+      }
+    }
+
+    function syncSidebarSearchHighlights(results, searchTerm) {
+      if (!sidebar) {
+        return;
+      }
+
+      clearSidebarSearchHighlights(true);
+      if (!searchTerm) {
+        return;
+      }
+
+      const topResults = [];
+      const seenAnchors = new Set();
+
+      const addResult = (result) => {
+        const key = normalizeAnchor(result?.item?.anchor);
+        if (!key || seenAnchors.has(key)) {
+          return;
+        }
+        seenAnchors.add(key);
+        topResults.push(result);
+      };
+
+      // Ground truth = currently shown search ranking from Fuse.
+      for (const result of results) {
+        addResult(result);
+        if (topResults.length >= SIDEBAR_HIGHLIGHT_LIMIT) {
+          break;
+        }
+      }
+      topResults.forEach((result, index) => {
+        const sidebarLink = getSidebarLinkByAnchor(result.item.anchor);
+        if (!sidebarLink) {
+          return;
+        }
+        sidebarLink.classList.add("is-search-hit");
+        sidebarLink.dataset.searchRank = String(index + 1);
+
+        const childList = sidebarLink.closest(".desktop-sidebar-level-2");
+        if (!childList) {
+          return;
+        }
+        childList.classList.remove("is-collapsed");
+        const toggle = childList.parentElement?.querySelector(".desktop-sidebar-toggle");
+        if (toggle) {
+          toggle.setAttribute("aria-expanded", "true");
+        }
+      });
+    }
 
 
     document.addEventListener('keydown', (e) => {
@@ -331,7 +547,7 @@ if (
         });
 
         if (currentSection) {
-          openMap(currentSection);
+          openSidebar(currentSection);
           search.focus();
         }
       }
@@ -375,11 +591,13 @@ if (
       searchResults.innerHTML = '';
 
       if (searchTerm === '') {
+        clearSidebarSearchHighlights(true);
         menuSvg.classed("hidden", false);
         return;
       }
 
       const results = fuse.search(searchTerm);
+      syncSidebarSearchHighlights(results, searchTerm);
       if (results.length > 0) {
         console.log(results)
         menuSvg.classed("hidden", true);

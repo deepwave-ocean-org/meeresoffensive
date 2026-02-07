@@ -146,6 +146,17 @@ if (
                 }
                 window.closeMap()
             })
+            navigation.addEventListener("keydown", (e) => {
+                if (e.key !== "Enter" && e.key !== " ") {
+                    return;
+                }
+                e.preventDefault();
+                if (!navigation.classList.contains("active")) {
+                    window.openMap(section);
+                    return;
+                }
+                window.closeMap();
+            })
             infoButton.addEventListener("click", (e) => {
                 if (!navigation.classList.contains("active")) {
                     e.preventDefault();

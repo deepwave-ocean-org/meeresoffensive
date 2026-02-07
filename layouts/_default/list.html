@@ -2,7 +2,31 @@
 
 
 <div class="desktop-only swiper-hidden">
-    
+    <aside id="desktop-sidebar-nav" class="desktop-sidebar-nav" aria-label="Desktop navigation" data-lenis-prevent>
+        <nav class="desktop-sidebar-nav-inner">
+            <ul class="desktop-sidebar-level-1">
+                {{ range .Data.Pages.ByParam "order" }}
+                <li class="desktop-sidebar-item">
+                    <button
+                        class="desktop-sidebar-toggle"
+                        type="button"
+                        data-sidebar-section="{{ .Title | urlize }}"
+                        aria-expanded="false">
+                        {{ .Title }}
+                    </button>
+                    <ul class="desktop-sidebar-level-2 is-collapsed" data-sidebar-children="{{ .Title | urlize }}">
+                        {{ range .Data.Pages.ByParam "order" }}
+                        <li>
+                            <a href="#{{ .Title | urlize }}" class="desktop-sidebar-link">{{ .Title }}</a>
+                        </li>
+                        {{ end }}
+                    </ul>
+                </li>
+                {{ end }}
+            </ul>
+        </nav>
+    </aside>
+
     <div id="intro-slide">
         {{ .Render "intro" }}
     </div>
