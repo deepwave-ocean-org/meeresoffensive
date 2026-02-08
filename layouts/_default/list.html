@@ -11,6 +11,7 @@
                         class="desktop-sidebar-toggle"
                         type="button"
                         data-sidebar-section="{{ .Title | urlize }}"
+                        data-child-count="{{ len .Data.Pages }}"
                         aria-expanded="false">
                         {{ .Title }}
                     </button>

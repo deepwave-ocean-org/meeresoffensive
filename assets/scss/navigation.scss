@@ -160,15 +160,35 @@
 }
 
 #search-bar {
-    padding: 8px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
+    padding: 12px 16px;
+    border-radius: 12px;
+    border: 1px solid rgba(76, 138, 164, 0.2);
     width: 100%;
-    background: transparent;
+    background: linear-gradient(135deg, rgba(8, 20, 32, 0.85) 0%, rgba(4, 10, 16, 0.9) 100%);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
     color: white;
+    font-size: 1.4rem;
+    letter-spacing: 0.01em;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(76, 138, 164, 0.05) inset;
+    transition: border-color 250ms ease, box-shadow 250ms ease;
+}
+
+#search-bar:focus {
+    outline: none;
+    border-color: rgba(0, 171, 243, 0.45);
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.3),
+        0 0 0 3px rgba(0, 171, 243, 0.1),
+        0 0 20px rgba(0, 171, 243, 0.06);
+}
+
+#search-bar::placeholder {
+    color: rgba(76, 138, 164, 0.45);
+    letter-spacing: 0.05em;
 }
 
 #search-results {
@@ -194,6 +214,17 @@
     display: block;
 }
 
+// Animated gradient border keyframes
+@keyframes sidebar-border-glow {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 0.8; }
+}
+
+@keyframes sidebar-shine {
+    0% { background-position: 200% center; }
+    100% { background-position: -200% center; }
+}
+
 .desktop-sidebar-nav {
     position: fixed;
     top: 7rem;
@@ -207,16 +238,53 @@
     overscroll-behavior: contain;
     touch-action: pan-y;
     z-index: 9100;
-    background: rgba(0, 0, 0, 0.28);
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
-    backdrop-filter: blur(2px);
-    padding: 0.8rem;
+    background: linear-gradient(165deg, rgba(8, 20, 32, 0.92) 0%, rgba(4, 10, 16, 0.95) 100%);
+    border: 1px solid transparent;
+    border-radius: 16px;
+    box-shadow:
+        0 24px 64px rgba(0, 0, 0, 0.6),
+        0 0 0 1px rgba(76, 138, 164, 0.08) inset,
+        0 1px 0 rgba(255, 255, 255, 0.05) inset;
+    backdrop-filter: blur(32px) saturate(1.6);
+    -webkit-backdrop-filter: blur(32px) saturate(1.6);
+    padding: 0.5rem;
     transform: translateX(-112%);
     opacity: 0;
     pointer-events: none;
-    transition: transform 220ms ease, opacity 220ms ease;
+    transition: transform 350ms cubic-bezier(0.22, 0.61, 0.36, 1), opacity 250ms ease;
+
+    // Animated gradient border — only visible on top & left edges
+    background-clip: padding-box;
+    &::before {
+        content: "";
+        position: absolute;
+        inset: -1px;
+        border-radius: 17px;
+        padding: 1px;
+        background: linear-gradient(
+            180deg,
+            rgba(76, 138, 164, 0.3) 0%,
+            rgba(0, 171, 243, 0.12) 20%,
+            transparent 60%
+        );
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        pointer-events: none;
+        animation: sidebar-border-glow 4s ease-in-out infinite;
+    }
+
+    // Scrollbar styling
+    &::-webkit-scrollbar {
+        width: 3px;
+    }
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+        background: rgba(76, 138, 164, 0.15);
+        border-radius: 3px;
+    }
 }
 
 .desktop-sidebar-nav.is-open {
@@ -232,44 +300,91 @@
 }
 
 .desktop-sidebar-item {
-    border-bottom: 1px solid rgba(204, 204, 204, 0.25);
+    border-bottom: none;
+    margin-bottom: 3px;
 }
 
 .desktop-sidebar-item:last-child {
-    border-bottom: 0;
+    margin-bottom: 0;
 }
 
 .desktop-sidebar-toggle {
     width: 100%;
     border: 0;
-    background: transparent;
-    color: #ffffff;
+    background: linear-gradient(135deg, rgba(76, 138, 164, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%);
+    color: rgba(255, 255, 255, 0.92);
     text-align: left;
-    font-size: 1.5rem;
-    font-weight: 700;
+    font-size: 1.3rem;
+    font-weight: 600;
     line-height: 1.4;
-    padding: 0.9rem 2.2rem 0.9rem 0.5rem;
+    padding: 1rem 2.6rem 1rem 1.2rem;
     position: relative;
-    letter-spacing: 0.01em;
+    letter-spacing: 0.03em;
+    text-transform: none;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    transition: all 220ms cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
+.desktop-sidebar-toggle:hover {
+    background: linear-gradient(135deg, rgba(76, 138, 164, 0.14) 0%, rgba(255, 255, 255, 0.06) 100%);
+    border-color: rgba(76, 138, 164, 0.2);
+    color: #ffffff;
+    transform: translateX(2px);
+}
+
+// Chevron indicator
 .desktop-sidebar-toggle::after {
-    content: "\203A";
+    content: "";
     position: absolute;
-    right: 0.4rem;
+    right: 1rem;
     top: 50%;
-    transform: translateY(-50%);
-    color: rgba(255, 255, 255, 0.85);
-    transition: transform 160ms ease;
+    width: 6px;
+    height: 6px;
+    border-right: 1.5px solid rgba(76, 138, 164, 0.6);
+    border-bottom: 1.5px solid rgba(76, 138, 164, 0.6);
+    transform: translateY(-50%) rotate(-45deg);
+    transition: transform 250ms cubic-bezier(0.22, 0.61, 0.36, 1), border-color 180ms ease;
+}
+
+.desktop-sidebar-toggle:hover::after {
+    border-color: rgba(0, 171, 243, 0.9);
+}
+
+.desktop-sidebar-toggle[aria-expanded="true"] {
+    background: linear-gradient(135deg, rgba(76, 138, 164, 0.12) 0%, rgba(0, 171, 243, 0.05) 100%);
+    border-color: rgba(76, 138, 164, 0.15);
+    border-radius: 10px 10px 2px 2px;
+    color: #ffffff;
 }
 
 .desktop-sidebar-toggle[aria-expanded="true"]::after {
-    transform: translateY(-50%) rotate(90deg);
+    transform: translateY(-50%) rotate(45deg);
+    border-color: rgba(0, 171, 243, 0.8);
 }
 
 .desktop-sidebar-level-2 {
-    margin-left: 0.6rem !important;
-    padding-bottom: 1rem !important;
+    margin-left: 0 !important;
+    padding: 0.2rem 0 0.6rem 0 !important;
+    background: linear-gradient(180deg, rgba(76, 138, 164, 0.04) 0%, rgba(0, 0, 0, 0.1) 100%);
+    border-radius: 0 0 10px 10px;
+    margin-bottom: 3px;
+    border: 1px solid rgba(76, 138, 164, 0.04);
+    border-top: none;
+    border-right-color: transparent;
+    position: relative;
+
+    // Subtle left accent line
+    &::before {
+        content: "";
+        position: absolute;
+        left: 1.2rem;
+        top: 0.4rem;
+        bottom: 0.6rem;
+        width: 1px;
+        background: linear-gradient(180deg, rgba(76, 138, 164, 0.3), rgba(76, 138, 164, 0.05));
+        border-radius: 1px;
+    }
 }
 
 .desktop-sidebar-level-2.is-collapsed {
@@ -279,34 +394,179 @@
 .desktop-sidebar-link {
     display: block;
     position: relative;
-    color: rgba(255, 255, 255, 0.9) !important;
-    font-size: 1.45rem;
-    line-height: 1.45;
-    padding: 0.65rem 0.4rem;
-    border-radius: 4px;
-    transition: background-color 150ms ease, color 150ms ease;
-}
+    color: rgba(255, 255, 255, 0.6) !important;
+    font-size: 1.25rem;
+    font-weight: 400;
+    line-height: 1.5;
+    padding: 0.55rem 0.8rem 0.55rem 2rem;
+    margin: 1px 0.5rem 1px 0.5rem;
+    border-radius: 8px;
+    transition: all 180ms cubic-bezier(0.22, 0.61, 0.36, 1);
 
-.desktop-sidebar-link.is-search-hit {
-    background: rgba(255, 255, 255, 0.2);
-    color: #ffffff !important;
-    border: 1px solid rgba(255, 255, 255, 0.35);
-    padding-left: 2.2rem;
-}
-
-.desktop-sidebar-link.is-search-hit::before {
-    content: attr(data-search-rank);
-    position: absolute;
-    left: 0.7rem;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: rgba(255, 255, 255, 0.9);
+    // Dot indicator
+    &::before {
+        content: "";
+        position: absolute;
+        left: 1.2rem;
+        top: 50%;
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background: rgba(76, 138, 164, 0.35);
+        transform: translateY(-50%);
+        transition: all 200ms ease;
+    }
 }
 
 .desktop-sidebar-link:hover,
 .desktop-sidebar-link:focus-visible {
-    background: rgba(255, 255, 255, 0.12);
+    background: rgba(76, 138, 164, 0.1);
     color: #ffffff !important;
+    transform: translateX(3px);
+
+    &::before {
+        background: rgba(0, 171, 243, 0.9);
+        box-shadow: 0 0 6px rgba(0, 171, 243, 0.4);
+        width: 5px;
+        height: 5px;
+    }
+}
+
+.desktop-sidebar-link.is-search-hit {
+    background: linear-gradient(135deg, rgba(0, 171, 243, 0.12) 0%, rgba(76, 138, 164, 0.08) 100%);
+    color: #ffffff !important;
+    border: 1px solid rgba(0, 171, 243, 0.25);
+    padding-left: 2.6rem;
+
+    &::before {
+        background: rgba(0, 171, 243, 0.9);
+        box-shadow: 0 0 8px rgba(0, 171, 243, 0.5);
+        width: 5px;
+        height: 5px;
+    }
+}
+
+.desktop-sidebar-link.is-search-hit::after {
+    content: attr(data-search-rank);
+    position: absolute;
+    right: 0.6rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: rgba(0, 171, 243, 0.9);
+    background: rgba(0, 171, 243, 0.12);
+    width: 1.6rem;
+    height: 1.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 171, 243, 0.3);
+}
+
+// Remove the old ::before for search hits
+.desktop-sidebar-link.is-search-hit::before {
+    content: none;
+}
+
+.desktop-sidebar-link.is-search-hit:hover {
+    background: linear-gradient(135deg, rgba(0, 171, 243, 0.2) 0%, rgba(76, 138, 164, 0.12) 100%);
+    border-color: rgba(0, 171, 243, 0.4);
+}
+
+// ── Staggered entrance animation ──
+@keyframes sidebar-item-in {
+    from {
+        opacity: 0;
+        transform: translateX(-12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes sidebar-child-in {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.desktop-sidebar-nav.is-open .desktop-sidebar-item {
+    animation: sidebar-item-in 300ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+// Stagger each level-1 item
+@for $i from 1 through 8 {
+    .desktop-sidebar-nav.is-open .desktop-sidebar-item:nth-child(#{$i}) {
+        animation-delay: #{40 + ($i * 40)}ms;
+    }
+}
+
+// Stagger level-2 children when expanded
+.desktop-sidebar-level-2:not(.is-collapsed) li {
+    animation: sidebar-child-in 220ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+@for $i from 1 through 12 {
+    .desktop-sidebar-level-2:not(.is-collapsed) li:nth-child(#{$i}) {
+        animation-delay: #{$i * 30}ms;
+    }
+}
+
+// ── Sub-item counter badge ──
+.desktop-sidebar-toggle[data-child-count]::before {
+    content: attr(data-child-count);
+    position: absolute;
+    right: 2.6rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: rgba(76, 138, 164, 0.55);
+    background: rgba(76, 138, 164, 0.08);
+    min-width: 1.4rem;
+    height: 1.4rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    padding: 0 0.3rem;
+    letter-spacing: 0;
+    transition: all 200ms ease;
+}
+
+.desktop-sidebar-toggle[data-child-count]:hover::before {
+    color: rgba(0, 171, 243, 0.8);
+    background: rgba(0, 171, 243, 0.1);
+}
+
+.desktop-sidebar-toggle[data-child-count][aria-expanded="true"]::before {
+    color: rgba(0, 171, 243, 0.7);
+    background: rgba(0, 171, 243, 0.08);
+}
+
+// ── Active state tracking ──
+.desktop-sidebar-link.is-active {
+    color: #ffffff !important;
+    background: rgba(0, 171, 243, 0.08);
+
+    &::before {
+        background: rgba(0, 171, 243, 0.9);
+        box-shadow: 0 0 8px rgba(0, 171, 243, 0.4);
+        width: 5px;
+        height: 5px;
+    }
+}
+
+.desktop-sidebar-toggle.is-active-parent {
+    color: #ffffff;
+    border-color: rgba(76, 138, 164, 0.15);
+    background: linear-gradient(135deg, rgba(76, 138, 164, 0.1) 0%, rgba(0, 171, 243, 0.04) 100%);
 }

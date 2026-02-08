@@ -405,6 +405,39 @@ if (
           closeMap();
         });
       });
+
+      // Active state tracking: highlight current section in sidebar
+      function updateSidebarActiveState() {
+        const currentHash = normalizeAnchor(window.location.hash);
+        if (!currentHash) return;
+
+        // Clear all active states
+        sidebar.querySelectorAll(".desktop-sidebar-link.is-active").forEach(el => el.classList.remove("is-active"));
+        sidebar.querySelectorAll(".desktop-sidebar-toggle.is-active-parent").forEach(el => el.classList.remove("is-active-parent"));
+
+        // Find matching link
+        const activeLink = getSidebarLinkByAnchor(currentHash);
+        if (activeLink) {
+          activeLink.classList.add("is-active");
+          // Also highlight parent toggle
+          const parentItem = activeLink.closest(".desktop-sidebar-item");
+          if (parentItem) {
+            const parentToggle = parentItem.querySelector(".desktop-sidebar-toggle");
+            if (parentToggle) {
+              parentToggle.classList.add("is-active-parent");
+            }
+          }
+        }
+      }
+
+      // Update on hash change and on replaceState
+      window.addEventListener("hashchange", updateSidebarActiveState);
+      const origReplaceState = history.replaceState.bind(history);
+      history.replaceState = function() {
+        origReplaceState.apply(this, arguments);
+        updateSidebarActiveState();
+      };
+      updateSidebarActiveState();
     }
 
     map.addEventListener("click", (event) => {
