@@ -1,5 +1,5 @@
 if (
-    window.innerWidth < 768
+    window.matchMedia('(pointer: coarse)').matches
 ) {
     document.addEventListener('DOMContentLoaded', function () {
         console.log("mooobille!")

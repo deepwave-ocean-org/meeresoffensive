@@ -1,5 +1,5 @@
 if (
-    window.innerWidth > 767
+    window.matchMedia('(pointer: fine)').matches
 ) {
 
     function mouseScroll() {

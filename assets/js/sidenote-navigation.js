@@ -118,7 +118,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 // LINK external
             } else {
-                if (window.matchMedia('(max-width: 767px)').matches) {
+                if (window.matchMedia('(pointer: coarse)').matches) {
                     entry.classList.toggle('active');
                 } else {
                     window.open(link, '_blank');

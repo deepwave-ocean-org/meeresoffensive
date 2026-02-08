@@ -2,7 +2,7 @@ import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 import Fuse from 'https://cdn.jsdelivr.net/npm/fuse.js@6.6.2/dist/fuse.esm.js';
 
 if (
-  window.innerWidth > 767
+  window.matchMedia('(pointer: fine)').matches
 ) {
   const SIDEBAR_HIGHLIGHT_LIMIT = 3;
 
