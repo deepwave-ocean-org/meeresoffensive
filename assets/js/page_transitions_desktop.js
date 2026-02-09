@@ -134,6 +134,7 @@ if (
             videoReversed.preload = "auto";
             const view1 = section.querySelector(".view-1");
             const view2 = section.querySelector(".view-2");
+            const gifExplanation = view1.querySelector(".gif-explanation");
             const background = section.querySelector(".mo-background");
             const navigationHeader = section.querySelector(".navigation-header")
             const etikett = section.querySelector(".desktop-search-etikett")
@@ -208,6 +209,11 @@ if (
             viewTL.to(view1, { left: -window.innerWidth, ease: "none", duration: 0.75 }, 0.25);
             viewTL.to(view2, { left: 0, ease: "none", duration: 0.75 }, 0.25);
             viewTL.to(background, { opacity: 0.2, ease: "none", duration: 0.75 }, 0.25);
+            // gif-explanation compensates ~75vw of view-1's 125vw leftward movement,
+            // so the text effectively drifts only ~50vw left (stays visible much longer)
+            viewTL.to(gifExplanation, { x: "75vw", ease: "none", duration: 0.75 }, 0.25);
+            // fade out in the last 35% of the transition for a smooth exit
+            viewTL.to(gifExplanation, { opacity: 0, ease: "none", duration: 0.35 }, 0.65);
 
             video.addEventListener('ended', () => {
                 const triggerPosition = ScrollTrigger.getById("show-explanation-" + section.id).start;
