@@ -135,35 +135,33 @@ if (
             const view1 = section.querySelector(".view-1");
             const view2 = section.querySelector(".view-2");
             const background = section.querySelector(".mo-background");
-            const navigation = section.querySelector(".navigation-opener ")
-            const infoButton = navigation.querySelector(".info-button");
+            const navigationHeader = section.querySelector(".navigation-header")
+            const etikett = section.querySelector(".desktop-search-etikett")
+            const infoButton = navigationHeader.querySelector(".info-button");
             const sectionParent = document.getElementsByClassName("mo-section")[index]
 
-            navigation.addEventListener("click", () => {
-                if (!navigation.classList.contains("active")) {
+            etikett.addEventListener("click", () => {
+                if (!etikett.classList.contains("active")) {
                     window.openMap(section)
                     return
                 }
                 window.closeMap()
             })
-            navigation.addEventListener("keydown", (e) => {
+            etikett.addEventListener("keydown", (e) => {
                 if (e.key !== "Enter" && e.key !== " ") {
                     return;
                 }
                 e.preventDefault();
-                if (!navigation.classList.contains("active")) {
+                if (!etikett.classList.contains("active")) {
                     window.openMap(section);
                     return;
                 }
                 window.closeMap();
             })
             infoButton.addEventListener("click", (e) => {
-                if (!navigation.classList.contains("active")) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    window.openInfoVideo(section)
-                    return
-                }
+                e.preventDefault();
+                e.stopPropagation();
+                window.openInfoVideo(section)
             })
             let isPlayingForward = true;
 

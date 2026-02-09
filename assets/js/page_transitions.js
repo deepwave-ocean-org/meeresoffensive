@@ -177,53 +177,75 @@ if (
                         const videoPromise = new Promise((resolve) => {
                             const sources = video.querySelectorAll('source[data-src]');
                             let currentSourceIndex = 0;
+                            let hasRetried = false;
+
+                            function onVideoReady() {
+                                video.removeEventListener('canplay', onVideoReady);
+                                video.removeEventListener('loadeddata', onVideoReady);
+                                video.play();
+                                const spinner = slide.querySelector('.video-spinner');
+                                if (spinner) spinner.remove();
+                                video.style.display = 'block';
+                                resolve();
+                            }
 
                             function tryLoadSource() {
                                 if (currentSourceIndex >= sources.length) {
+                                    // Retry once with MP4 source (last one) and longer timeout
+                                    if (!hasRetried) {
+                                        hasRetried = true;
+                                        currentSourceIndex = sources.length - 1;
+                                        const source = sources[currentSourceIndex];
+                                        source.src = source.dataset.src;
+                                        video.load();
+                                        video.playbackRate = 0.4;
+
+                                        const retryTimeout = setTimeout(() => {
+                                            console.error('All video sources failed to load');
+                                            video.style.display = 'none';
+                                            resolve();
+                                        }, 20000);
+
+                                        video.addEventListener('canplay', () => { clearTimeout(retryTimeout); onVideoReady(); }, { once: true });
+                                        video.addEventListener('loadeddata', () => { clearTimeout(retryTimeout); onVideoReady(); }, { once: true });
+                                        return;
+                                    }
                                     console.error('All video sources failed to load');
-                                    resolve(); // Resolve anyway to not block other loading
+                                    resolve();
                                     return;
                                 }
 
                                 const source = sources[currentSourceIndex];
                                 if (!source.src) {
                                     source.src = source.dataset.src;
-                                    video.style.display = 'none';
-                                    video.load();
-                                    video.playbackRate = 0.4;  
-
-                                    // Add error handling and decode check
-                                    const loadTimeout = setTimeout(() => {
-                                        console.warn('Video load timeout');
-                                        currentSourceIndex++;
-                                        tryLoadSource();
-                                    }, 5000);
-
-                                    // video.decode().catch(err => {
-                                    //     console.warn('Video decode failed:', err);
-                                    //     clearTimeout(loadTimeout);
-                                    //     currentSourceIndex++;
-                                    //     tryLoadSource();
-                                    // });
-
-                                    video.addEventListener('canplaythrough', () => {
-                                        video.play();
-                                        const spinner = slide.querySelector('.video-spinner');
-                                        if (spinner) spinner.remove();
-                                        video.style.display = 'block';
-                                        resolve();
-                                    }, { once: true });
-
-                                    // Handle error and try next source
-                                    source.addEventListener('error', () => {
-                                        console.log(`Source ${currentSourceIndex} failed, trying next`);
-                                        currentSourceIndex++;
-                                        tryLoadSource();
-                                    }, { once: true });
                                 }
+                                video.style.display = 'none';
+                                video.load();
+                                video.playbackRate = 0.4;
+
+                                const loadTimeout = setTimeout(() => {
+                                    console.warn('Video load timeout for source', currentSourceIndex);
+                                    video.removeEventListener('canplay', onVideoReady);
+                                    video.removeEventListener('loadeddata', onVideoReady);
+                                    currentSourceIndex++;
+                                    tryLoadSource();
+                                }, 12000);
+
+                                video.addEventListener('canplay', () => { clearTimeout(loadTimeout); onVideoReady(); }, { once: true });
+                                video.addEventListener('loadeddata', () => { clearTimeout(loadTimeout); onVideoReady(); }, { once: true });
+
+                                // Handle source error and try next
+                                source.addEventListener('error', () => {
+                                    clearTimeout(loadTimeout);
+                                    video.removeEventListener('canplay', onVideoReady);
+                                    video.removeEventListener('loadeddata', onVideoReady);
+                                    console.log(`Source ${currentSourceIndex} failed, trying next`);
+                                    currentSourceIndex++;
+                                    tryLoadSource();
+                                }, { once: true });
                             }
 
-                            tryLoadSource(); // Start loading first source
+                            tryLoadSource();
                         });
                         loadPromises.push(videoPromise);
                     }
@@ -325,6 +347,7 @@ if (
                 }
             }
         });
+        window.mobileSwiper = swiper;
 
         function watchMobileUI() {
             let oldHeight = window.innerHeight

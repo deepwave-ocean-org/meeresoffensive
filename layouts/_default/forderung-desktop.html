@@ -1,32 +1,21 @@
 <section id="{{ .Title | urlize }}" data-file="{{ .File.ContentBaseName }}"
   class="panel mo-section link-color-{{ .Params.color }} order-{{ .Params.order }}">
   <article data-url="#{{ .Title | urlize }}" class="mo-single" id="article-no-{{ .Params.order }}">
-    <span
-      class="navigation-opener"
-      data-order="{{ .Params.order }}"
-      role="button"
-      tabindex="0"
-      title="Suche &amp; Navigation öffnen"
-      aria-label="Suche &amp; Navigation öffnen"
-      aria-expanded="false">
-      <span class="navigation-opener-icons" aria-hidden="true">
-        <svg class="navigation-icon navigation-icon-compass" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="10"></circle>
-          <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
-        </svg>
-        <svg class="navigation-icon navigation-icon-close" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
-      </span>
+    <span class="navigation-header" data-order="{{ .Params.order }}">
       <span class="navigation-title">{{ .Params.title }}</span>
-      <span class="info-button" title="Erklärvideo öffnen" aria-label="Erklärvideo öffnen">
+      <span class="info-button" role="button" tabindex="0" title="Erklärvideo öffnen" aria-label="Erklärvideo öffnen">
         <svg class="info-button-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <circle cx="12" cy="12" r="10"></circle>
           <polygon points="10 8 16 12 10 16 10 8"></polygon>
         </svg>
       </span>
     </span>
+    <div class="desktop-search-etikett" role="button" tabindex="0" aria-label="Suche &amp; Navigation öffnen" aria-expanded="false">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+    </div>
     <div class="mo-background" data-bg=""
       style="background: linear-gradient(180deg, rgba(0,0,0,0.35) 1%, rgba(0,0,0,0) 14%, rgba(10,10,10,0.5) 60%, rgba(10,10,10,1) 98%, #0a0a0a 100%), url(' backgrounds/{{ .Params.background_image }} ');">
     </div>

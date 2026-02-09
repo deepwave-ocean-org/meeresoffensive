@@ -297,10 +297,11 @@ if (
       if (darkBackground) {
         darkBackground.classList.remove("background-dark");
       }
-      const activeNavigation = document.querySelector(".navigation-opener.active");
-      if (activeNavigation) {
-        activeNavigation.classList.remove("active");
-        activeNavigation.setAttribute("aria-expanded", "false");
+      const activeEtikett = document.querySelector(".desktop-search-etikett.active");
+      if (activeEtikett) {
+        activeEtikett.classList.remove("active");
+        activeEtikett.classList.remove("is-hidden");
+        activeEtikett.setAttribute("aria-expanded", "false");
       }
       window.lenis.start();
       document.body.style.overflow = '';
@@ -318,11 +319,14 @@ if (
       const view1 = section.querySelector(".view-1");
       const view2 = section.querySelector(".view-2");
       const background = section.querySelector(".mo-background");
-      const navigation = section.querySelector(".navigation-opener ")
+      const etikett = section.querySelector(".desktop-search-etikett")
 
       window.scrollTo(0, section.getBoundingClientRect().top + window.scrollY);
-      navigation.classList.add("active");
-      navigation.setAttribute("aria-expanded", "true");
+      if (etikett) {
+        etikett.classList.add("active");
+        etikett.classList.add("is-hidden");
+        etikett.setAttribute("aria-expanded", "true");
+      }
       [videoCont, view1, view2].forEach(el => el.classList.add("hidden"));
       sidebar.classList.add("is-open");
       showOverlay("sidebar");
@@ -339,11 +343,14 @@ if (
       const view1 = section.querySelector(".view-1");
       const view2 = section.querySelector(".view-2");
       const background = section.querySelector(".mo-background");
-      const navigation = section.querySelector(".navigation-opener ")
+      const etikett = section.querySelector(".desktop-search-etikett")
 
       window.scrollTo(0, section.getBoundingClientRect().top + window.scrollY);
-      navigation.classList.add("active");
-      navigation.setAttribute("aria-expanded", "true");
+      if (etikett) {
+        etikett.classList.add("active");
+        etikett.classList.add("is-hidden");
+        etikett.setAttribute("aria-expanded", "true");
+      }
       [videoCont, view1, view2].forEach(el => el.classList.add("hidden"));
       showOverlay("search");
       if (sidebar) {
@@ -362,10 +369,13 @@ if (
       const view2 = section.querySelector(".view-2");
       const background = section.querySelector(".mo-background");
 
-      const navigation = section.querySelector(".navigation-opener")
+      const etikett = section.querySelector(".desktop-search-etikett")
       window.scrollTo(0, section.getBoundingClientRect().top + window.scrollY);
-      navigation.classList.add("active");
-      navigation.setAttribute("aria-expanded", "true");
+      if (etikett) {
+        etikett.classList.add("active");
+        etikett.classList.add("is-hidden");
+        etikett.setAttribute("aria-expanded", "true");
+      }
       [videoCont, view1, view2].forEach(el => el.classList.add("hidden"));
       infoVideo.classList.remove("hidden");
       background.classList.add("background-dark");

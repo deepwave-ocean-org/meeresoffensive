@@ -25,6 +25,9 @@
     {{ $map := resources.Get "js/map.js" | resources.Minify }}
     <script src="{{ $map.RelPermalink }}" type="module"></script>
 
+    {{ $mobileSearch := resources.Get "js/mobile-search.js" | resources.Minify }}
+    <script src="{{ $mobileSearch.RelPermalink }}" type="module"></script>
+
     {{ $js := resources.Get "js/sidenote-navigation.js" | resources.Minify }}
     <script src="{{ $js.RelPermalink }}"></script>
 
