@@ -250,6 +250,7 @@ if (
     const search = document.getElementById('search-bar')
     const searchResults = document.getElementById("search-results")
     const searchContainer = document.getElementById("search-container");
+    let sidebarClearTimer = null;
 
     const mapSlide = document.getElementById("map-slide-child")
     let overlayCloseTimer = null;
@@ -391,6 +392,10 @@ if (
     window.openInfoVideo = openInfoVideo
 
     if (sidebar) {
+      // Keep sidebar highlights when mouse moves from search results to sidebar
+      sidebar.addEventListener("mouseenter", () => {
+        if (sidebarClearTimer) { clearTimeout(sidebarClearTimer); sidebarClearTimer = null; }
+      });
       sidebar.addEventListener("wheel", (event) => {
         event.stopPropagation();
       }, { passive: true });
@@ -640,7 +645,7 @@ if (
       }
 
       const results = fuse.search(searchTerm);
-      syncSidebarSearchHighlights(results, searchTerm);
+      clearSidebarSearchHighlights(true);
       if (results.length > 0) {
         console.log(results)
         menuSvg.classed("hidden", true);
@@ -650,6 +655,26 @@ if (
         results.forEach(result => {
           const li = document.createElement('li');
           li.className = 'search-result-item';
+
+          // Highlight sidebar item on hover — collapse all, then open only the relevant chapter
+          li.addEventListener("mouseenter", () => {
+            if (sidebarClearTimer) { clearTimeout(sidebarClearTimer); sidebarClearTimer = null; }
+            clearSidebarSearchHighlights(true);
+            const sidebarLink = getSidebarLinkByAnchor(result.item.anchor);
+            if (sidebarLink) {
+              sidebarLink.classList.add("is-search-hit");
+              const childList = sidebarLink.closest(".desktop-sidebar-level-2");
+              if (childList) {
+                childList.classList.remove("is-collapsed");
+                const toggle = childList.parentElement?.querySelector(".desktop-sidebar-toggle");
+                if (toggle) toggle.setAttribute("aria-expanded", "true");
+              }
+            }
+          });
+          li.addEventListener("mouseleave", () => {
+            sidebarClearTimer = setTimeout(() => { clearSidebarSearchHighlights(true); }, 400);
+          });
+
           const link = document.createElement('a');
           link.href = "#" + result.item.anchor;
           link.addEventListener("click", (e) => {

@@ -138,7 +138,6 @@ if (
             const background = section.querySelector(".mo-background");
             const navigationHeader = section.querySelector(".navigation-header")
             const etikett = section.querySelector(".desktop-search-etikett")
-            const infoButton = navigationHeader.querySelector(".info-button");
             const sectionParent = document.getElementsByClassName("mo-section")[index]
 
             etikett.addEventListener("click", () => {
@@ -158,11 +157,6 @@ if (
                     return;
                 }
                 window.closeMap();
-            })
-            infoButton.addEventListener("click", (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                window.openInfoVideo(section)
             })
             let isPlayingForward = true;
 
@@ -212,8 +206,8 @@ if (
             // gif-explanation compensates ~75vw of view-1's 125vw leftward movement,
             // so the text effectively drifts only ~50vw left (stays visible much longer)
             viewTL.to(gifExplanation, { x: "75vw", ease: "none", duration: 0.75 }, 0.25);
-            // fade out in the last 35% of the transition for a smooth exit
-            viewTL.to(gifExplanation, { opacity: 0, ease: "none", duration: 0.35 }, 0.65);
+            // fade out: starts at 58%, done by 78%
+            viewTL.to(gifExplanation, { opacity: 0, ease: "power1.in", duration: 0.2 }, 0.58);
 
             video.addEventListener('ended', () => {
                 const triggerPosition = ScrollTrigger.getById("show-explanation-" + section.id).start;
