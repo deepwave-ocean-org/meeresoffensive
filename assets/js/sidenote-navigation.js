@@ -40,8 +40,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     scrollInParentView(wrapper, explanationContainer, -2)
                 }
                 removeAllActive()
-                explanationLinks[index].classList.toggle('active')
-                scrollInParentView(explanationLinks[index], original)
+                if (explanationLinks[index]) {
+                    explanationLinks[index].classList.toggle('active')
+                    scrollInParentView(explanationLinks[index], original)
+                }
                 entry.classList.toggle('active')
                 scrollInParentView(entry, explanationContainer, 9)
             })
@@ -56,9 +58,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     return
                 }
                 removeAllActive()
-                explanations[index].classList.toggle('active')
+                if (explanations[index]) {
+                    explanations[index].classList.toggle('active')
+                    scrollInParentView(explanations[index], explanationContainer)
+                }
                 e.currentTarget.classList.toggle('active')
-                scrollInParentView(explanations[index], explanationContainer)
             })
         })
         const closeHandle = section.querySelector(".mo-close-handle")
