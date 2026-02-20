@@ -26,6 +26,60 @@ if (
             }
         }
 
+        // Dynamisch die Höhenaufteilung zwischen mo-main-content und mo-translation berechnen
+        function adjustMobileLayout(swiper) {
+            const activeSlide = swiper.slides[swiper.activeIndex];
+            if (!activeSlide) return;
+
+            const mainContent = activeSlide.querySelector('.mo-main-content');
+            const mainContentP = activeSlide.querySelector('.mo-main-content p');
+            if (!mainContentP) return;
+
+            const vh = window.innerHeight;
+            const rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
+            const quoteHeight = 5 * rem;  // .quote-icon height
+            const navHeight = 4 * rem;    // Navigation/Pagination
+            const marginTotal = 2.5 * rem; // margins oben+unten
+
+            // Text-Höhe messen: Klone erzeugen, der frei fließen darf
+            const measure = mainContentP.cloneNode(true);
+            measure.style.cssText = 'position:absolute;visibility:hidden;height:auto;overflow:visible;width:' + mainContentP.offsetWidth + 'px;font-size:large;max-width:80vw;';
+            document.body.appendChild(measure);
+            const textNeeded = measure.scrollHeight;
+            document.body.removeChild(measure);
+
+            console.log('adjustMobileLayout: vh=' + vh + ' textNeeded=' + textNeeded + ' quoteH=' + quoteHeight + ' navH=' + navHeight);
+
+            // Gesamter Platzbedarf für den oberen Bereich (Nav + Quote + Text + Margins)
+            const upperNeeded = navHeight + quoteHeight + textNeeded + marginTotal;
+
+            // Translation bekommt den restlichen Platz, aber mit Grenzen
+            const minTranslation = Math.round(vh * 0.30); // Mindestens 30vh
+            const maxTranslation = Math.round(vh * 0.55); // Maximal 55vh
+
+            let translationHeight = vh - upperNeeded;
+            translationHeight = Math.max(minTranslation, Math.min(maxTranslation, translationHeight));
+
+            // Höhe für den Text-Bereich
+            const contentHeight = vh - translationHeight - navHeight - quoteHeight;
+
+            console.log('adjustMobileLayout: translationH=' + translationHeight + ' contentH=' + contentHeight);
+
+            // Inline-Styles setzen (überschreiben die CSS-Variablen-basierten Werte)
+            const translation = activeSlide.querySelector('.mo-translation');
+            if (translation) translation.style.height = translationHeight + 'px';
+            if (mainContent) {
+                mainContent.style.bottom = translationHeight + 'px';
+                mainContent.style.height = contentHeight + 'px';
+                mainContent.style.margin = '0';
+                mainContent.style.padding = (marginTotal / 2) + 'px 0';
+            }
+
+            // CTA-Wrapper muss gleiche Höhe wie mo-translation bekommen
+            const ctaWrapper = activeSlide.querySelector('.mo-cta-wrapper');
+            if (ctaWrapper) ctaWrapper.style.height = translationHeight + 'px';
+        }
+
         function singleSlideScrollAnimation(swiper) {
             killTimeline(window.backgroundTimeline);
             killTimeline(window.videoTimeline);
@@ -328,6 +382,7 @@ if (
                     singleSlideScrollAnimation(this);
                     playVideo(this);
                     loadRessources(this);
+                    adjustMobileLayout(this);
                 },
                 afterInit: (swiper) => {
                     swiper.updateAutoHeight(1)
@@ -338,6 +393,7 @@ if (
                     console.log("slide_change")
                     singleSlideScrollAnimation(this);
                     playVideo(this);
+                    adjustMobileLayout(this);
                 },
                 destroy: function () {
                     killTimeline(window.backgroundTimeline);

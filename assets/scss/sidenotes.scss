@@ -132,12 +132,17 @@ display: none;
     font-size: large;
 }
 
+.mo-cta-wrapper h3 {
+    cursor: pointer;
+    position: relative;
+}
+
 .mo-cta-wrapper h3::after {
     content: "\2241";
     position: absolute;
-    right: 6rem;
+    right: 1rem;
     font-size: 180%;
-    top: 3.2rem;
+    top: 0;
     z-index: 1;
 }
 @media (pointer: fine) {
@@ -167,9 +172,34 @@ display: none;
 }
 
 @media (pointer: coarse) {
+    .mo-cta-wrapper {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        top: auto;
+        width: 100vw;
+        height: var(--translation-height, 55vh);
+        padding: 2rem;
+        overflow-y: auto;
+        z-index: 10;
+        box-sizing: border-box;
+    }
+    .mo-cta-wrapper div,
+    .mo-cta-wrapper h3 {
+        padding-bottom: 1.5rem;
+    }
+    .mo-cta-wrapper h3 {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        min-height: 44px;
+    }
     .mo-cta-wrapper h3::after {
-            top: 3.45rem;
-        }
+        position: static;
+        padding-left: 1rem;
+        font-size: 200%;
+    }
     .sidenote.active {
         display: inline-flex;
         flex-direction: column;
