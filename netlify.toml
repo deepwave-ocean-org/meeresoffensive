@@ -1,6 +1,7 @@
 [build]
   command = "hugo"
   publish = "public"
+  image = "ubuntu:noble"
 
 [build.environment]
   HUGO_VERSION = "0.150.0"
