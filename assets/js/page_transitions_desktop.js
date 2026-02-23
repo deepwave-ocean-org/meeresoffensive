@@ -1,5 +1,5 @@
 if (
-    window.innerWidth > 767
+    window.matchMedia('(pointer: fine)').matches
 ) {
 
     function mouseScroll() {
@@ -134,58 +134,80 @@ if (
             videoReversed.preload = "auto";
             const view1 = section.querySelector(".view-1");
             const view2 = section.querySelector(".view-2");
+            const gifExplanation = view1.querySelector(".gif-explanation");
             const background = section.querySelector(".mo-background");
-            const navigation = section.querySelector(".navigation-opener ")
-            const infoButton = navigation.querySelector(".info-button");
+            const navigationHeader = section.querySelector(".navigation-header")
+            const etikett = section.querySelector(".desktop-search-etikett")
             const sectionParent = document.getElementsByClassName("mo-section")[index]
 
-            navigation.addEventListener("click", () => {
-                if (!navigation.classList.contains("active")) {
+            etikett.addEventListener("click", () => {
+                if (!etikett.classList.contains("active")) {
                     window.openMap(section)
                     return
                 }
                 window.closeMap()
             })
-            infoButton.addEventListener("click", (e) => {
-                if (!navigation.classList.contains("active")) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    window.openInfoVideo(section)
-                    return
+            etikett.addEventListener("keydown", (e) => {
+                if (e.key !== "Enter" && e.key !== " ") {
+                    return;
                 }
+                e.preventDefault();
+                if (!etikett.classList.contains("active")) {
+                    window.openMap(section);
+                    return;
+                }
+                window.closeMap();
             })
             let isPlayingForward = true;
 
-            const animationTrigger = {
-                id: "show-explanation-" + section.id,
-                trigger: section,
-                start: "900% top",
-                end: "920% top",
-                // markers: true,
-                scrub: true,
-                onLeaveBack: () => {
-                    if (isPlayingForward) {
-                        videoReversed.currentTime = 0.1;
-                    }
-                },
-            };
+            // All transitions in one timeline (700% – 1500%)
+            let videoReadyForReverse = false;
+            const viewTL = gsap.timeline({
+                scrollTrigger: {
+                    id: "show-explanation-" + section.id,
+                    trigger: section,
+                    start: "700% top",
+                    end: "1500% top",
+                    // markers: true,
+                    scrub: true,
+                    onUpdate: (self) => {
+                        // When scrubbing backward into the video fade zone
+                        if (self.direction === -1 && self.progress < 0.25 && !videoReadyForReverse) {
+                            videoReadyForReverse = true;
+                            // Keep container hidden until reversed video is seeked
+                            gsap.set(videoCont, { opacity: 0 });
+                            videoReversed.currentTime = 0.1;
+                            video.classList.add("hidden");
+                            videoReversed.classList.remove("hidden");
+                            videoReversed.addEventListener('seeked', () => {
+                                // Clear the forced opacity so GSAP scrub takes over
+                                gsap.set(videoCont, { clearProps: "opacity" });
+                            }, { once: true });
+                            isPlayingForward = false;
+                        }
+                        // Reset flag when scrolling forward past the fade zone
+                        if (self.direction === 1 && self.progress > 0.25) {
+                            videoReadyForReverse = false;
+                        }
+                    },
+                    onLeaveBack: () => {
+                        videoReadyForReverse = false;
+                    },
+                }
+            });
 
-            gsap.to(videoCont, {
-                left: -window.innerWidth,
-                scrollTrigger: animationTrigger
-            });
-            gsap.to(view1, {
-                left: -window.innerWidth,
-                scrollTrigger: animationTrigger
-            });
-            gsap.to(view2, {
-                left: 0,
-                scrollTrigger: animationTrigger
-            });
-            gsap.to(background, {
-                opacity: 0.2,
-                scrollTrigger: animationTrigger
-            });
+            // 0 – 0.25: video fades out + text centers (700% – 900%)
+            viewTL.to(videoCont, { opacity: 0, ease: "none", duration: 0.25 }, 0);
+            viewTL.to(view1, { left: "25vw", ease: "none", duration: 0.25 }, 0);
+            // 0.25 – 1.0: text slides left, view-2 slides in (900% – 1500%)
+            viewTL.to(view1, { left: -window.innerWidth, ease: "none", duration: 0.75 }, 0.25);
+            viewTL.to(view2, { left: 0, ease: "none", duration: 0.75 }, 0.25);
+            viewTL.to(background, { opacity: 0.2, ease: "none", duration: 0.75 }, 0.25);
+            // gif-explanation compensates ~75vw of view-1's 125vw leftward movement,
+            // so the text effectively drifts only ~50vw left (stays visible much longer)
+            viewTL.to(gifExplanation, { x: "75vw", ease: "none", duration: 0.75 }, 0.25);
+            // fade out: starts at 58%, done by 78%
+            viewTL.to(gifExplanation, { opacity: 0, ease: "power1.in", duration: 0.2 }, 0.58);
 
             video.addEventListener('ended', () => {
                 const triggerPosition = ScrollTrigger.getById("show-explanation-" + section.id).start;
@@ -218,6 +240,10 @@ if (
 
             videoReversed.addEventListener('ended', () => {
                 console.log("reverse ended")
+                const trigger = ScrollTrigger.getById("show-explanation-" + section.id);
+                if (trigger && window.scrollY >= trigger.start) {
+                    return
+                }
                 if (sectionParent.getBoundingClientRect().y > 0 && sectionParent.getBoundingClientRect().y < window.innerHeight * 10) {
                     return
                 }
@@ -250,7 +276,7 @@ if (
                 pin: true,
                 start: "top top",
                 // markers: true,
-                end: "+=1000%",
+                end: "+=1600%",
                 onToggle: (e) => {
                     if (!e.isActive) {
                         return

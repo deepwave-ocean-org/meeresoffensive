@@ -1,5 +1,5 @@
 ---
-title: Menschen und Meere ins Zentrum globaler nachhaltiger Entwicklung
+title: Gerechtigkeit
 titlesmall: Menschen und Meere
 order: 50
 

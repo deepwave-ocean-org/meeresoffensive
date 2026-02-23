@@ -32,13 +32,13 @@ from Hugo Novella Theme
 .hidden {
     visibility: hidden !important;
 }
-@media screen and (max-width: 767px) {
+@media (pointer: coarse) {
     .desktop-only {
         display: none !important;
     }
 }
 
-@media screen and (min-width: 768px) {
+@media (pointer: fine) {
     .mobile-only {
         display: none !important;
     }

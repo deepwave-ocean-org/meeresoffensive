@@ -1,8 +1,15 @@
 <section id="{{ .Title | urlize }}" data-file="{{ .File.ContentBaseName }}"
   class="panel mo-section link-color-{{ .Params.color }} order-{{ .Params.order }}">
   <article data-url="#{{ .Title | urlize }}" class="mo-single" id="article-no-{{ .Params.order }}">
-    <span class="navigation-opener" data-order="{{ .Params.order }}">{{ .Params.title }} <span
-        class="info-button">i</span></span>
+    <span class="navigation-header" data-order="{{ .Params.order }}">
+      <span class="navigation-title">{{ .Params.title }}</span>
+    </span>
+    <div class="desktop-search-etikett" role="button" tabindex="0" aria-label="Suche &amp; Navigation öffnen" aria-expanded="false">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+    </div>
     <div class="mo-background" data-bg=""
       style="background: linear-gradient(180deg, rgba(0,0,0,0.35) 1%, rgba(0,0,0,0) 14%, rgba(10,10,10,0.5) 60%, rgba(10,10,10,1) 98%, #0a0a0a 100%), url(' backgrounds/{{ .Params.background_image }} ');">
     </div>

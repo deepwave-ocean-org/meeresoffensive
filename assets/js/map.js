@@ -2,8 +2,9 @@ import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 import Fuse from 'https://cdn.jsdelivr.net/npm/fuse.js@6.6.2/dist/fuse.esm.js';
 
 if (
-  window.innerWidth > 767
+  window.matchMedia('(pointer: fine)').matches
 ) {
+  const SIDEBAR_HIGHLIGHT_LIMIT = 3;
 
   function initializeMapVisualization(svg, links, nodes, width, height) {
 
@@ -244,40 +245,118 @@ if (
 
     // ---- toggling the Map ------ //
     const map = document.getElementById('map');
+    const sidebar = document.getElementById('desktop-sidebar-nav');
     const infoVideo = document.getElementById('info-video');
     const search = document.getElementById('search-bar')
     const searchResults = document.getElementById("search-results")
+    const searchContainer = document.getElementById("search-container");
+    let sidebarClearTimer = null;
 
     const mapSlide = document.getElementById("map-slide-child")
+    let overlayCloseTimer = null;
+
+    function showOverlay(mode = "search") {
+      if (overlayCloseTimer) {
+        clearTimeout(overlayCloseTimer);
+        overlayCloseTimer = null;
+      }
+      map.classList.remove("hidden");
+      if (mode === "sidebar") {
+        map.classList.add("sidebar-mode");
+      } else {
+        map.classList.remove("sidebar-mode");
+      }
+      requestAnimationFrame(() => {
+        map.classList.add("is-overlay-open");
+      });
+    }
+
+    function hideOverlay() {
+      map.classList.remove("is-overlay-open");
+      overlayCloseTimer = setTimeout(() => {
+        map.classList.add("hidden");
+        map.classList.remove("sidebar-mode");
+      }, 220);
+    }
 
     function closeMap() {
       console.log("closeMap")
-      if (map.classList.contains("hidden") && infoVideo.classList.contains("hidden")) {
-        return
+      if (sidebar) {
+        sidebar.classList.remove("is-open");
+        sidebar.querySelectorAll(".desktop-sidebar-toggle[aria-expanded='true']").forEach(toggle => {
+          toggle.setAttribute("aria-expanded", "false");
+        });
+        sidebar.querySelectorAll(".desktop-sidebar-level-2").forEach(list => {
+          list.classList.add("is-collapsed");
+        });
       }
-      map.classList.add("hidden");
+
+      hideOverlay();
       infoVideo.classList.add("hidden");
       document.querySelectorAll(".video-container.hidden, .view-1.hidden, .view-2.hidden").forEach(el => el.classList.remove("hidden"));
-      document.querySelector(".mo-background.background-dark").classList.remove("background-dark");
-      document.querySelector(".navigation-opener.active").classList.remove("active")
+      const darkBackground = document.querySelector(".mo-background.background-dark");
+      if (darkBackground) {
+        darkBackground.classList.remove("background-dark");
+      }
+      const activeEtikett = document.querySelector(".desktop-search-etikett.active");
+      if (activeEtikett) {
+        activeEtikett.classList.remove("active");
+        activeEtikett.classList.remove("is-hidden");
+        activeEtikett.setAttribute("aria-expanded", "false");
+      }
       window.lenis.start();
       document.body.style.overflow = '';
       search.blur();
       search.value = "";
       renderSearchResults()
     }
-    function openMap(section) {
-      console.log("openMap", section)
+
+    function openSidebar(section) {
+      console.log("openSidebar", section)
+      if (!sidebar) {
+        return;
+      }
       const videoCont = section.querySelector(".video-container");
       const view1 = section.querySelector(".view-1");
       const view2 = section.querySelector(".view-2");
       const background = section.querySelector(".mo-background");
-      const navigation = section.querySelector(".navigation-opener ")
+      const etikett = section.querySelector(".desktop-search-etikett")
 
       window.scrollTo(0, section.getBoundingClientRect().top + window.scrollY);
-      navigation.classList.add("active");
+      if (etikett) {
+        etikett.classList.add("active");
+        etikett.classList.add("is-hidden");
+        etikett.setAttribute("aria-expanded", "true");
+      }
       [videoCont, view1, view2].forEach(el => el.classList.add("hidden"));
-      map.classList.remove("hidden");
+      sidebar.classList.add("is-open");
+      showOverlay("sidebar");
+      background.classList.add("background-dark");
+      window.lenis.stop();
+      document.body.style.overflow = 'hidden';
+      search.focus();
+      renderSearchResults()
+    }
+
+    function openSearchOverlay(section) {
+      console.log("openSearchOverlay", section)
+      const videoCont = section.querySelector(".video-container");
+      const view1 = section.querySelector(".view-1");
+      const view2 = section.querySelector(".view-2");
+      const background = section.querySelector(".mo-background");
+      const etikett = section.querySelector(".desktop-search-etikett")
+
+      window.scrollTo(0, section.getBoundingClientRect().top + window.scrollY);
+      if (etikett) {
+        etikett.classList.add("active");
+        etikett.classList.add("is-hidden");
+        etikett.setAttribute("aria-expanded", "true");
+      }
+      [videoCont, view1, view2].forEach(el => el.classList.add("hidden"));
+      showOverlay("search");
+      if (sidebar) {
+        sidebar.classList.remove("is-open");
+      }
       background.classList.add("background-dark");
       window.lenis.stop();
       document.body.style.overflow = 'hidden';
@@ -291,9 +370,13 @@ if (
       const view2 = section.querySelector(".view-2");
       const background = section.querySelector(".mo-background");
 
-      const navigation = section.querySelector(".navigation-opener")
+      const etikett = section.querySelector(".desktop-search-etikett")
       window.scrollTo(0, section.getBoundingClientRect().top + window.scrollY);
-      navigation.classList.add("active");
+      if (etikett) {
+        etikett.classList.add("active");
+        etikett.classList.add("is-hidden");
+        etikett.setAttribute("aria-expanded", "true");
+      }
       [videoCont, view1, view2].forEach(el => el.classList.add("hidden"));
       infoVideo.classList.remove("hidden");
       background.classList.add("background-dark");
@@ -305,8 +388,189 @@ if (
 
 
     window.closeMap = closeMap
-    window.openMap = openMap
+    window.openMap = openSidebar
     window.openInfoVideo = openInfoVideo
+
+    if (sidebar) {
+      // Keep sidebar highlights when mouse moves from search results to sidebar
+      sidebar.addEventListener("mouseenter", () => {
+        if (sidebarClearTimer) { clearTimeout(sidebarClearTimer); sidebarClearTimer = null; }
+      });
+      sidebar.addEventListener("wheel", (event) => {
+        event.stopPropagation();
+      }, { passive: true });
+      sidebar.addEventListener("touchmove", (event) => {
+        event.stopPropagation();
+      }, { passive: true });
+
+      sidebar.querySelectorAll(".desktop-sidebar-toggle").forEach(toggle => {
+        toggle.addEventListener("click", () => {
+          const sectionId = toggle.dataset.sidebarSection;
+          const childList = sidebar.querySelector(`[data-sidebar-children="${sectionId}"]`);
+          const isExpanded = toggle.getAttribute("aria-expanded") === "true";
+          toggle.setAttribute("aria-expanded", isExpanded ? "false" : "true");
+          if (childList) {
+            childList.classList.toggle("is-collapsed", isExpanded);
+          }
+        });
+      });
+
+      sidebar.querySelectorAll(".desktop-sidebar-link").forEach(link => {
+        link.addEventListener("click", () => {
+          closeMap();
+        });
+      });
+
+      // Active state tracking: highlight current section in sidebar
+      function updateSidebarActiveState() {
+        const currentHash = normalizeAnchor(window.location.hash);
+        if (!currentHash) return;
+
+        // Clear all active states
+        sidebar.querySelectorAll(".desktop-sidebar-link.is-active").forEach(el => el.classList.remove("is-active"));
+        sidebar.querySelectorAll(".desktop-sidebar-toggle.is-active-parent").forEach(el => el.classList.remove("is-active-parent"));
+
+        // Find matching link
+        const activeLink = getSidebarLinkByAnchor(currentHash);
+        if (activeLink) {
+          activeLink.classList.add("is-active");
+          // Also highlight parent toggle
+          const parentItem = activeLink.closest(".desktop-sidebar-item");
+          if (parentItem) {
+            const parentToggle = parentItem.querySelector(".desktop-sidebar-toggle");
+            if (parentToggle) {
+              parentToggle.classList.add("is-active-parent");
+            }
+          }
+        }
+      }
+
+      // Update on hash change and on replaceState
+      window.addEventListener("hashchange", updateSidebarActiveState);
+      const origReplaceState = history.replaceState.bind(history);
+      history.replaceState = function() {
+        origReplaceState.apply(this, arguments);
+        updateSidebarActiveState();
+      };
+      updateSidebarActiveState();
+    }
+
+    map.addEventListener("click", (event) => {
+      if (map.classList.contains("hidden")) {
+        return;
+      }
+      const clickedInsideSearch = searchContainer?.contains(event.target);
+      const clickedInsideSidebar = sidebar?.contains(event.target);
+      if (!clickedInsideSearch && !clickedInsideSidebar) {
+        closeMap();
+      }
+    });
+
+    infoVideo.addEventListener("click", (event) => {
+      const clickedInsideFrame = event.target.closest("iframe");
+      if (!clickedInsideFrame) {
+        closeMap();
+      }
+    });
+
+    function normalizeAnchor(value) {
+      if (!value) {
+        return "";
+      }
+      let normalized = String(value).replace(/^#/, "");
+      let previous = "";
+      while (normalized !== previous) {
+        previous = normalized;
+        try {
+          normalized = decodeURIComponent(normalized);
+        } catch {
+          break;
+        }
+      }
+      return normalized.toLowerCase();
+    }
+
+    function getSidebarLinkByAnchor(anchor) {
+      if (!sidebar) {
+        return null;
+      }
+      const targetAnchor = normalizeAnchor(anchor);
+      const sidebarLinks = sidebar.querySelectorAll(".desktop-sidebar-link");
+      for (const link of sidebarLinks) {
+        const href = link.getAttribute("href") || "";
+        if (normalizeAnchor(href) === targetAnchor) {
+          return link;
+        }
+      }
+      return null;
+    }
+
+    function clearSidebarSearchHighlights(collapseLists = false) {
+      if (!sidebar) {
+        return;
+      }
+      sidebar.querySelectorAll(".desktop-sidebar-link.is-search-hit").forEach(link => {
+        link.classList.remove("is-search-hit");
+        delete link.dataset.searchRank;
+      });
+      if (collapseLists) {
+        sidebar.querySelectorAll(".desktop-sidebar-toggle").forEach(toggle => {
+          toggle.setAttribute("aria-expanded", "false");
+        });
+        sidebar.querySelectorAll(".desktop-sidebar-level-2").forEach(list => {
+          list.classList.add("is-collapsed");
+        });
+      }
+    }
+
+    function syncSidebarSearchHighlights(results, searchTerm) {
+      if (!sidebar) {
+        return;
+      }
+
+      clearSidebarSearchHighlights(true);
+      if (!searchTerm) {
+        return;
+      }
+
+      const topResults = [];
+      const seenAnchors = new Set();
+
+      const addResult = (result) => {
+        const key = normalizeAnchor(result?.item?.anchor);
+        if (!key || seenAnchors.has(key)) {
+          return;
+        }
+        seenAnchors.add(key);
+        topResults.push(result);
+      };
+
+      // Ground truth = currently shown search ranking from Fuse.
+      for (const result of results) {
+        addResult(result);
+        if (topResults.length >= SIDEBAR_HIGHLIGHT_LIMIT) {
+          break;
+        }
+      }
+      topResults.forEach((result, index) => {
+        const sidebarLink = getSidebarLinkByAnchor(result.item.anchor);
+        if (!sidebarLink) {
+          return;
+        }
+        sidebarLink.classList.add("is-search-hit");
+        sidebarLink.dataset.searchRank = String(index + 1);
+
+        const childList = sidebarLink.closest(".desktop-sidebar-level-2");
+        if (!childList) {
+          return;
+        }
+        childList.classList.remove("is-collapsed");
+        const toggle = childList.parentElement?.querySelector(".desktop-sidebar-toggle");
+        if (toggle) {
+          toggle.setAttribute("aria-expanded", "true");
+        }
+      });
+    }
 
 
     document.addEventListener('keydown', (e) => {
@@ -331,7 +595,7 @@ if (
         });
 
         if (currentSection) {
-          openMap(currentSection);
+          openSidebar(currentSection);
           search.focus();
         }
       }
@@ -375,11 +639,13 @@ if (
       searchResults.innerHTML = '';
 
       if (searchTerm === '') {
+        clearSidebarSearchHighlights(true);
         menuSvg.classed("hidden", false);
         return;
       }
 
       const results = fuse.search(searchTerm);
+      clearSidebarSearchHighlights(true);
       if (results.length > 0) {
         console.log(results)
         menuSvg.classed("hidden", true);
@@ -389,6 +655,26 @@ if (
         results.forEach(result => {
           const li = document.createElement('li');
           li.className = 'search-result-item';
+
+          // Highlight sidebar item on hover — collapse all, then open only the relevant chapter
+          li.addEventListener("mouseenter", () => {
+            if (sidebarClearTimer) { clearTimeout(sidebarClearTimer); sidebarClearTimer = null; }
+            clearSidebarSearchHighlights(true);
+            const sidebarLink = getSidebarLinkByAnchor(result.item.anchor);
+            if (sidebarLink) {
+              sidebarLink.classList.add("is-search-hit");
+              const childList = sidebarLink.closest(".desktop-sidebar-level-2");
+              if (childList) {
+                childList.classList.remove("is-collapsed");
+                const toggle = childList.parentElement?.querySelector(".desktop-sidebar-toggle");
+                if (toggle) toggle.setAttribute("aria-expanded", "true");
+              }
+            }
+          });
+          li.addEventListener("mouseleave", () => {
+            sidebarClearTimer = setTimeout(() => { clearSidebarSearchHighlights(true); }, 400);
+          });
+
           const link = document.createElement('a');
           link.href = "#" + result.item.anchor;
           link.addEventListener("click", (e) => {
@@ -443,10 +729,11 @@ if (
       renderSearchResults(e)
     }, 300));
 
-
-
     map.append(initializeMapVisualization(menuSvg, root.links(), root.descendants(), width, height));
-    mapSlide.append(initializeMapVisualization(slideSvg, root.links(), root.descendants(), width, height));
+    if (mapSlide) {
+      mapSlide.append(initializeMapVisualization(slideSvg, root.links(), root.descendants(), width, height));
+    }
+
 
   })
 }

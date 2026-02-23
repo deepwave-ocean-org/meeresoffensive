@@ -1,5 +1,5 @@
 ---
-title: Meeresschutz und Klimaschutz eng verknüpfen
+title: Meere x Klima
 titlesmall: Meeresschutz ist Klimaschutz
 order: 10
 

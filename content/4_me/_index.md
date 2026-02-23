@@ -1,5 +1,5 @@
 ---
-title: Schutz der Hohen See und der Tiefsee muss sichergestellt werden
+title: Hohe See
 titlesmall: Hohe See und Tiefsee
 order: 40
 
