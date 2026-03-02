@@ -121,6 +121,18 @@ if (
 
         requestAnimationFrame(raf);
 
+        // Allow native scroll inside .mo-translation; only pass through
+        // to Lenis when the content has reached its scroll boundary.
+        document.querySelectorAll('.mo-translation').forEach(el => {
+            el.addEventListener('wheel', (e) => {
+                const atTop = el.scrollTop <= 0;
+                const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 1;
+
+                if (!(e.deltaY > 0 && atBottom) && !(e.deltaY < 0 && atTop)) {
+                    e.stopPropagation();
+                }
+            }, { passive: true });
+        });
 
         const sections = document.querySelectorAll(".desktop-only .mo-single")
 
