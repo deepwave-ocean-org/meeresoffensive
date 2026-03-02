@@ -9,6 +9,26 @@ body {
     overflow-x: hidden;
 }
 
+.small-window-overlay {
+    display: none;
+}
+
+@media (pointer: fine) and (max-height: 649px), (pointer: fine) and (max-width: 999px) {
+    .small-window-overlay {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        background: rgba(10, 10, 10, 0.92);
+        color: white;
+        font-size: 1.8rem;
+        text-align: center;
+        padding: 2rem;
+    }
+}
+
 a {
     color: #00abf3;
 }
