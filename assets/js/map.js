@@ -250,7 +250,20 @@ if (
     const search = document.getElementById('search-bar')
     const searchResults = document.getElementById("search-results")
     const searchContainer = document.getElementById("search-container");
+    const homeLink = document.getElementById("sidebar-home-link");
     let sidebarClearTimer = null;
+
+    if (homeLink) {
+      homeLink.addEventListener("click", (e) => {
+        e.preventDefault();
+        closeMap();
+        const intro = document.getElementById("intro-slide");
+        if (intro) {
+          const targetY = intro.getBoundingClientRect().top + window.scrollY;
+          window.scrollTo(0, targetY);
+        }
+      });
+    }
 
     const mapSlide = document.getElementById("map-slide-child")
     let overlayCloseTimer = null;
