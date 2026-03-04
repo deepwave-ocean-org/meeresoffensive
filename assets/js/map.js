@@ -37,8 +37,9 @@ if (
 
             if (targetElement) {
               window.closeMap()
-              const targetPosition = targetElement.getBoundingClientRect().top + window.scrollY;
-              window.scrollTo(0, targetPosition);
+              const trigger = ScrollTrigger.getById("pin-section-" + d.data.anchor);
+              const targetY = trigger ? trigger.start : (targetElement.getBoundingClientRect().top + window.scrollY);
+              window.lenis.scrollTo(targetY, { immediate: true });
               history.pushState(null, null, d.data.href);
             }
           }
@@ -691,17 +692,19 @@ if (
           const link = document.createElement('a');
           link.href = "#" + result.item.anchor;
           link.addEventListener("click", (e) => {
+            e.preventDefault();
             window.closeMap();
+            const section = document.getElementById(result.item.anchor);
+            const trigger = ScrollTrigger.getById("pin-section-" + result.item.anchor);
+            const targetY = trigger ? trigger.start : (section ? section.getBoundingClientRect().top + window.scrollY : 0);
+            window.lenis.scrollTo(targetY, { immediate: true });
+
             if (result.matches[0].key == "content.explanations.text") {
-              e.preventDefault();
-              const section = document.getElementById(result.item.anchor)
               console.log(result, section, result.matches[0].refIndex, section.querySelectorAll('a[href^="#"]'))
               const explanationLink = section.querySelectorAll('a[href^="#"]')[result.matches[0].refIndex]
               const explanation = section.querySelectorAll('.mo-explanation')[result.matches[0].refIndex]
               explanationLink.classList.toggle('active')
               explanation.classList.toggle('active')
-
-              window.scrollTo(0, section.getBoundingClientRect().bottom + window.scrollY - window.innerHeight)
               explanationLink.scrollTo({
                 top: section.querySelector(".mo-main-content").offsetTop - 15,
                 behavior: 'smooth'

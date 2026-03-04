@@ -140,7 +140,7 @@
     .mo-single {
         position: relative;
         color: white;
-        font-size: x-large;
+        font-size: clamp(1.2rem, 2.67vh, 2.4rem);
         display: flex;
         display: flex;
         flex-direction: row;
@@ -167,7 +167,7 @@
     .gif-explanation {
         width: 80%;
         margin: 0 auto;
-        padding-bottom: 10rem;
+        padding-bottom: clamp(3rem, 10vh, 10rem);
         will-change: transform, opacity;
     }
 
@@ -188,7 +188,7 @@
     flex-direction: column;
         justify-content: flex-end;
     align-items: center;
-    padding-bottom: 10rem;
+    padding-bottom: clamp(3rem, 10vh, 10rem);
     }
     
     .mo-main-content .quote-icon {
