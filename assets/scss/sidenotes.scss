@@ -135,15 +135,24 @@ display: none;
 .mo-cta-wrapper h3 {
     cursor: pointer;
     position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .mo-cta-wrapper h3::after {
-    content: "\2241";
-    position: absolute;
-    right: 1rem;
-    font-size: 180%;
-    top: 0;
-    z-index: 1;
+    content: none;
+}
+
+.mo-close-icon {
+    flex-shrink: 0;
+    opacity: 0.65;
+    margin-left: 1.2rem;
+    transition: opacity 180ms ease;
+}
+
+.mo-close-handle:hover .mo-close-icon {
+    opacity: 1;
 }
 @media (pointer: fine) {
 .mo-cta-wrapper {
@@ -190,15 +199,7 @@ display: none;
         padding-bottom: 1.5rem;
     }
     .mo-cta-wrapper h3 {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
         min-height: 44px;
-    }
-    .mo-cta-wrapper h3::after {
-        position: static;
-        padding-left: 1rem;
-        font-size: 200%;
     }
     .sidenote.active {
         display: inline-flex;
