@@ -258,11 +258,7 @@ if (
       homeLink.addEventListener("click", (e) => {
         e.preventDefault();
         closeMap();
-        const intro = document.getElementById("intro-slide");
-        if (intro) {
-          const targetY = intro.getBoundingClientRect().top + window.scrollY;
-          window.scrollTo(0, targetY);
-        }
+        window.lenis.scrollTo(0, { immediate: true });
       });
     }
 
@@ -700,8 +696,7 @@ if (
             window.lenis.scrollTo(targetY, { immediate: true });
 
             if (result.matches[0].key == "content.explanations.text") {
-              console.log(result, section, result.matches[0].refIndex, section.querySelectorAll('a[href^="#"]'))
-              const explanationLink = section.querySelectorAll('a[href^="#"]')[result.matches[0].refIndex]
+const explanationLink = section.querySelectorAll('a[href^="#"]')[result.matches[0].refIndex]
               const explanation = section.querySelectorAll('.mo-explanation')[result.matches[0].refIndex]
               explanationLink.classList.toggle('active')
               explanation.classList.toggle('active')

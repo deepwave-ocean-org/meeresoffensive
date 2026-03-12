@@ -19,7 +19,8 @@
 
 #intro-slide p {
     margin-bottom: 1rem;
-    hyphens: auto;
+    hyphens: manual;
+    overflow-wrap: break-word;
     font-size: large;
 }
 
