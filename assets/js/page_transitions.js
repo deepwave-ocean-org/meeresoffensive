@@ -1,5 +1,5 @@
 if (
-    window.matchMedia('(pointer: coarse)').matches
+    window.matchMedia('(pointer: coarse), (pointer: fine) and (max-height: 649px)').matches
 ) {
     document.addEventListener('DOMContentLoaded', function () {
         console.log("mooobille!")
@@ -54,7 +54,7 @@ if (
             const upperNeeded = navHeight + quoteHeight + textNeeded + marginTotal;
 
             // Translation bekommt den restlichen Platz, aber mit Grenzen
-            const minTranslation = Math.round(vh * 0.30); // Mindestens 30vh
+            const minTranslation = Math.round(vh * 0.20); // Mindestens 20vh
             const maxTranslation = Math.round(vh * 0.55); // Maximal 55vh
 
             let translationHeight = vh - upperNeeded;

@@ -344,6 +344,31 @@
     list-style: none;
 }
 
+.sidebar-home-link {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.5rem 0.9rem;
+    margin-bottom: 0.8rem;
+    border-radius: 7px;
+    color: rgba(255, 255, 255, 0.42) !important;
+    font-size: 1.4rem;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    transition: all 180ms ease;
+
+    svg {
+        flex-shrink: 0;
+        width: 13px;
+        height: 13px;
+    }
+
+    &:hover {
+        color: rgba(255, 255, 255, 0.8) !important;
+        background: rgba(255, 255, 255, 0.06);
+    }
+}
+
 .desktop-sidebar-item {
     border-bottom: none;
     margin-bottom: 3px;

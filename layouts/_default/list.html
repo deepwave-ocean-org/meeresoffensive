@@ -4,6 +4,10 @@
 <div class="desktop-only swiper-hidden">
     <aside id="desktop-sidebar-nav" class="desktop-sidebar-nav" aria-label="Desktop navigation" data-lenis-prevent>
         <nav class="desktop-sidebar-nav-inner">
+            <a href="#intro-slide" id="sidebar-home-link" class="sidebar-home-link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/><polyline points="9 21 9 12 15 12 15 21"/></svg>
+                Startseite
+            </a>
             <ul class="desktop-sidebar-level-1">
                 {{ range .Data.Pages.ByParam "order" }}
                 <li class="desktop-sidebar-item">

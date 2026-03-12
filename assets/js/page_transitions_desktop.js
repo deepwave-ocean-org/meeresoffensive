@@ -121,6 +121,18 @@ if (
 
         requestAnimationFrame(raf);
 
+        // Allow native scroll inside .mo-translation; only pass through
+        // to Lenis when the content has reached its scroll boundary.
+        document.querySelectorAll('.mo-translation').forEach(el => {
+            el.addEventListener('wheel', (e) => {
+                const atTop = el.scrollTop <= 0;
+                const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 1;
+
+                if (!(e.deltaY > 0 && atBottom) && !(e.deltaY < 0 && atTop)) {
+                    e.stopPropagation();
+                }
+            }, { passive: true });
+        });
 
         const sections = document.querySelectorAll(".desktop-only .mo-single")
 
@@ -170,6 +182,7 @@ if (
                     end: "1500% top",
                     // markers: true,
                     scrub: true,
+                    invalidateOnRefresh: true,
                     onUpdate: (self) => {
                         // When scrubbing backward into the video fade zone
                         if (self.direction === -1 && self.progress < 0.25 && !videoReadyForReverse) {
@@ -200,7 +213,7 @@ if (
             viewTL.to(videoCont, { opacity: 0, ease: "none", duration: 0.25 }, 0);
             viewTL.to(view1, { left: "25vw", ease: "none", duration: 0.25 }, 0);
             // 0.25 – 1.0: text slides left, view-2 slides in (900% – 1500%)
-            viewTL.to(view1, { left: -window.innerWidth, ease: "none", duration: 0.75 }, 0.25);
+            viewTL.to(view1, { left: "-100vw", ease: "none", duration: 0.75 }, 0.25);
             viewTL.to(view2, { left: 0, ease: "none", duration: 0.75 }, 0.25);
             viewTL.to(background, { opacity: 0.2, ease: "none", duration: 0.75 }, 0.25);
             // gif-explanation compensates ~75vw of view-1's 125vw leftward movement,
