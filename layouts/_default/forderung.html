@@ -39,7 +39,7 @@
       </div>
       {{ with .Params.ctas }}
         <div class="mo-cta-wrapper">
-          <h3 class="mo-close-handle">Was kann ich tun?</h3>
+          <h3 class="mo-close-handle">Was kann ich tun?<svg class="mo-close-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></h3>
           {{ range . }}
           <div
             class="{{ if eq .short true}}mo-cta-short icon-time_short{{ end }}{{ if eq .part true}}mo-cta-part icon-time_part{{ end }}{{ if eq .full true}}mo-cta-full icon-time_full{{ end }} cta-text">
