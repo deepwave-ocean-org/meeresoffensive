@@ -691,21 +691,38 @@ if (
             e.preventDefault();
             window.closeMap();
             const section = document.getElementById(result.item.anchor);
-            const trigger = ScrollTrigger.getById("pin-section-" + result.item.anchor);
-            const targetY = trigger ? trigger.start : (section ? section.getBoundingClientRect().top + window.scrollY : 0);
+            const isExplanationMatch = result.matches[0].key == "content.explanations.text";
+            const article = section ? section.querySelector(".mo-single") : null;
+            const pinTrigger = article ? ScrollTrigger.getById("pin-section-" + article.id) : null;
+            const explanationTrigger = article ? ScrollTrigger.getById("show-explanation-" + article.id) : null;
+            // Explanations live in view-2, which only slides in after scrolling
+            // past the show-explanation transition — jump straight to its end
+            // instead of the section start (view-1) so it's visible right away.
+            const targetY = (isExplanationMatch && explanationTrigger)
+              ? explanationTrigger.end
+              : (pinTrigger ? pinTrigger.start : (section ? section.getBoundingClientRect().top + window.scrollY : 0));
+            // Lenis caches its scroll limit and doesn't always pick up the
+            // extra height GSAP's pinned sections add, which would otherwise
+            // clamp a deep jump like this one short of its real target.
+            window.lenis.resize();
             window.lenis.scrollTo(targetY, { immediate: true });
+            // Force the scrub-driven view-1/view-2 timeline to catch up with
+            // the jump immediately, instead of waiting for the next scroll tick.
+            ScrollTrigger.update();
 
-            if (result.matches[0].key == "content.explanations.text") {
-const explanationLink = section.querySelectorAll('a[href^="#"]')[result.matches[0].refIndex]
+            if (isExplanationMatch) {
+              const explanationLink = section.querySelectorAll('a[href^="#"]')[result.matches[0].refIndex]
               const explanation = section.querySelectorAll('.mo-explanation')[result.matches[0].refIndex]
+              const original = section.querySelector(".mo-main-content")
+              const explanationContainer = section.querySelector(".mo-translation")
               explanationLink.classList.toggle('active')
               explanation.classList.toggle('active')
-              explanationLink.scrollTo({
-                top: section.querySelector(".mo-main-content").offsetTop - 15,
+              original.scrollTo({
+                top: explanationLink.offsetTop - 15,
                 behavior: 'smooth'
               });
-              explanationLink.scrollTo({
-                top: section.querySelector(".mo-translation").offsetTop - 9,
+              explanationContainer.scrollTo({
+                top: explanation.offsetTop - 9,
                 behavior: 'smooth'
               });
             }
