@@ -1,5 +1,14 @@
 if (
-    window.matchMedia('(pointer: fine)').matches
+    // Must stay the exact complement of page_transitions.js's mobile check
+    // ("(pointer: coarse), (pointer: fine) and (max-height: 649px)"). Without
+    // the height clause here, any mouse/trackpad user with a window shorter
+    // than 650px matched BOTH guards, so the mobile Swiper and this GSAP/
+    // Lenis setup initialized at the same time and fought over the page
+    // (the mobile side's slideChange handler calls window.scrollTo(0, 0),
+    // which knocks Lenis's scroll position back to 0 after this script has
+    // already positioned it — that's what made deep links like
+    // "#meerespolitik" jump to an unrelated section on load).
+    window.matchMedia('(pointer: fine) and (min-height: 650px)').matches
 ) {
 
     function mouseScroll() {
@@ -333,9 +342,37 @@ if (
         })
     }
     document.addEventListener('DOMContentLoaded', function () {
+        // Capture the hash the page was actually opened with, before anything
+        // below gets a chance to overwrite it (see comment further down).
+        const initialHash = window.location.hash;
+
         setupAllScrollTriggers();
 
         ScrollTrigger.refresh();
+
+        // ScrollTrigger.refresh() above activates whichever pinned section
+        // happens to sit at scroll position 0, and that section's onToggle
+        // immediately overwrites the URL via history.replaceState — clobbering
+        // a deep link like "#meerespolitik" before the user ever sees it.
+        // Jump to the section the URL was actually opened with (captured
+        // above, since window.location.hash may already be wrong by now) so
+        // that section's onToggle fires last and reinstates the right hash.
+        if (initialHash) {
+            const target = document.querySelector(
+                '.desktop-only .mo-single[data-url="' + initialHash + '"]'
+            );
+            if (target && window.lenis) {
+                window.lenis.scrollTo(target, {
+                    immediate: true,
+                    // lenis's immediate jump doesn't reliably emit a "scroll"
+                    // event in time, so ScrollTrigger can miss the new
+                    // position on its own — force it once the jump has
+                    // actually landed, so the target section's onToggle
+                    // fires and writes the correct hash back via replaceState.
+                    onComplete: () => ScrollTrigger.update(),
+                });
+            }
+        }
 
         requestAnimationFrame(() => {
             document.querySelector('.desktop-only').classList.remove('swiper-hidden');
