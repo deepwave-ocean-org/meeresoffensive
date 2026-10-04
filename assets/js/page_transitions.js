@@ -87,6 +87,10 @@ if (
             killTimeline(window.videoDescriptionTimeline2);
 
             const activeSlide = swiper.slides[swiper.activeIndex];
+            // With a #hash in the URL, Swiper jumps to that slide while it is
+            // still initializing, i.e. before it knows its slides: bail out
+            // instead of throwing (afterInit runs this again once they exist).
+            if (!activeSlide) return;
             const background = activeSlide.querySelector('.mo-background')
             if (!background) {
                 console.log("not a slide")
@@ -172,7 +176,9 @@ if (
         }
 
         function playVideo(swiper) {
-            const activeVideo = swiper.slides[swiper.activeIndex].querySelector('.mo-video video');
+            const activeSlide = swiper.slides[swiper.activeIndex];
+            if (!activeSlide) return;
+            const activeVideo = activeSlide.querySelector('.mo-video video');
             document.querySelectorAll('.mo-video video').forEach(video => {
                 if (video !== activeVideo) {
                     video.pause();
@@ -387,6 +393,19 @@ if (
                 afterInit: (swiper) => {
                     swiper.updateAutoHeight(1)
                     document.querySelector(".swiper").classList.remove("swiper-hidden");
+                    // Opened with a #hash: the handlers above may have run
+                    // before Swiper knew its slides. Re-measure, re-apply the
+                    // slide position and run the per-slide setup again.
+                    requestAnimationFrame(() => {
+                        if (!swiper.slides || !swiper.slides.length || swiper.size === undefined) {
+                            swiper.update();
+                            swiper.slideTo(swiper.activeIndex, 0, false);
+                        }
+                        singleSlideScrollAnimation(swiper);
+                        playVideo(swiper);
+                        adjustMobileLayout(swiper);
+                        swiper.updateAutoHeight(1);
+                    });
                 },
                 slideChange: function () {
                     window.scrollTo(0, 0);
