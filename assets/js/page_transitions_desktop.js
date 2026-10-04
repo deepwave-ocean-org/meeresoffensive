@@ -1,15 +1,86 @@
 if (
-    // Must stay the exact complement of page_transitions.js's mobile check
-    // ("(pointer: coarse), (pointer: fine) and (max-height: 649px)"). Without
-    // the height clause here, any mouse/trackpad user with a window shorter
-    // than 650px matched BOTH guards, so the mobile Swiper and this GSAP/
-    // Lenis setup initialized at the same time and fought over the page
-    // (the mobile side's slideChange handler calls window.scrollTo(0, 0),
-    // which knocks Lenis's scroll position back to 0 after this script has
-    // already positioned it — that's what made deep links like
-    // "#meerespolitik" jump to an unrelated section on load).
-    window.matchMedia('(pointer: fine) and (min-height: 650px)').matches
+    window.matchMedia('(pointer: fine)').matches
 ) {
+
+    // --- URL / deep-link handling ------------------------------------------
+    // The URL hash is kept in sync with the pinned section that is actually
+    // active, but only once things have settled: ScrollTrigger.refresh() (on
+    // load, after layout shifts) briefly toggles sections that are not the
+    // visible one, and writing the hash on every toggle made a deep link like
+    // "#meerespolitik" end up as e.g. "#klimaschutzfunktionen".
+    let deepLinkTarget = null      // section the page was opened with (#hash)
+    let userHasScrolled = false    // once true, stop forcing the deep link
+    let urlSyncTimer = null
+
+    function pinTriggerOf(section) {
+        return section && ScrollTrigger.getById("pin-section-" + section.id)
+    }
+
+    // data-url comes out double-encoded for sections with umlauts
+    // (e.g. "#globaler-s%25C3%25BCden"), while the browser has the single-
+    // encoded form: decode until stable so both compare equal.
+    function normalizeHash(h) {
+        let s = h || ''
+        for (let i = 0; i < 3 && s.indexOf('%') !== -1; i++) {
+            try {
+                const d = decodeURIComponent(s)
+                if (d === s) break
+                s = d
+            } catch (e) {
+                break
+            }
+        }
+        return s
+    }
+
+    function sameHash(a, b) {
+        return normalizeHash(a) === normalizeHash(b)
+    }
+
+    function syncUrlToActiveSection() {
+        clearTimeout(urlSyncTimer)
+        urlSyncTimer = setTimeout(() => {
+            // still moving to the deep-linked section: keep the requested URL
+            if (deepLinkTarget && !userHasScrolled) {
+                const t = pinTriggerOf(deepLinkTarget)
+                if (!t || !t.isActive) {
+                    return
+                }
+            }
+            const active = ScrollTrigger.getAll()
+                .filter(t => t.isActive && t.vars.id && t.vars.id.indexOf("pin-section-") === 0)
+                .sort((a, b) => b.start - a.start)[0]
+            const url = active && active.trigger && active.trigger.dataset.url
+            if (url && !sameHash(window.location.hash, url)) {
+                // write the single-encoded form ("#globaler-s%C3%BCden")
+                const clean = '#' + encodeURIComponent(normalizeHash(url).replace(/^#/, ''))
+                history.replaceState({ path: clean }, '', clean)
+            }
+        }, 200)
+    }
+
+    function jumpToDeepLink() {
+        if (!deepLinkTarget || userHasScrolled || !window.lenis) {
+            return
+        }
+        const t = pinTriggerOf(deepLinkTarget)
+        if (!t || t.isActive) {
+            return
+        }
+        // Scroll to the trigger's start position, not to the element: the
+        // sections are pinned, so the element's own position is not where
+        // its section actually begins in scroll terms.
+        // Lenis only learns about the extra height of the pin spacers
+        // asynchronously, so without resize() its scroll limit is still the
+        // old, short one and the jump gets clamped far above the target.
+        window.lenis.resize()
+        window.lenis.scrollTo(Math.ceil(t.start) + 1, {
+            immediate: true,
+            // lenis's immediate jump doesn't reliably emit a "scroll" event in
+            // time, so ScrollTrigger can miss the new position on its own.
+            onComplete: () => ScrollTrigger.update(),
+        })
+    }
 
     function mouseScroll() {
         let startY = 0
@@ -299,13 +370,8 @@ if (
                 start: "top top",
                 // markers: true,
                 end: "+=1600%",
-                onToggle: (e) => {
-                    if (!e.isActive) {
-                        return
-                    }
-                    if (section.dataset.url) {
-                        history.replaceState({ path: section.dataset.url }, '', section.dataset.url);
-                    };
+                onToggle: () => {
+                    syncUrlToActiveSection()
                 },
                 onEnter: () => {
                     video.currentTime = 0.1;
@@ -342,37 +408,30 @@ if (
         })
     }
     document.addEventListener('DOMContentLoaded', function () {
-        // Capture the hash the page was actually opened with, before anything
-        // below gets a chance to overwrite it (see comment further down).
+        // Remember which section the page was opened with before anything can
+        // overwrite the hash.
         const initialHash = window.location.hash;
+        if (initialHash) {
+            deepLinkTarget = Array.from(
+                document.querySelectorAll('.desktop-only .mo-single')
+            ).find(s => s.dataset.url && sameHash(s.dataset.url, initialHash)) || null
+        }
+        // Any real user input means they navigate themselves from here on.
+        ;['wheel', 'touchstart', 'keydown', 'mousedown'].forEach(ev =>
+            window.addEventListener(ev, () => { userHasScrolled = true }, { passive: true, once: true })
+        )
 
         setupAllScrollTriggers();
 
+        // Every refresh (this one, and the automatic one after the page has
+        // finished loading) can shift positions: re-assert the deep link and
+        // re-sync the URL afterwards.
+        ScrollTrigger.addEventListener('refresh', () => {
+            jumpToDeepLink()
+            syncUrlToActiveSection()
+        })
         ScrollTrigger.refresh();
-
-        // ScrollTrigger.refresh() above activates whichever pinned section
-        // happens to sit at scroll position 0, and that section's onToggle
-        // immediately overwrites the URL via history.replaceState — clobbering
-        // a deep link like "#meerespolitik" before the user ever sees it.
-        // Jump to the section the URL was actually opened with (captured
-        // above, since window.location.hash may already be wrong by now) so
-        // that section's onToggle fires last and reinstates the right hash.
-        if (initialHash) {
-            const target = document.querySelector(
-                '.desktop-only .mo-single[data-url="' + initialHash + '"]'
-            );
-            if (target && window.lenis) {
-                window.lenis.scrollTo(target, {
-                    immediate: true,
-                    // lenis's immediate jump doesn't reliably emit a "scroll"
-                    // event in time, so ScrollTrigger can miss the new
-                    // position on its own — force it once the jump has
-                    // actually landed, so the target section's onToggle
-                    // fires and writes the correct hash back via replaceState.
-                    onComplete: () => ScrollTrigger.update(),
-                });
-            }
-        }
+        jumpToDeepLink()
 
         requestAnimationFrame(() => {
             document.querySelector('.desktop-only').classList.remove('swiper-hidden');
